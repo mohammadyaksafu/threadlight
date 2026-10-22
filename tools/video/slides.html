@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ThreadLight video slides</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Schibsted+Grotesk:wght@400;600;700;800&display=swap">
+<style>
+  :root { --bg: #151940; --ink: #f4f5ff; --ink2: #b6bcec; --accent: #6ee0a0; --line: rgba(244,245,255,.14); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: "Schibsted Grotesk", system-ui, sans-serif; }
+  .slide { position: absolute; inset: 0; display: none; padding: 90px 110px; overflow: hidden; }
+  .slide.on { display: flex; flex-direction: column; justify-content: center; }
+  .thread { position: absolute; right: -80px; top: -40px; width: 900px; height: 480px; opacity: .08; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; letter-spacing: .14em; text-transform: uppercase; font-size: 20px; color: var(--ink2); }
+  h1 { font-size: 84px; line-height: 1.04; margin: 18px 0 0; font-weight: 800; letter-spacing: -.02em; }
+  h1 .soft { color: var(--ink2); }
+  p.lead { font-size: 30px; color: var(--ink2); max-width: 1100px; line-height: 1.4; margin-top: 26px; }
+  .logo { display: flex; align-items: center; gap: 18px; font-size: 40px; font-weight: 800; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 48px; }
+  .stat { border: 1px solid var(--line); border-radius: 28px; padding: 36px 40px; background: rgba(255,255,255,.04); }
+  .stat .n { font-size: 96px; font-weight: 800; letter-spacing: -.02em; }
+  .stat .t { font-size: 27px; color: var(--ink); margin-top: 6px; line-height: 1.35; }
+  .stat .src { font-family: "IBM Plex Mono", monospace; font-size: 17px; color: var(--ink2); margin-top: 18px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 44px; }
+  .col { border: 1px solid var(--line); border-radius: 28px; padding: 34px 40px; background: rgba(255,255,255,.04); }
+  .col h2 { margin: 0 0 18px; font-size: 30px; }
+  .col ul { margin: 0; padding-left: 26px; font-size: 25px; line-height: 1.55; color: var(--ink); }
+  .col.planned ul { color: var(--ink2); }
+  .rules { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 44px; }
+  .rule { border-radius: 22px; padding: 26px; background: rgba(255,255,255,.06); font-size: 26px; font-weight: 600; line-height: 1.3; }
+  .rule b { display: block; font-family: "IBM Plex Mono", monospace; color: var(--accent); font-size: 18px; margin-bottom: 10px; }
+  .links { margin-top: 44px; font-family: "IBM Plex Mono", monospace; font-size: 27px; line-height: 1.8; color: var(--ink); }
+  .links span { color: var(--ink2); display: inline-block; width: 170px; }
+  .note { position: absolute; left: 110px; top: 50px; font-family: "IBM Plex Mono", monospace; font-size: 17px; color: var(--ink2); }
+</style>
+</head>
+<body>
+<svg class="thread" viewBox="0 0 900 480" fill="none" aria-hidden="true"><path d="M0 380 C 200 60, 400 520, 610 210 S 840 90, 900 150" stroke="#fff" stroke-width="34" stroke-linecap="round"/></svg>
+
+<section class="slide" id="hook">
+  <div class="logo"><svg width="64" height="64" viewBox="0 0 34 34"><rect x="1" y="1" width="32" height="32" rx="9" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.3)"/><path d="M7 22 C 12 8, 17 30, 22 14 S 27 10, 28 12" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="22" cy="14" r="2.6" fill="#fff"/></svg>ThreadLight</div>
+  <h1>One factory. One certificate.<br><span class="soft">30 days before the audit.</span></h1>
+  <p class="lead">Verified Evidence Passport for garment exporters &middot; working prototype</p>
+  <div class="note">All data in this video is synthetic. No live AI calls in the demo.</div>
+</section>
+
+<section class="slide" id="problem">
+  <div class="eyebrow">The problem</div>
+  <h1>Compliance proof lives in scattered PDFs.</h1>
+  <div class="stats">
+    <div class="stat"><div class="n">83.29%</div><div class="t">of Bangladesh's $48.28B exports in FY2024-25 were apparel and home textiles</div><div class="src">Source: EPB data via Fibre2Fashion</div></div>
+    <div class="stat"><div class="n">800 / 1,875</div><div class="t">RSC-covered factories had completed structural remediation by June 2025</div><div class="src">Source: RMG Sustainability Council, Monthly Report June 2025 (structural only)</div></div>
+  </div>
+</section>
+
+<section class="slide" id="how">
+  <div class="eyebrow">How it decides</div>
+  <h1>Rules decide. Models read. People approve.</h1>
+  <div class="rules">
+    <div class="rule"><b>01</b>Rules decide dates, coverage and status</div>
+    <div class="rule"><b>02</b>Models only read text (planned)</div>
+    <div class="rule"><b>03</b>Every finding cites file and page</div>
+    <div class="rule"><b>04</b>Only a named person closes a finding</div>
+  </div>
+  <div class="cols">
+    <div class="col"><h2>Implemented now</h2><ul><li>Deterministic rules engine + parity tests</li><li>Evidence graph, risk index, what-if</li><li>Human approval loop, bilingual report</li></ul></div>
+    <div class="col planned"><h2>Planned</h2><ul><li>OCR and language-model extraction</li><li>Hybrid retrieval, drafting</li><li>Auth, tenant isolation, MCP server</li></ul></div>
+  </div>
+</section>
+
+<section class="slide" id="close">
+  <div class="eyebrow">The ask</div>
+  <h1>Pilot factories and advisors<br><span class="soft">who know garment compliance.</span></h1>
+  <div class="links">
+    <div><span>Live demo</span>mohammadyaksafu.github.io/threadlight</div>
+    <div><span>Code</span>github.com/mohammadyaksafu/threadlight</div>
+  </div>
+  <div class="note">Synthetic data. Risk figure is a decision-support index, not an audit score.</div>
+</section>
+
+<script>
+  const id = new URLSearchParams(location.search).get("s") || "hook";
+  document.getElementById(id).classList.add("on");
+</script>
+</body>
+</html>

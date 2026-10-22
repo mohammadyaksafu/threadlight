@@ -1,0 +1,13 @@
+[
+  {"id": "s01_hook", "text": "This is a garment factory thirty days before a buyer audit. Its fire safety certificate expires eleven days before the auditor arrives. One document, two failing requirements, and nobody has noticed yet."},
+  {"id": "s02_problem", "text": "Apparel and home textiles were 83.29 percent of Bangladesh's exports in fiscal year 2024 to 25. By June 2025, 800 of the 1,875 factories covered by the R M G Sustainability Council had completed structural remediation. The proof lives in scattered P D Fs, and gaps surface during the audit."},
+  {"id": "s03_solution", "text": "ThreadLight builds a Verified Evidence Passport. Every buyer requirement is linked to its evidence, every finding cites its source, and nothing is closed until a named person approves it. All data in this demo is synthetic."},
+  {"id": "s04_documents", "text": "Six documents. Extraction is shown as a pre-computed sample. The five rule stages run live in the browser."},
+  {"id": "s05_graph", "text": "In the evidence graph, one fire certificate supports two requirements. If it lapses, both fail together."},
+  {"id": "s06_findings", "text": "Each finding explains its status with a cited source. Integrity alerts flag records that disagree: committee minutes citing a certificate number that is not on file, and an emergency exit fix marked complete with no proof. They are prompts to check, not accusations."},
+  {"id": "s07_simulate", "text": "What if the certificate is renewed? Coverage jumps from 29 to 55 percent. One day short of the audit, it drops back."},
+  {"id": "s08_workflow", "text": "We assign the finding and upload the renewal. The rules recheck: both requirements are now pending human review, and coverage stays at 29. Can the system close it on its own? No. A named compliance officer approves, coverage rises to 55, and the officer closes it."},
+  {"id": "s09_report", "text": "The report separates verified from open items, in English or Bangla. It is a draft for human review, not an audit result."},
+  {"id": "s10_how", "text": "How does it decide? Rules decide dates, coverage and status. Models only read text. Every finding is cited, and people approve every closure. Today, the rules engine, graph, what-if, approval loop and bilingual report are implemented and tested. O C R, language model extraction and drafting are planned next."},
+  {"id": "s11_close", "text": "We are looking for pilot factories and advisors who know garment compliance. ThreadLight: evidence you can verify, before the auditor asks."}
+]

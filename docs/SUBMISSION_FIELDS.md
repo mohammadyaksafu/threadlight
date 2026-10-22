@@ -30,6 +30,10 @@ was reviewed and run by the team; tests (37 unit tests, a 7-scenario parity test
 headless-browser UI check) were run locally before submission. [FILL: anything written or
 translated by a person, e.g. who reviewed the Bangla text]
 
+**Demo video.** The pitch video was recorded automatically from the live site with a headless-browser
+script (`tools/video/record.js`). Its narration is a synthetic text-to-speech voice (the offline Windows
+voice "Microsoft Zira Desktop"), not a recorded person. Figures quoted in it come from docs/REFERENCES.md.
+
 ## Tooling & IDE
 
 - Editor / IDE: [FILL: e.g. the editor you used]
