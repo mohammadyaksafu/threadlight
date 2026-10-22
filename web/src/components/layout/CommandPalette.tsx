@@ -1,4 +1,5 @@
-import { CornerDownLeft, FileText, Languages, ListChecks, RotateCcw, Search, Workflow, type LucideIcon } from "lucide-react";
+import { CornerDownLeft, FileText, Languages, ListChecks, LogOut, RotateCcw, Search, Workflow, type LucideIcon } from "lucide-react";
+import { useSession } from "@/auth/SessionProvider";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { NAV_ITEMS } from "@/nav";
@@ -14,6 +15,7 @@ interface Command {
 /** Ctrl/Cmd+K (or "/") jump-to anything: pages, requirements, documents and demo actions. */
 export function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { state, result, dispatch } = useThreadLight();
+  const { signOut } = useSession();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
@@ -36,8 +38,9 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
       { id: "act-bangla", group: "Actions", label: "Show the report in Bangla", icon: Languages, keywords: "bn language translate",
         run: () => { dispatch({ type: "lang", lang: "bn" }); navigate("/report"); } },
       { id: "act-reset", group: "Actions", label: "Reset demo to baseline", icon: RotateCcw, keywords: "restart clear", run: () => dispatch({ type: "reset" }) },
+      { id: "act-signout", group: "Actions", label: "Sign out (switch demo role)", icon: LogOut, keywords: "logout role account", run: signOut },
     ];
-  }, [result.requirements, state.data.documents, navigate, dispatch]);
+  }, [result.requirements, state.data.documents, navigate, dispatch, signOut]);
 
   const q = query.trim().toLowerCase();
   const matches = q ? commands.filter((c) => `${c.label} ${c.hint ?? ""} ${c.keywords ?? ""} ${c.group}`.toLowerCase().includes(q)) : commands;

@@ -154,6 +154,14 @@ React 18 + TypeScript (strict) + Tailwind CSS 3, built with Vite.
 - **Delivery**: `vite build` emits static files to `web/dist`; a GitHub Actions workflow tests,
   builds and publishes them to GitHub Pages. The only network request is Google Fonts.
 
+### Demo sign-in (not real authentication)
+
+`web/src/auth/` holds three public demo accounts (Compliance Officer, Factory staff, Guest). The
+check runs in the browser and the session lives in `sessionStorage` for the tab. Roles decide which
+workflow actions are enabled, and the reducer re-checks the role on every workflow action: only the
+Compliance Officer can approve or close, Guests are read-only. This demonstrates the approval model;
+it is not a security boundary. Real authentication, roles and tenant isolation are Planned.
+
 ### Model routing (today)
 
 No model is called. Every step is either fixed sample data or deterministic code.

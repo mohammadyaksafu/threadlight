@@ -8,9 +8,22 @@ Paste-ready values for the link fields of the submission form. Replace each [FIL
 | Facebook Video (optional) | Not used. | |
 | GitHub Repository | https://github.com/mohammadyaksafu/threadlight | Public. |
 | Figma / Design Link (optional) | Not used: the design is implemented directly in the live app (design tokens in `web/src/styles/index.css`). | |
-| Demo / Live Links (required) | https://mohammadyaksafu.github.io/threadlight/ | Public, no login. All data is synthetic. Works on desktop and mobile. |
+| Demo / Live Links (required) | https://mohammadyaksafu.github.io/threadlight/ | Public. Sign in with a demo account below (one click on the sign-in page). All data is synthetic. Works on desktop and mobile. |
 | Other Links | https://github.com/mohammadyaksafu/threadlight/blob/main/docs/ARCHITECTURE.md (implemented vs planned) | |
 | Other Links | https://github.com/mohammadyaksafu/threadlight/blob/main/docs/EVALUATION.md (what the tests verify) | |
+
+## Test credentials for judges
+
+The live demo opens on a **demo sign-in** page. These are public, throw-away accounts. This is not real
+authentication: the check runs in the browser and only decides which demo buttons are enabled. All data is synthetic.
+
+| Role | Email (username) | Password | What it can do |
+|---|---|---|---|
+| Compliance Officer | `officer@threadlight.demo` | `Officer-Demo-2026` | Everything: assign, upload, approve and close findings |
+| Factory staff | `staff@threadlight.demo` | `Staff-Demo-2026` | Assign and upload evidence; approve/close are blocked |
+| Guest (read-only) | `guest@threadlight.demo` | `Guest-Demo-2026` | Browse every page; no workflow actions |
+
+Each account also has a one-click "Demo accounts" button on the sign-in page.
 
 ## About the video
 

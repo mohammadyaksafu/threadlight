@@ -2,6 +2,8 @@
 
 import { Navigate, type RouteObject } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
+import { RequireAuth } from "@/auth/RequireAuth";
+import { LoginPage } from "@/pages/LoginPage";
 import { OverviewPage } from "@/pages/OverviewPage";
 import { DocumentsPage } from "@/pages/documents/DocumentsPage";
 import { DocumentDetailPage } from "@/pages/documents/DocumentDetailPage";
@@ -16,8 +18,9 @@ import { WorkflowPage } from "@/pages/actions/WorkflowPage";
 import { ReportPage } from "@/pages/report/ReportPage";
 
 export const ROUTES: RouteObject[] = [
+  { path: "login", element: <LoginPage /> },
   {
-    element: <AppShell />,
+    element: <RequireAuth><AppShell /></RequireAuth>,
     children: [
       { index: true, element: <OverviewPage /> },
       { path: "documents", element: <DocumentsPage /> },

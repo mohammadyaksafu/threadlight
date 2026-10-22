@@ -34,6 +34,7 @@ a person approves it as Compliance Officer do they become *supported* (coverage 
 | Evidence graph (one document, many requirements) | Language-model drafting of explanations and reports |
 | Decision-support risk index and coverage, what-if simulation | Authentication, roles, tenant isolation |
 | Ranked task plan with owner, due date and proof needed | MCP server for buyer and auditor integrations |
+| Demo sign-in with three public roles (browser-only, not real auth) | Real authentication and authorisation |
 | Finding lifecycle with human-only assign/close and approval gate | Real pilot data |
 | Bilingual (English / Bangla) template report | |
 
@@ -90,6 +91,19 @@ Suggested path: Documents > Run analysis > Evidence graph (click D1) > Findings 
 Integrity alerts) > Simulate > Actions > R1 workflow (Assign, Upload, try Close, Approve, Close) >
 Report (switch to Bangla). Keys `1`-`7` open the seven sections; **Ctrl+K** (or `/`) opens a search
 palette to jump to any page, requirement or document. The sidebar has a System / Light / Dark theme switch.
+
+## Demo accounts
+
+The live demo opens on a **demo sign-in** page. These are public, throw-away accounts. This is not real
+authentication: the check runs in the browser and only decides which demo buttons are enabled. All data is synthetic.
+
+| Role | Email (username) | Password | What it can do |
+|---|---|---|---|
+| Compliance Officer | `officer@threadlight.demo` | `Officer-Demo-2026` | Everything: assign, upload, approve and close findings |
+| Factory staff | `staff@threadlight.demo` | `Staff-Demo-2026` | Assign and upload evidence; approve/close are blocked |
+| Guest (read-only) | `guest@threadlight.demo` | `Guest-Demo-2026` | Browse every page; no workflow actions |
+
+Each account also has a one-click "Demo accounts" button on the sign-in page.
 
 ## Run the tests
 

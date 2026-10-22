@@ -1,4 +1,5 @@
-import { Monitor, Moon, Sun, X } from "lucide-react";
+import { LogOut, Monitor, Moon, Sun, X } from "lucide-react";
+import { useSession } from "@/auth/SessionProvider";
 import { NavLink } from "react-router-dom";
 import { SAMPLE } from "@/data/sample";
 import { THEMES, type ThemeChoice } from "@/lib/hooks";
@@ -27,6 +28,7 @@ export function Sidebar({ open, onClose, theme, onTheme }: {
   open: boolean; onClose: () => void; theme: ThemeChoice; onTheme: (t: ThemeChoice) => void;
 }) {
   const { result } = useThreadLight();
+  const { user, signOut } = useSession();
   const badge: Record<string, number> = {
     documents: result.active_documents.length,
     findings: result.scores.open_findings,
@@ -93,6 +95,21 @@ export function Sidebar({ open, onClose, theme, onTheme }: {
         </nav>
 
         <div className="relative border-t border-side-line p-4">
+          {user && (
+            <div className="mb-4 flex items-center gap-3 rounded-xl bg-side-hover p-2.5">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-side-ink font-bold text-side" aria-hidden="true">
+                {user.title.split(" ").map((w) => w[0]).join("").slice(0, 2)}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span id="session-role" className="block truncate text-sm font-semibold">{user.title}</span>
+                <span className="block truncate text-[11px] text-side-ink-2">{user.email}</span>
+              </span>
+              <button type="button" id="sign-out" onClick={signOut} aria-label="Sign out" title="Sign out"
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-side-ink-2 hover:bg-side-active hover:text-side-ink">
+                <LogOut size={16} aria-hidden="true" />
+              </button>
+            </div>
+          )}
           <dl className="grid gap-1.5 text-xs">
             <div className="flex justify-between gap-3"><dt className="text-side-ink-2">Factory</dt><dd className="truncate font-semibold">{SAMPLE.factory}</dd></div>
             <div className="flex justify-between gap-3"><dt className="text-side-ink-2">Buyer</dt><dd className="truncate font-semibold">{SAMPLE.buyer}</dd></div>

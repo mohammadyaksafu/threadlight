@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import { ROUTES } from "./routes";
 import { ThreadLightProvider } from "./store/ThreadLightProvider";
+import { SessionProvider } from "./auth/SessionProvider";
 import "./styles/index.css";
 
 // Hash routing (#/findings, #/requirements/R1) works on GitHub Pages and any static host with no
@@ -11,8 +12,10 @@ const router = createHashRouter(ROUTES);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThreadLightProvider>
-      <RouterProvider router={router} />
-    </ThreadLightProvider>
+    <SessionProvider>
+      <ThreadLightProvider>
+        <RouterProvider router={router} />
+      </ThreadLightProvider>
+    </SessionProvider>
   </StrictMode>,
 );

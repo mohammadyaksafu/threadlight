@@ -12,7 +12,7 @@ processed and no OCR or language model is part of this prototype.
 |---|---|---|
 | Unit tests | `python3 -m unittest discover -s tests` | 37 tests (75 assertion statements) passing |
 | Parity, Python vs TypeScript | `python3 tests/parity.py` | 7 of 7 scenarios identical |
-| Headless UI check of the built web app | `npm run test:ui` (in `web/`) | 70 of 70 checks passing (Chrome, headless) |
+| Headless UI check of the built web app | `npm run test:ui` (in `web/`) | 80 of 80 checks passing (Chrome, headless) |
 
 ### Unit tests cover
 
@@ -45,7 +45,7 @@ edges, plan and scores.
 
 ### UI check covers
 
-Overview home page, sidebar current-page state, requirement and document detail pages, the alerts sub-page, the mobile navigation drawer, the Ctrl+K command palette, synthetic-data banner, header figures (30 / 29 / 63 / 6), all eight statuses,
+Demo sign-in (redirect when signed out, wrong password rejected, Guest read-only, Factory staff can upload but cannot approve, Compliance Officer full flow), Overview home page, sidebar current-page state, requirement and document detail pages, the alerts sub-page, the mobile navigation drawer, the Ctrl+K command palette, synthetic-data banner, header figures (30 / 29 / 63 / 6), all eight statuses,
 Run analysis lighting 7 agents with correct rules/sample labels, graph lines and the "1
 document affects 2 requirements (R1, R5)" message, slider extremes and the audit-day boundary,
 the lifecycle (close blocked with "AI cannot close this finding", upload keeps coverage 29

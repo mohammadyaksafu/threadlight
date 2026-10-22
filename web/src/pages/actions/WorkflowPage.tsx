@@ -1,5 +1,7 @@
 import { Check, Lock, RotateCcw, ShieldCheck, Upload, UserCheck, UserPlus, type LucideIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { can, type Permission } from "@/auth/accounts";
+import { useSession } from "@/auth/SessionProvider";
 import { STATES, type LifecycleState } from "@/engine";
 import { useThreadLight } from "@/store/ThreadLightProvider";
 import type { Action } from "@/store/reducer";
@@ -8,7 +10,7 @@ import { PageHeader, Panel } from "@/components/ui/page";
 
 interface StepDef {
   state: LifecycleState; label: string; who: string; detail: string;
-  button?: { id: string; label: string; icon: LucideIcon; action: Action["type"] };
+  button?: { id: string; label: string; icon: LucideIcon; action: "assign" | "upload" | "approve" };
 }
 
 const STEPS: StepDef[] = [
@@ -27,7 +29,9 @@ const STEPS: StepDef[] = [
 export function WorkflowPage() {
   const { state, result, baseline, dispatch } = useThreadLight();
   const f = state.finding, cur = STATES.indexOf(f.state);
-  const canClose = f.state === "verified";
+  const { user } = useSession();
+  const role = user!.role;
+  const canClose = f.state === "verified" && can(role, "close");
   const btns = useRef<Record<string, HTMLButtonElement | null>>({});
   const prev = useRef(f.state);
   const status = (id: string) => result.requirements.find((r) => r.id === id)!.status;
@@ -45,7 +49,11 @@ export function WorkflowPage() {
   return (
     <>
       <PageHeader back={{ to: "/actions", label: "Actions" }} eyebrow="Resolve" title="Finding R1 workflow"
-        description="Strictly in order. Only a person can assign, approve or close. The rules recheck after every upload."
+        description={<>Strictly in order. Only a person can assign, approve or close. The rules recheck after every upload.
+          <span id="lc-role" className="mt-2 flex flex-wrap items-center gap-2 text-[13px]">
+            <span className="rounded-full bg-thread-soft px-2.5 py-0.5 font-semibold text-thread-strong">Signed in as {user!.title}</span>
+            <span className="text-ink-3">{user!.summary}</span>
+          </span></>}
         actions={<Button id="lc-reset" ref={(el) => { btns.current["lc-reset"] = el; }} variant="dashed" size="sm" onClick={() => dispatch({ type: "reset" })} icon={<RotateCcw size={15} aria-hidden="true" />}>Reset to baseline</Button>} />
 
       <p id="lc-msg" aria-live="polite" tabIndex={-1}
@@ -74,18 +82,26 @@ export function WorkflowPage() {
                       <span className="text-xs text-ink-3">{st.who}</span>
                     </div>
                     <p className="mt-0.5 text-[13px] text-ink-2">{st.detail}</p>
-                    {st.button && Icon && i > cur && (
-                      <Button id={st.button.id} ref={(el) => { btns.current[st.button!.id] = el; }} className="mt-3" size="sm"
-                        variant={nextUp ? "primary" : "secondary"} disabled={!nextUp || (st.state === "remediated" && state.data.documents.some((d) => d.id === "D1-renewal"))}
-                        onClick={() => dispatch({ type: st.button!.action } as Action)} icon={<Icon size={15} aria-hidden="true" />}>
-                        {st.button.label}
-                      </Button>
-                    )}
+                    {st.button && Icon && i > cur && (() => {
+                      const allowed = can(role, st.button.action as Permission);
+                      return (
+                        <>
+                          {/* role-denied uses aria-disabled so a click explains which role is needed */}
+                          <Button id={st.button.id} ref={(el) => { btns.current[st.button!.id] = el; }} className="mt-3" size="sm"
+                            variant={nextUp && allowed ? "primary" : "secondary"} aria-disabled={nextUp && !allowed ? true : undefined}
+                            disabled={!nextUp || (st.state === "remediated" && state.data.documents.some((d) => d.id === "D1-renewal"))}
+                            onClick={() => dispatch({ type: st.button!.action, role } as Action)} icon={<Icon size={15} aria-hidden="true" />}>
+                            {st.button.label}
+                          </Button>
+                          {!allowed && <p className="mt-1.5 inline-flex items-center gap-1 text-xs text-ink-3"><Lock size={12} aria-hidden="true" />Needs the {st.button.action === "approve" ? "Compliance Officer" : "Factory staff or Compliance Officer"} role</p>}
+                        </>
+                      );
+                    })()}
                     {st.button && i <= cur && i > 0 && <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-ok"><Check size={13} strokeWidth={3} aria-hidden="true" />Done</p>}
                     {st.state === "closed" && (
                       // aria-disabled (not disabled) so an early click can explain why Close is locked.
                       <Button id="lc-close" ref={(el) => { btns.current["lc-close"] = el; }} className="mt-3" size="sm"
-                        variant={canClose ? "primary" : "secondary"} aria-disabled={!canClose} onClick={() => dispatch({ type: "close" })}
+                        variant={canClose ? "primary" : "secondary"} aria-disabled={!canClose} onClick={() => dispatch({ type: "close", role })}
                         icon={canClose || f.state === "closed" ? <ShieldCheck size={15} aria-hidden="true" /> : <Lock size={15} aria-hidden="true" />}>
                         {f.state === "closed" ? "Finding closed" : "Close finding"}
                       </Button>

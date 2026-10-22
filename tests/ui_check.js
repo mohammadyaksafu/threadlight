@@ -94,6 +94,40 @@ async function main() {
   await send("Page.navigate", { url: PAGE });
   await sleep(2000);
 
+  // Demo sign-in: gate, wrong password, and role permissions
+  const typeInto = async (sel, value) => { await evaluate(`document.querySelector(${q(sel)}).focus()`); await send("Input.insertText", { text: value }); };
+  await shot("login");
+  check("signed-out visitors land on the demo sign-in page", (await evaluate("location.hash")).startsWith("#/login"));
+  check("sign-in page says it is not real authentication", (await text("main")).includes("Demo sign-in, not real authentication"));
+  await typeInto("#login-email", "officer@threadlight.demo"); await typeInto("#login-password", "wrong-password");
+  await click("#login-submit"); await sleep(150);
+  check("wrong password is rejected", (await text("#login-error")).includes("does not match"));
+
+  await click("#login-as-guest"); await sleep(400);
+  check("guest account signs in", (await text("#session-role")) === "Guest (read-only)");
+  await go("/actions/workflow");
+  check("guest: Assign is locked to their role", await evaluate(`document.getElementById("lc-assign").getAttribute("aria-disabled")`) === "true");
+  await click("#lc-assign");
+  check("guest: clicking Assign explains the role needed", (await text("#lc-msg")).includes("cannot assign"));
+  await click("#sign-out"); await sleep(300);
+
+  await evaluate(`location.hash = "#/login"`); await sleep(250);
+  await typeInto("#login-email", "staff@threadlight.demo"); await typeInto("#login-password", "Staff-Demo-2026");
+  await click("#login-submit"); await sleep(400);
+  check("staff account signs in with typed credentials", (await text("#session-role")) === "Factory staff");
+  await go("/actions/workflow");
+  await click("#lc-assign"); await click("#lc-upload");
+  check("staff: can assign and upload (coverage stays 29)", (await kpis())[1] === "29" && await text('[data-testid="lc-current"] [data-label]') === "Remediate");
+  await click("#lc-approve");
+  check("staff: cannot approve (Compliance Officer only)", (await text("#lc-msg")).includes("cannot approve") && (await kpis())[1] === "29");
+  await click("#lc-reset");
+  await click("#sign-out"); await sleep(300);
+
+  await evaluate(`location.hash = "#/login"`); await sleep(250);
+  await click("#login-as-officer"); await sleep(400);
+  check("officer account signs in", (await text("#session-role")) === "Compliance Officer");
+  await go("/");
+
   // Overview + header figures
   check("home page is Overview", await current("#nav-overview") === "page");
   check("synthetic-data banner visible", (await text('[data-testid="synthetic-banner"]')).includes("Synthetic data. Rules run live in your browser. Extraction results are pre-computed samples, not live AI."));

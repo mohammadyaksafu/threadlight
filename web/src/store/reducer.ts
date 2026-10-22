@@ -6,6 +6,7 @@ import {
 } from "@/engine";
 import { APPROVER, D1_ORIGINAL, SAMPLE, SIM_MAX, SIM_MIN } from "@/data/sample";
 import { STATUS, type Lang } from "@/lib/vocab";
+import { accountFor, can, type Permission, type Role } from "@/auth/accounts";
 
 export interface Selection { kind: "doc" | "req"; id: string }
 export type Tone = "neutral" | "ok" | "blocked";
@@ -20,10 +21,10 @@ export interface AppState {
 }
 
 export type Action =
-  | { type: "assign" }
-  | { type: "upload" }
-  | { type: "approve" }
-  | { type: "close" }
+  | { type: "assign"; role: Role }
+  | { type: "upload"; role: Role }
+  | { type: "approve"; role: Role }
+  | { type: "close"; role: Role }
   | { type: "reset" }
   | { type: "select"; selection: Selection }
   | { type: "simDate"; date: string }
@@ -42,7 +43,24 @@ export function initialState(): AppState {
 
 const statusOf = (r: Result, id: string): string => STATUS[r.requirements.find((x) => x.id === id)!.status].en.toLowerCase();
 
+const NEEDS: Record<string, string> = {
+  assign: "Factory staff or the Compliance Officer", upload: "Factory staff or the Compliance Officer",
+  approve: "the Compliance Officer", close: "the Compliance Officer",
+};
+
+/** Workflow actions are also checked here, so a disabled button is never the only guard. */
+function denied(state: AppState, action: Action): AppState | null {
+  if (!("role" in action)) return null;
+  if (can(action.role, action.type as Permission)) return null;
+  return {
+    ...state,
+    message: { tone: "blocked", text: `Your demo role (${accountFor(action.role).title}) cannot ${action.type} this finding. Sign in as ${NEEDS[action.type]} to continue.` },
+  };
+}
+
 export function reducer(state: AppState, action: Action): AppState {
+  const blocked = denied(state, action);
+  if (blocked) return blocked;
   switch (action.type) {
     case "assign":
       return {
