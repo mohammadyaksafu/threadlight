@@ -65,7 +65,8 @@ web/                             React 18 + TypeScript + Tailwind CSS app (Vite)
   src/styles/index.css           design tokens (light/dark) + Tailwind layers
 .github/workflows/pages.yml      CI: tests, parity, build, deploy to GitHub Pages
 tools/video/                     script that records the demo video from the live site (TTS narration)
-docs/                            ARCHITECTURE, EVALUATION, REFERENCES, SUBMISSION_FIELDS, SUBMISSION_LINKS, VIDEO_SCRIPT
+docs/                            ARCHITECTURE, EVALUATION, REFERENCES, SUBMISSION_FIELDS, SUBMISSION_LINKS,
+                                 AI_USAGE (form answers on AI depth), VIDEO_SCRIPT
 ```
 
 ## Run the web app
