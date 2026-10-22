@@ -1,0 +1,56 @@
+{
+  "_notice": "SYNTHETIC DATA. Every factory, buyer, framework, document and reference number in this file was invented for the ThreadLight prototype. Clause text and document fields are pre-extracted sample results, not output of a live OCR or language model.",
+  "scenario": "A factory 30 days before an audit",
+  "today": "2026-10-22",
+  "audit_date": "2026-11-21",
+  "factory": "Sample Apparel Ltd.",
+  "buyer": "Buyer A (synthetic)",
+  "framework": "Buyer A Code of Conduct v3.2 (synthetic)",
+  "evidence_types": {
+    "fire_certificate": {"label": "fire safety certificate", "label_bn": "অগ্নি নিরাপত্তা সনদ"},
+    "structural_report": {"label": "structural assessment report", "label_bn": "কাঠামোগত মূল্যায়ন প্রতিবেদন"},
+    "trade_license": {"label": "trade license", "label_bn": "ট্রেড লাইসেন্স"},
+    "env_clearance": {"label": "environmental clearance", "label_bn": "পরিবেশগত ছাড়পত্র"},
+    "fire_drill_record": {"label": "fire drill record", "label_bn": "অগ্নি মহড়ার রেকর্ড"},
+    "payroll_summary": {"label": "payroll and working-hour summary", "label_bn": "মজুরি ও কর্মঘণ্টার সারসংক্ষেপ"},
+    "committee_minutes": {"label": "safety committee minutes", "label_bn": "নিরাপত্তা কমিটির কার্যবিবরণী"},
+    "cap_closure_evidence": {"label": "corrective action closure evidence", "label_bn": "সংশোধনমূলক পদক্ষেপ সমাপ্তির প্রমাণ"}
+  },
+  "requirements": [
+    {"id": "R1", "clause": "4.1", "title": "Valid fire safety certificate", "title_bn": "বৈধ অগ্নি নিরাপত্তা সনদ", "criticality": 5, "needs": ["fire_certificate"], "department": "Safety & Maintenance",
+     "text": "The supplier shall hold a fire safety certificate issued by the competent authority that is valid on the date of the audit."},
+    {"id": "R2", "clause": "4.2", "title": "Structural safety assessment", "title_bn": "কাঠামোগত নিরাপত্তা মূল্যায়ন", "criticality": 5, "needs": ["structural_report"], "department": "Engineering",
+     "text": "The supplier shall provide a structural safety assessment by a qualified engineer that remains valid on the date of the audit."},
+    {"id": "R3", "clause": "2.1", "title": "Valid trade license", "title_bn": "বৈধ ট্রেড লাইসেন্স", "criticality": 4, "needs": ["trade_license"], "department": "Administration",
+     "text": "The supplier shall operate under a trade license, in the registered name of the facility, valid on the date of the audit."},
+    {"id": "R4", "clause": "7.3", "title": "Environmental clearance", "title_bn": "পরিবেশগত ছাড়পত্র", "criticality": 3, "needs": ["env_clearance"], "department": "Compliance",
+     "text": "The supplier shall hold an environmental clearance for the facility, in the registered name of the facility, valid on the date of the audit."},
+    {"id": "R5", "clause": "4.4", "title": "Fire drill records", "title_bn": "অগ্নি মহড়ার রেকর্ড", "criticality": 3, "needs": ["fire_drill_record", "fire_certificate"], "department": "Safety & Maintenance", "max_age_days": {"fire_drill_record": 180},
+     "text": "The supplier shall keep records of fire drills conducted within the last 180 days, carried out under a valid fire safety certificate."},
+    {"id": "R6", "clause": "5.2", "title": "Wage and working-hour records", "title_bn": "মজুরি ও কর্মঘণ্টার রেকর্ড", "criticality": 4, "needs": ["payroll_summary"], "department": "HR & Payroll",
+     "text": "The supplier shall maintain wage and working-hour records for all workers and make a summary available to the auditor."},
+    {"id": "R7", "clause": "4.6", "title": "Safety committee minutes", "title_bn": "নিরাপত্তা কমিটির সভার কার্যবিবরণী", "criticality": 2, "needs": ["committee_minutes"], "department": "HR & Payroll",
+     "text": "The supplier shall keep minutes of safety committee meetings, including references to the safety documents reviewed."},
+    {"id": "R8", "clause": "9.1", "title": "Closure proof for corrective action CAP-14", "title_bn": "সংশোধনমূলক পদক্ষেপ CAP-14 সমাপ্তির প্রমাণ", "criticality": 5, "needs": ["cap_closure_evidence"], "department": "Safety & Maintenance",
+     "text": "Corrective actions reported as complete shall be supported by closure evidence such as dated photographs or a verification note."}
+  ],
+  "documents": [
+    {"id": "D1", "type": "fire_certificate", "title": "Fire Safety Certificate", "entity": "Sample Apparel Ltd.", "ref": "FC-2025-0417", "issued": "2025-11-11", "valid_until": "2026-11-10",
+     "source": {"file": "fire_certificate.pdf", "page": 1}, "confidence": 0.97, "verified": true, "cites": []},
+    {"id": "D2", "type": "structural_report", "title": "Structural Assessment Report", "entity": "Sample Apparel Ltd.", "ref": "SR-2025-118", "issued": "2025-03-01", "valid_until": "2027-03-01",
+     "source": {"file": "structural_assessment.pdf", "page": 4}, "confidence": 0.95, "verified": true, "cites": []},
+    {"id": "D3", "type": "trade_license", "title": "Trade License", "entity": "Sample Apparel Ltd.", "ref": "TL-77310", "issued": "2026-01-01", "valid_until": "2026-12-31",
+     "source": {"file": "trade_license.pdf", "page": 1}, "confidence": 0.98, "verified": true, "cites": []},
+    {"id": "D4", "type": "env_clearance", "title": "Environmental Clearance", "entity": "Sample Apparels Ltd.", "ref": "EC-2024-5521", "issued": "2024-10-01", "valid_until": "2026-09-30",
+     "source": {"file": "env_clearance_scan.pdf", "page": 2}, "confidence": 0.81, "verified": true, "cites": []},
+    {"id": "D5", "type": "fire_drill_record", "title": "Fire Drill Log", "entity": "Sample Apparel Ltd.", "ref": "FD-LOG-2026", "issued": "2026-08-14", "valid_until": null,
+     "source": {"file": "fire_drill_log.pdf", "page": 1}, "confidence": 0.92, "verified": true, "cites": []},
+    {"id": "D6", "type": "committee_minutes", "title": "Safety Committee Minutes (Sep 2026)", "entity": "Sample Apparel Ltd.", "ref": "SC-MIN-2026-09", "issued": "2026-09-20", "valid_until": null,
+     "source": {"file": "safety_committee_minutes.pdf", "page": 2}, "confidence": 0.88, "verified": true, "cites": [{"ref": "FC-2025-0471", "of_type": "fire_certificate"}]}
+  ],
+  "corrective_actions": [
+    {"id": "CAP-14", "title": "Clear and re-mark blocked emergency exit, Floor 2", "claimed_status": "complete", "closure_evidence": [], "requirement": "R8"}
+  ],
+  "renewal": {"id": "D1-renewal", "type": "fire_certificate", "title": "Fire Safety Certificate (renewal)", "entity": "Sample Apparel Ltd.", "ref": "FC-2026-0562", "issued": "2026-10-21", "valid_until": "2027-10-20",
+    "source": {"file": "fire_certificate_renewal.pdf", "page": 1}, "confidence": 0.96, "verified": false, "cites": [], "supersedes": "D1"}
+}

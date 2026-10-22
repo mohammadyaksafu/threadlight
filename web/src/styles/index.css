@@ -1,0 +1,78 @@
+/* ThreadLight design tokens + Tailwind layers.
+   Tokens are RGB channels so Tailwind opacity modifiers (bg-ok/10) work.
+   Dark mode follows prefers-color-scheme unless [data-theme] overrides it. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 242 243 249; --surface: 255 255 255; --surface-2: 240 242 248; --surface-3: 230 233 243;
+    --ink: 19 21 43; --ink-2: 72 77 102; --ink-3: 104 109 134; --line: 220 223 235;
+    --thread: 43 53 144; --thread-strong: 29 37 112; --thread-soft: 230 232 248; --on-thread: 255 255 255;
+    --ok: 22 101 62;    --ok-bg: 225 242 232;
+    --gap: 176 38 27;   --gap-bg: 252 231 228;
+    --insuf: 130 83 0;  --insuf-bg: 251 239 209;
+    --conf: 106 58 158; --conf-bg: 240 231 250;
+    --pend: 58 72 102;  --pend-bg: 229 234 243;
+    --shadow: 20 23 46;
+    /* sidebar + hero: deep indigo "thread" panel in both themes */
+    --side-bg: 21 25 64; --side-ink: 236 238 252; --side-ink-2: 168 174 216; --side-hover: 35 40 92; --side-active: 54 62 140; --side-line: 43 49 102;
+    --hero-bg: 29 35 94; --hero-ink: 245 246 255; --hero-ink-2: 186 192 236;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: 12 14 28; --surface: 20 23 45; --surface-2: 28 32 60; --surface-3: 38 43 78;
+      --ink: 233 235 247; --ink-2: 178 182 208; --ink-3: 140 145 174; --line: 44 49 86;
+      --thread: 154 165 255; --thread-strong: 188 195 255; --thread-soft: 36 42 88; --on-thread: 12 14 28;
+      --ok: 103 212 158; --ok-bg: 17 47 31; --gap: 255 143 128; --gap-bg: 60 23 20;
+      --insuf: 240 194 90; --insuf-bg: 51 40 12; --conf: 205 168 255; --conf-bg: 45 30 70;
+      --pend: 179 191 216; --pend-bg: 35 42 61; --shadow: 0 0 0;
+      --side-bg: 15 17 36; --side-ink: 233 235 247; --side-ink-2: 150 156 196; --side-hover: 28 32 64; --side-active: 44 51 112; --side-line: 34 38 74;
+      --hero-bg: 30 35 82; --hero-ink: 240 242 255; --hero-ink-2: 178 184 228;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: 12 14 28; --surface: 20 23 45; --surface-2: 28 32 60; --surface-3: 38 43 78;
+    --ink: 233 235 247; --ink-2: 178 182 208; --ink-3: 140 145 174; --line: 44 49 86;
+    --thread: 154 165 255; --thread-strong: 188 195 255; --thread-soft: 36 42 88; --on-thread: 12 14 28;
+    --ok: 103 212 158; --ok-bg: 17 47 31; --gap: 255 143 128; --gap-bg: 60 23 20;
+    --insuf: 240 194 90; --insuf-bg: 51 40 12; --conf: 205 168 255; --conf-bg: 45 30 70;
+    --pend: 179 191 216; --pend-bg: 35 42 61; --shadow: 0 0 0;
+    --side-bg: 15 17 36; --side-ink: 233 235 247; --side-ink-2: 150 156 196; --side-hover: 28 32 64; --side-active: 44 51 112; --side-line: 34 38 74;
+    --hero-bg: 30 35 82; --hero-ink: 240 242 255; --hero-ink-2: 178 184 228;
+    color-scheme: dark;
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-bg font-sans text-[15px] leading-normal text-ink antialiased; }
+  :lang(bn) { @apply font-bn; }
+  .font-mono { font-size: 0.92em; }
+  :focus-visible { outline: 3px solid rgb(var(--thread)); outline-offset: 2px; border-radius: 6px; }
+  [hidden] { display: none !important; }
+}
+
+@layer components {
+  .card { @apply rounded-2xl border border-line/80 bg-surface p-5 shadow-card; }
+  .eyebrow { @apply font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-thread; }
+}
+
+/* Evidence graph edges: colour AND dash pattern per status (never colour alone).
+   Outside @layer: class names are composed at runtime (e-${status}) and must not be purged. */
+.edge { fill: none; stroke-width: 2.25; stroke-linecap: round; }
+@media (prefers-reduced-motion: no-preference) { .edge { transition: opacity .2s, stroke-width .2s; } }
+.edge.dim { opacity: .12; }
+.edge.lit { stroke-width: 3.5; }
+.e-supported { stroke: rgb(var(--ok)); }
+.e-likely_gap { stroke: rgb(var(--gap)); stroke-dasharray: 7 5; }
+.e-insufficient { stroke: rgb(var(--insuf)); stroke-dasharray: 1 5; }
+.e-conflicting { stroke: rgb(var(--conf)); stroke-dasharray: 10 4 2 4; }
+.e-pending_review { stroke: rgb(var(--pend)); stroke-dasharray: 4 4; }
+
+input[type="range"] { accent-color: rgb(var(--thread)); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
