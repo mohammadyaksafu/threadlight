@@ -95,6 +95,9 @@ async function main() {
   await send("Page.enable"); await send("Runtime.enable");
   await send("Emulation.setDeviceMetricsOverride", { width: 1600, height: 900, deviceScaleFactor: 1.2, mobile: false });
   await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: "light" }] });
+  // Start a demo session as the Compliance Officer (public demo account; sessionStorage lasts for this tab).
+  await send("Page.navigate", { url: APP + "#/login" }); await sleep(2500);
+  await ev(`sessionStorage.setItem("tl-session", "officer")`);
 
   for (const sc of SCENES) {
     if (sc.url) { await send("Page.navigate", { url: sc.url }); await sleep(2500); }
