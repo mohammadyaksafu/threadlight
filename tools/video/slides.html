@@ -3,83 +3,122 @@
 <head>
 <meta charset="utf-8">
 <title>ThreadLight video slides</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Schibsted+Grotesk:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+Bengali:wght@600&family=Schibsted+Grotesk:wght@400;600;700;800&display=swap">
 <style>
-  :root { --bg: #151940; --ink: #f4f5ff; --ink2: #b6bcec; --accent: #6ee0a0; --line: rgba(244,245,255,.14); }
+  :root { --bg: #151940; --ink: #f4f5ff; --ink2: #b6bcec; --accent: #6ee0a0; --amber: #f0c25a; --line: rgba(244,245,255,.14); --card: rgba(255,255,255,.05); }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: "Schibsted Grotesk", system-ui, sans-serif; }
-  .slide { position: absolute; inset: 0; display: none; padding: 90px 110px; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; padding: 80px 100px 110px; overflow: hidden; }
   .slide.on { display: flex; flex-direction: column; justify-content: center; }
   .thread { position: absolute; right: -80px; top: -40px; width: 900px; height: 480px; opacity: .08; }
-  .eyebrow { font-family: "IBM Plex Mono", monospace; letter-spacing: .14em; text-transform: uppercase; font-size: 20px; color: var(--ink2); }
-  h1 { font-size: 84px; line-height: 1.04; margin: 18px 0 0; font-weight: 800; letter-spacing: -.02em; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; letter-spacing: .14em; text-transform: uppercase; font-size: 19px; color: var(--accent); }
+  h1 { font-size: 74px; line-height: 1.05; margin: 16px 0 0; font-weight: 800; letter-spacing: -.02em; }
   h1 .soft { color: var(--ink2); }
-  p.lead { font-size: 30px; color: var(--ink2); max-width: 1100px; line-height: 1.4; margin-top: 26px; }
-  .logo { display: flex; align-items: center; gap: 18px; font-size: 40px; font-weight: 800; }
-  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 48px; }
-  .stat { border: 1px solid var(--line); border-radius: 28px; padding: 36px 40px; background: rgba(255,255,255,.04); }
-  .stat .n { font-size: 96px; font-weight: 800; letter-spacing: -.02em; }
-  .stat .t { font-size: 27px; color: var(--ink); margin-top: 6px; line-height: 1.35; }
-  .stat .src { font-family: "IBM Plex Mono", monospace; font-size: 17px; color: var(--ink2); margin-top: 18px; }
-  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 44px; }
-  .col { border: 1px solid var(--line); border-radius: 28px; padding: 34px 40px; background: rgba(255,255,255,.04); }
-  .col h2 { margin: 0 0 18px; font-size: 30px; }
-  .col ul { margin: 0; padding-left: 26px; font-size: 25px; line-height: 1.55; color: var(--ink); }
-  .col.planned ul { color: var(--ink2); }
-  .rules { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 44px; }
-  .rule { border-radius: 22px; padding: 26px; background: rgba(255,255,255,.06); font-size: 26px; font-weight: 600; line-height: 1.3; }
-  .rule b { display: block; font-family: "IBM Plex Mono", monospace; color: var(--accent); font-size: 18px; margin-bottom: 10px; }
-  .links { margin-top: 44px; font-family: "IBM Plex Mono", monospace; font-size: 27px; line-height: 1.8; color: var(--ink); }
-  .links span { color: var(--ink2); display: inline-block; width: 170px; }
-  .note { position: absolute; left: 110px; top: 50px; font-family: "IBM Plex Mono", monospace; font-size: 17px; color: var(--ink2); }
+  p.lead { font-size: 28px; color: var(--ink2); max-width: 1150px; line-height: 1.4; margin: 24px 0 0; }
+  .logo { display: flex; align-items: center; gap: 16px; font-size: 32px; font-weight: 800; margin-bottom: 34px; }
+  .persona { display: flex; gap: 22px; margin-top: 40px; flex-wrap: wrap; }
+  .tag { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 12px 24px; font-size: 23px; }
+  .tag b { color: var(--accent); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 44px; }
+  .stat { border: 1px solid var(--line); border-radius: 26px; padding: 30px 32px; background: var(--card); }
+  .stat .n { font-size: 74px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .stat .t { font-size: 23px; margin-top: 14px; line-height: 1.35; }
+  .stat .src { font-family: "IBM Plex Mono", monospace; font-size: 15px; color: var(--ink2); margin-top: 16px; line-height: 1.4; }
+  /* AI pipeline */
+  .flow { display: grid; grid-template-columns: 1fr 34px 1.25fr 34px 1fr 34px 1fr; align-items: stretch; margin-top: 40px; }
+  .arrow { display: grid; place-items: center; color: var(--ink2); font-size: 30px; }
+  .stage { border: 1px solid var(--line); border-radius: 24px; background: var(--card); padding: 22px 22px 18px; }
+  .stage h3 { margin: 0 0 14px; font-family: "IBM Plex Mono", monospace; font-size: 17px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); }
+  .item { border-radius: 14px; background: rgba(255,255,255,.06); padding: 12px 14px; margin-bottom: 10px; font-size: 20px; font-weight: 600; line-height: 1.25; }
+  .item small { display: block; font-weight: 400; font-size: 15px; color: var(--ink2); margin-top: 4px; }
+  .live, .plan { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; margin-top: 8px; }
+  .live { background: rgba(110,224,160,.18); color: var(--accent); }
+  .plan { background: rgba(240,194,90,.16); color: var(--amber); }
+  .human { margin-top: 22px; border: 1px dashed var(--line); border-radius: 18px; padding: 14px 20px; font-size: 22px; display: flex; gap: 14px; align-items: center; }
+  .bn { font-family: "Noto Sans Bengali", sans-serif; }
+  /* impact */
+  .cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 30px; margin-top: 38px; }
+  .col { border: 1px solid var(--line); border-radius: 26px; padding: 28px 34px; background: var(--card); }
+  .col h2 { margin: 0 0 14px; font-size: 26px; }
+  .col ul { margin: 0; padding-left: 24px; font-size: 22.5px; line-height: 1.6; }
+  .col p { margin: 12px 0 0; font-size: 16px; color: var(--ink2); font-family: "IBM Plex Mono", monospace; }
+  .links { margin-top: 30px; font-family: "IBM Plex Mono", monospace; font-size: 22px; line-height: 1.7; }
+  .links span { color: var(--ink2); display: inline-block; width: 150px; }
+  .note { position: absolute; left: 100px; top: 44px; font-family: "IBM Plex Mono", monospace; font-size: 16px; color: var(--ink2); }
 </style>
 </head>
 <body>
 <svg class="thread" viewBox="0 0 900 480" fill="none" aria-hidden="true"><path d="M0 380 C 200 60, 400 520, 610 210 S 840 90, 900 150" stroke="#fff" stroke-width="34" stroke-linecap="round"/></svg>
 
-<section class="slide" id="hook">
-  <div class="logo"><svg width="64" height="64" viewBox="0 0 34 34"><rect x="1" y="1" width="32" height="32" rx="9" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.3)"/><path d="M7 22 C 12 8, 17 30, 22 14 S 27 10, 28 12" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="22" cy="14" r="2.6" fill="#fff"/></svg>ThreadLight</div>
-  <h1>One factory. One certificate.<br><span class="soft">30 days before the audit.</span></h1>
-  <p class="lead">Verified Evidence Passport for garment exporters &middot; working prototype</p>
-  <div class="note">All data in this video is synthetic. No live AI calls in the demo.</div>
+<!-- 0:00 Problem, part 1: the user -->
+<section class="slide" id="user">
+  <div class="note">All data in this video is synthetic.</div>
+  <div class="logo"><svg width="56" height="56" viewBox="0 0 34 34"><rect x="1" y="1" width="32" height="32" rx="9" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.3)"/><path d="M7 22 C 12 8, 17 30, 22 14 S 27 10, 28 12" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="22" cy="14" r="2.6" fill="#fff"/></svg>ThreadLight</div>
+  <div class="eyebrow">The problem &middot; the user</div>
+  <h1>A factory compliance manager,<br><span class="soft">30 days before a buyer audit.</span></h1>
+  <div class="persona">
+    <div class="tag">Export garment factory, <b>Bangladesh</b></div>
+    <div class="tag">Fire certificate expires <b>before the audit</b></div>
+    <div class="tag">Nobody has noticed</div>
+  </div>
 </section>
 
+<!-- 0:12 Problem, part 2: urgency (Bangladesh + global) -->
 <section class="slide" id="problem">
-  <div class="eyebrow">The problem</div>
-  <h1>Compliance proof lives in scattered PDFs.</h1>
+  <div class="eyebrow">Why it matters &middot; Bangladesh + global</div>
+  <h1>Buyers demand proof.<br><span class="soft">It lives in scattered PDFs.</span></h1>
   <div class="stats">
-    <div class="stat"><div class="n">83.29%</div><div class="t">of Bangladesh's $48.28B exports in FY2024-25 were apparel and home textiles</div><div class="src">Source: EPB data via Fibre2Fashion</div></div>
-    <div class="stat"><div class="n">800 / 1,875</div><div class="t">RSC-covered factories had completed structural remediation by June 2025</div><div class="src">Source: RMG Sustainability Council, Monthly Report June 2025 (structural only)</div></div>
+    <div class="stat"><div class="n">83.29%</div><div class="t">of Bangladesh's $48.28B exports in FY2024-25 were apparel and home textiles</div><div class="src">EPB data via Fibre2Fashion</div></div>
+    <div class="stat"><div class="n">49.82%</div><div class="t">of Bangladesh's garment exports went to the EU (July-March FY2024-25)</div><div class="src">EPB data via Dhaka Tribune</div></div>
+    <div class="stat"><div class="n">2029</div><div class="t">EU due-diligence rules (CSDDD) apply from July 2029, after Omnibus I</div><div class="src">DLA Piper summary; check the official EU text</div></div>
   </div>
 </section>
 
-<section class="slide" id="how">
-  <div class="eyebrow">How it decides</div>
-  <h1>Rules decide. Models read. People approve.</h1>
-  <div class="rules">
-    <div class="rule"><b>01</b>Rules decide dates, coverage and status</div>
-    <div class="rule"><b>02</b>Models only read text (planned)</div>
-    <div class="rule"><b>03</b>Every finding cites file and page</div>
-    <div class="rule"><b>04</b>Only a named person closes a finding</div>
+<!-- 2:00 AI approach: input -> AI -> output -->
+<section class="slide" id="flow">
+  <div class="eyebrow">AI approach &middot; input &rarr; AI &rarr; output</div>
+  <h1 style="font-size:60px">Models read. Rules decide. <span class="soft">People approve.</span></h1>
+  <div class="flow">
+    <div class="stage"><h3>Input</h3>
+      <div class="item">Certificates, scans, logs<small>PDF and photo, English or <span class="bn">বাংলা</span></small></div>
+      <div class="item">Buyer code of conduct<small>clauses and evidence rules</small></div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage"><h3>AI layer</h3>
+      <div class="item">OCR + LLM structured extraction<small>fields with file and page citation</small><span class="plan">planned &middot; sample in demo</span></div>
+      <div class="item">RAG clause-to-evidence matching<small>hybrid retrieval + reranking</small><span class="plan">planned</span></div>
+      <div class="item">Evidence knowledge graph<small>one document, many requirements</small><span class="live">live</span></div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage"><h3>Decide</h3>
+      <div class="item">Deterministic rules<small>expiry, coverage, contradictions</small><span class="live">live</span></div>
+      <div class="item">Risk index + what-if<small>decision support, not a score</small><span class="live">live</span></div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="stage"><h3>Output</h3>
+      <div class="item">Cited findings, alerts, plan<span class="live">live</span></div>
+      <div class="item">Bilingual report<small>LLM drafting planned; templates live</small><span class="live">live</span></div>
+    </div>
   </div>
+  <div class="human">&#10003; A named person approves every closure. AI can never close a finding. <span class="live" style="margin:0">live</span></div>
+</section>
+
+<!-- 2:30 Impact & next step -->
+<section class="slide" id="impact">
+  <div class="eyebrow">Impact &middot; next step</div>
+  <h1 style="font-size:62px">Fewer audit surprises.<br><span class="soft">Faster, provable fixes.</span></h1>
   <div class="cols">
-    <div class="col"><h2>Implemented now</h2><ul><li>Deterministic rules engine + parity tests</li><li>Evidence graph, risk index, what-if</li><li>Human approval loop, bilingual report</li></ul></div>
-    <div class="col planned"><h2>Planned</h2><ul><li>OCR and language-model extraction</li><li>Hybrid retrieval, drafting</li><li>Auth, tenant isolation, MCP server</li></ul></div>
+    <div class="col"><h2>KPIs we will measure in a pilot</h2>
+      <ul><li>Evidence-preparation hours per audit</li><li>Share of requirements with cited, in-date evidence</li><li>Issues found before vs during the audit</li><li>Days from finding to approved closure</li></ul>
+      <p>Targets set with pilot factories. No results claimed yet.</p></div>
+    <div class="col"><h2>Next</h2>
+      <ul><li>Pilot with export factories</li><li>Real OCR + LLM extraction, RAG</li><li>Bangla document reading</li><li>Buyer view of the Evidence Passport</li></ul></div>
   </div>
-</section>
-
-<section class="slide" id="close">
-  <div class="eyebrow">The ask</div>
-  <h1>Pilot factories and advisors<br><span class="soft">who know garment compliance.</span></h1>
-  <div class="links">
-    <div><span>Live demo</span>mohammadyaksafu.github.io/threadlight</div>
-    <div><span>Code</span>github.com/mohammadyaksafu/threadlight</div>
-  </div>
-  <div class="note">Synthetic data. Risk figure is a decision-support index, not an audit score.</div>
+  <div class="links"><div><span>Live demo</span>mohammadyaksafu.github.io/threadlight</div><div><span>Code</span>github.com/mohammadyaksafu/threadlight</div></div>
 </section>
 
 <script>
-  const id = new URLSearchParams(location.search).get("s") || "hook";
+  const id = new URLSearchParams(location.search).get("s") || "user";
   document.getElementById(id).classList.add("on");
 </script>
 </body>

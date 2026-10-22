@@ -27,14 +27,13 @@ Each account also has a one-click "Demo accounts" button on the sign-in page.
 
 ## About the video
 
-- File: `recordings/threadlight-demo.mp4` (1920x1080, 163 seconds, under the 181-second limit). Not committed to git.
+- File: `recordings/threadlight-demo.mp4` (1920x1080, 174.6 seconds, under the 181-second limit; structured Problem / Solution / Demo / AI approach / Impact). Not committed to git.
 - Recorded automatically from the live site by `tools/video/record.js` (headless Chrome). The slides are
   `tools/video/slides.html` and the narration text is `tools/video/narration.json`.
 - The voice is the offline Windows text-to-speech voice "Microsoft Zira Desktop". It is a synthetic voice,
   not a person, and is disclosed in SUBMISSION_FIELDS.md. You can replace it with your own voice by
   recording over the same timeline (see VIDEO_SCRIPT.md).
-- The business-model segment from VIDEO_SCRIPT.md is left out because its price and pilot numbers are
-  still [FILL]; no figures were invented.
+- No KPI targets, prices or quotes are stated; KPIs are named as what a pilot will measure.
 
 ## Uploading to YouTube (Unlisted)
 

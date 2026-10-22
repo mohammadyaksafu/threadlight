@@ -18,23 +18,30 @@ const narration = JSON.parse(fs.readFileSync(path.join(DIR, "narration.json"), "
 const dur = Object.fromEntries(narration.map((n) => [n.id, +execFileSync("ffprobe",
   ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path.join(DIR, "audio", n.id + ".wav")]).toString().trim()]));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const LIMIT = 179;
 
-// Scene plan: length in seconds and the actions to run at given offsets (seconds from scene start).
+// Scene plan, following the 180-second pitch structure: Problem 0:00-0:30, Solution 0:30-1:00,
+// Demo 1:00-2:00, AI approach 2:00-2:30, Impact 2:30-3:00. Each scene lasts max(min, narration + 0.8 s);
+// steps are actions at offsets (seconds from scene start).
 const SCENES = [
-  { id: "s01_hook", len: 13.5, url: SLIDES + "?s=hook" },
-  { id: "s02_problem", len: 23, url: SLIDES + "?s=problem" },
-  { id: "s03_solution", len: 14, url: APP + "#/", steps: [[6.5, "scroll", 260], [11.5, "scroll", 0]] },
-  { id: "s04_documents", len: 10, hash: "#/documents", steps: [[1.2, "click", "#run-analysis"], [5, "scroll", 420]] },
-  { id: "s05_graph", len: 8.5, hash: "#/graph", steps: [[1.5, "click", '[data-testid="node-doc"][data-id="D1"]']] },
-  { id: "s06_findings", len: 17.5, hash: "#/findings", steps: [[2.2, "click", "#finding-R1 a"], [6.5, "hash", "#/findings/alerts"], [11, "scroll", 380]] },
-  { id: "s07_simulate", len: 11, hash: "#/simulate", steps: [[0.8, "slide", "2026-12-31"], [6, "click", "#preset-1"], [8.5, "click", "#preset-2"]] },
-  { id: "s08_workflow", len: 22, hash: "#/actions/workflow", steps: [
-    [0.8, "click", "#lc-assign"], [3, "click", "#lc-upload"], [6.2, "point", "#main aside, #main .lg\\:sticky"],
-    [9.2, "click", "#lc-close"], [13.5, "click", "#lc-approve"], [17.2, "click", "#lc-close"]] },
-  { id: "s09_report", len: 10, hash: "#/report", steps: [[1.8, "click", '[data-lang="bn"]'], [4.5, "scroll", 700]] },
-  { id: "s10_how", len: 23, url: SLIDES + "?s=how" },
-  { id: "s11_close", len: 10.5, url: SLIDES + "?s=close" },
+  { id: "p1_user", seg: "1 Problem", min: 0, url: SLIDES + "?s=user" },
+  { id: "p2_problem", seg: "1 Problem", min: 0, url: SLIDES + "?s=problem" },
+  { id: "s1_solution", seg: "2 Solution", min: 0, url: APP + "#/", steps: [[12, "scroll", 300], [22, "scroll", 0]] },
+  { id: "d1_documents", seg: "3 Demo", min: 9, hash: "#/documents", steps: [[0.6, "click", "#run-analysis"]] },
+  { id: "d2_graph", seg: "3 Demo", min: 8, hash: "#/graph", steps: [[0.8, "click", '[data-testid="node-doc"][data-id="D1"]']] },
+  { id: "d3_findings", seg: "3 Demo", min: 13, hash: "#/findings", steps: [[0.8, "click", "#finding-R1 a"], [5.2, "hash", "#/findings/alerts"], [9.5, "scroll", 320]] },
+  { id: "d4_simulate", seg: "3 Demo", min: 9, hash: "#/simulate", steps: [[0.4, "slide", "2026-12-31"], [6, "click", "#preset-1"]] },
+  { id: "d5_workflow", seg: "3 Demo", min: 19, hash: "#/actions/workflow", steps: [
+    [0.6, "click", "#lc-assign"], [2.6, "click", "#lc-upload"], [7, "click", "#lc-close"], [10.4, "click", "#lc-approve"], [14, "click", "#lc-close"]] },
+  { id: "d6_report", seg: "3 Demo", min: 9, hash: "#/report", steps: [[0.8, "click", '[data-lang="bn"]'], [3.6, "scroll", 650]] },
+  { id: "a1_ai", seg: "4 AI approach", min: 0, url: SLIDES + "?s=flow" },
+  { id: "i1_impact", seg: "5 Impact & next", min: 0, url: SLIDES + "?s=impact" },
 ];
+
+for (const sc of SCENES) sc.len = +Math.max(sc.min, dur[sc.id] + 0.8).toFixed(2);
+const TOTAL = SCENES.reduce((a, s) => a + s.len, 0);
+if (TOTAL > LIMIT) { console.error(`Planned length ${TOTAL.toFixed(1)}s is over ${LIMIT}s; shorten the narration.`); process.exit(1); }
+console.log(`planned length ${TOTAL.toFixed(1)}s`);
 
 const OVERLAY = `
 (function(){
@@ -43,12 +50,15 @@ const OVERLAY = `
   st.textContent = '#__cur{position:fixed;z-index:99999;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:rgba(255,255,255,.9);border:3px solid #2b3590;box-shadow:0 2px 10px rgba(0,0,0,.35);pointer-events:none;transition:left .55s cubic-bezier(.3,.7,.3,1),top .55s cubic-bezier(.3,.7,.3,1),transform .15s;left:70%;top:60%;opacity:0}'
    + '#__cur.on{opacity:1}#__cur.down{transform:scale(.7)}'
    + '#__cap{position:fixed;z-index:99998;left:50%;bottom:22px;transform:translateX(-50%);max-width:1180px;width:max-content;padding:10px 20px;border-radius:14px;background:rgba(12,14,34,.86);color:#fff;font:500 21px/1.4 "Schibsted Grotesk",system-ui,sans-serif;text-align:center;pointer-events:none}'
-   + '#__cap:empty{display:none}';
+   + '#__cap:empty{display:none}'
+   + '#__seg{position:fixed;z-index:99998;right:18px;top:14px;padding:5px 12px;border-radius:999px;background:rgba(12,14,34,.86);color:#6ee0a0;font:600 13px/1.4 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;pointer-events:none}';
   document.head.appendChild(st);
   const c = document.createElement('div'); c.id='__cur'; document.body.appendChild(c);
   const cap = document.createElement('div'); cap.id='__cap'; document.body.appendChild(cap);
+  const seg = document.createElement('div'); seg.id='__seg'; document.body.appendChild(seg);
   window.__tl = {
     caption(t){ cap.textContent = t; },
+    segment(t){ seg.textContent = t; },
     point(sel){ const el = document.querySelector(sel); if(!el) return false; el.scrollIntoView({block:'center',behavior:'smooth'});
       return new Promise(r=>setTimeout(()=>{ const b=el.getBoundingClientRect(); c.classList.add('on'); c.style.left=(b.left+Math.min(b.width/2,90))+'px'; c.style.top=(b.top+b.height/2)+'px'; setTimeout(()=>r(true),600); },350)); },
     async click(sel){ const ok = await this.point(sel); if(!ok) return false; c.classList.add('down'); setTimeout(()=>c.classList.remove('down'),180); document.querySelector(sel).click(); return true; },
@@ -104,6 +114,7 @@ async function main() {
     else { await ev(`location.hash=${JSON.stringify(sc.hash)}`); await sleep(700); }
     await ev(`window.scrollTo(0,0)`);
     await ev(OVERLAY);
+    await ev(`window.__tl.segment(${JSON.stringify(sc.seg)})`);
     await sleep(300);
     // caption schedule (inside the page so timing is independent of CDP latency)
     const text = narration.find((n) => n.id === sc.id).text;

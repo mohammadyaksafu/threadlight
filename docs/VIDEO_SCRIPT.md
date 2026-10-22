@@ -1,84 +1,80 @@
-# Video script: ThreadLight (target 170 s, hard limit 181 s)
+# Video script: ThreadLight (174.6 s, limit 181 s)
 
-Speaking pace assumed: about 2.5 words per second. Word counts are given per segment so you can
-check timing; the voiceover totals about 400 words (about 160 s) plus pauses.
+Structured to the "Vibe to Production in 180 Seconds" standard: Problem, Solution, Demo, AI approach,
+Impact. The recorded video (`recordings/threadlight-demo.mp4`) is generated from this script by
+`tools/video/record.js`: the narration text is `tools/video/narration.json`, the slides are
+`tools/video/slides.html`, and every demo shot is recorded from the live site. A segment label
+("1 Problem" ... "5 Impact & next") sits in the top-right corner of every shot so judges can follow
+the structure, and captions show the narration.
 
-Before recording: run `npm run build && npm run preview` in `web/` (or use the GitHub Pages URL),
-open the printed URL, click **Reset to baseline** on the R1 workflow page, then reload so it opens on the Overview page with theme "auto" in light mode. Browser window 1920x1080.
+The narration is a synthetic text-to-speech voice (Windows "Microsoft Zira Desktop"). For more energy,
+record your own voice over the same lines and timings; see "Re-recording with your own voice" below.
 
----
+| Time | Segment | On screen | Mandatory item covered |
+|---|---|---|---|
+| 0:00-0:28 | 1 Problem | User slide (compliance manager, 30 days before audit) then urgency slide: 83.29% of exports, 49.82% to the EU, CSDDD from 2029, each with its source | Problem, target user, urgency (Bangladesh + global) |
+| 0:28-0:53 | 2 Solution | Live Overview page | AI-driven solution and differentiation |
+| 0:53-2:00 | 3 Demo | Live app: Documents (Run analysis) > Evidence graph (D1) > R1 detail > Integrity alerts > Simulate > R1 workflow (assign, upload, close blocked, approve, close) > Report in Bangla | Working prototype, Bangla localisation |
+| 2:00-2:29 | 4 AI approach | Pipeline slide: Input > AI layer (OCR + LLM extraction, RAG matching, knowledge graph) > Rules > Output > human approval, each tagged live or planned | AI-native approach, system flow input > AI > output |
+| 2:29-2:55 | 5 Impact & next | KPI and next-step slide with live demo and code links | Impact KPIs, next step |
 
-## 0:00-0:15 Hook (about 35 words)
+## Narration
 
-**On screen:** Findings tab, header visible: "Days to audit 30", "Evidence coverage 29%". Slow zoom on R1 card ("Likely gap").
-
-**Voiceover:**
-"This is a garment factory thirty days before a buyer audit. Its fire safety certificate
-expires eleven days before the auditor arrives. Nobody has noticed yet. Two requirements will
-fail because of one document."
-
-## 0:15-0:35 Problem (about 50 words)
-
-**On screen:** Title card, two numbers with source names in small text underneath:
-- "83.29% of Bangladesh's $48.28B exports in FY2024-25 were apparel and home textiles" (Source: EPB data via Fibre2Fashion)
-- "800 of 1,875 RSC-covered factories had completed structural remediation by June 2025" (Source: RMG Sustainability Council, June 2025 report; structural remediation only)
-
-**Voiceover:**
-"Apparel and home textiles were 83.29 percent of Bangladesh's exports in fiscal year 2024-25. Buyers
-demand proof of safety, wages and remediation. By June 2025, 800 of 1,875 factories covered by
-the RMG Sustainability Council had completed structural remediation. The evidence lives in
+**1 Problem (0:00-0:28)**
+"Meet the compliance manager of an export garment factory in Bangladesh, thirty days before a buyer
+audit. The fire safety certificate expires before the auditor arrives, and nobody has noticed yet.
+Apparel and home textiles are 83 percent of Bangladesh's exports, and the EU buys about half of its
+garments. Buyers demand proof, and EU due-diligence rules raise the bar. Yet the proof lives in
 scattered PDFs, and gaps surface during the audit."
 
-## 0:35-0:50 Solution (about 37 words)
+**2 Solution (0:28-0:53)**
+"ThreadLight is an AI compliance copilot. It reads the factory's documents, links every buyer
+requirement to its evidence in a graph, flags gaps and contradictions with a cited source, plans the
+fixes, and writes the report in English and Bangla. The difference: rules, not the model, decide dates
+and status, and only a named person can close a finding. Everything in this demo uses synthetic data."
 
-**On screen:** Header with banner "Synthetic data. Rules run live in your browser...". Cursor points at the banner.
+**3 Demo (0:53-2:00)**
+"Six documents come in. Here, extraction is a pre-computed sample; the rule stages run live.
+One fire certificate supports two requirements. If it lapses, both fail.
+Every finding cites its source. Integrity alerts catch a certificate number that is not on file, and a
+fix marked complete with no proof.
+Renew the certificate, and coverage jumps from 29 to 55 percent.
+We assign it and upload the renewal. It is pending human review, so coverage stays at 29. The system
+cannot close it. A named compliance officer approves, and only then can it close.
+The report separates verified from open, in English or Bangla."
 
-**Voiceover:**
-"ThreadLight builds a Verified Evidence Passport. Every buyer requirement is linked to its
-evidence in a graph, every finding cites its source, and nothing is closed until a named
-person approves it. Everything you see uses synthetic data."
+**4 AI approach (2:00-2:29)**
+"Under the hood: input is certificates, scans and buyer codes, in English or Bangla. OCR and a language
+model extract fields as structured data with page citations. Retrieval-augmented matching links each
+clause to candidate evidence, and a knowledge graph ties them together. Deterministic rules decide the
+status, and a model drafts bilingual explanations for a person to approve. Today the graph, rules and
+report run live; extraction and retrieval are next."
 
-## 0:50-2:05 Live demo (about 180 words, 75 s)
+**5 Impact & next step (2:29-2:55)**
+"The value is fewer audit surprises and faster, provable fixes. In a pilot we will measure
+evidence-preparation hours, the share of requirements with cited, in-date evidence, issues found
+before the audit, and time to an approved closure. Next: pilot with export factories, real OCR and
+retrieval, and Bangla document reading. ThreadLight: evidence you can verify, before the auditor asks."
 
-| Time | Click path (exact) | Voiceover |
-|---|---|---|
-| 0:50 | In the sidebar click **Documents**. Click **Run analysis**. Wait for all 7 agents to light (about 3 s). | "Six documents. The two extraction steps are pre-computed samples here; the five rule stages run live in the browser." |
-| 1:00 | Sidebar **Evidence graph**. Click node **D1 Fire Safety Certificate**. | "One certificate, two requirements: if it lapses, both fail together." |
-| 1:08 | Sidebar **Findings**. Click the **R1** row (detail page), go back, then click **Integrity alerts** and point at **A2**, then **A3**. | "R1: the certificate expires before the audit. A2: the safety minutes cite a certificate number that is not on file. A3: an emergency-exit fix marked complete, with no proof. These are integrity alerts to check, not accusations." |
-| 1:25 | Sidebar **Simulate**. Drag the slider right to about 2026-12-31, then click preset **Day before audit**, then **Audit day**. | "What if the certificate is renewed? Coverage jumps from 29 to 55. One day short of the audit, it drops back." |
-| 1:38 | Sidebar **Actions**, then the **Finding R1 workflow** card. Click **Assign to Safety & Maintenance**. Click **Upload renewed certificate (sample file)**. | "The plan ranks the work by owner and due date. We assign it, and upload the renewal. The rules recheck: R1 and R5 are now pending human review. Coverage stays at 29." |
-| 1:50 | Click **Close finding** (it is locked). Pause on the red message "AI cannot close this finding". | "Can the system close it on its own? No." |
-| 1:55 | Click **Approve as Compliance Officer**. Then click **Close finding**. | "A named compliance officer approves. Now coverage is 55, and the officer closes it." |
-| 2:00 | Sidebar **Report**. Click **বাংলা**. Scroll to the footer line. | "The report separates verified from open, in English or Bangla. It is a draft for human review, not an audit result." |
+No KPI targets, prices or interview quotes are stated: those are [FILL] until a pilot provides them.
 
-## 2:05-2:30 How the AI decides (about 60 words)
+## Regenerating the video
 
-**On screen:** Simple slide with four lines, then a two-column slide "Implemented now" / "Planned" (copy from docs/ARCHITECTURE.md).
+From the repository root on Windows (needs Chrome, ffmpeg and Node 22+):
 
-**Voiceover:**
-"How does it decide? Rules decide dates, coverage and status. Models only read text. Every
-finding is cited to a file and page, and humans approve every closure. Today, the rules engine,
-graph, risk index, what-if, approval loop and bilingual report are implemented and tested. OCR,
-language-model extraction, retrieval and drafting are planned next."
+```
+powershell -File tools/video/tts.ps1
+node tools/video/record.js
+```
 
-## 2:30-2:50 Business model and pilot (about 45 words)
+The recorder refuses to build a video longer than 179 seconds.
 
-**On screen:** Slide: "Who pays: [FILL]", "Price: [FILL]", "Pilot: [FILL number] factories, [FILL] weeks". Optional interview quote: [FILL: real quote with permission and attribution, or remove].
+## Re-recording with your own voice
 
-**Voiceover:**
-"Factories pay [FILL: pricing model] per [FILL: unit]. Our pilot plan: [FILL: number] factories
-over [FILL: weeks], measuring extraction accuracy, missed issues and preparation time against a
-compliance officer's own review. [FILL: one sentence from a real interview, with permission, or delete.]"
-
-## 2:50-3:00 Close and ask (about 25 words)
-
-**On screen:** ThreadLight logo, https://github.com/mohammadyaksafu/threadlight, contact [FILL].
-
-**Voiceover:**
-"We are looking for pilot factories and NRB advisors who know compliance. ThreadLight: evidence
-you can verify, before the auditor asks."
-
----
+Record each narration block above as its own audio file (WAV), name it after the `id` in
+`tools/video/narration.json` (for example `p1_user.wav`), put the files in `tools/video/audio/`, and run
+`node tools/video/record.js` (skip the `tts.ps1` step). Scene lengths follow your recordings; keep the
+total under 179 seconds.
 
 ## Recording tips
 
