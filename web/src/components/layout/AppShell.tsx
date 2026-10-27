@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { NAV_ITEMS } from "@/nav";
 import { useTheme } from "@/lib/hooks";
+import { useSession } from "@/auth/SessionProvider";
 import { CommandPalette } from "./CommandPalette";
 import { Sidebar } from "./Sidebar";
 import { StatusBar } from "./StatusBar";
@@ -12,6 +13,8 @@ export function AppShell() {
   const [theme, setTheme] = useTheme();
   const [open, setOpen] = useState(false);
   const [palette, setPalette] = useState(false);
+  const { mode, apiUser } = useSession();
+  const live = mode === "live" && !!apiUser;
   const location = useLocation();
   const navigate = useNavigate();
   const mainRef = useRef<HTMLElement>(null);
@@ -67,7 +70,9 @@ export function AppShell() {
           <p data-testid="synthetic-banner" role="note"
             className="flex items-start gap-2 border-t border-thread/10 bg-thread-soft/60 px-4 py-2 text-[12.5px] font-medium text-ink-2 sm:px-8">
             <Info size={14} className="mt-0.5 shrink-0 text-thread" aria-hidden="true" />
-            <span><strong className="text-ink">Synthetic data.</strong> Rules run live in your browser. Extraction results are pre-computed samples, not live AI.</span>
+            {live
+              ? <span><strong className="text-ink">Synthetic data, live system.</strong> Uploads are read on the server by OCR and Gemini; the rules decide; a named person approves.</span>
+              : <span><strong className="text-ink">Synthetic data.</strong> Rules run live in your browser. Extraction results are pre-computed samples, not live AI.</span>}
           </p>
         </header>
 

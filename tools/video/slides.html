@@ -74,47 +74,48 @@
   </div>
 </section>
 
-<!-- 2:00 AI approach: input -> AI -> output -->
+<!-- AI approach: input -> AI -> output (everything shown here runs on the live server) -->
 <section class="slide" id="flow">
-  <div class="eyebrow">AI approach &middot; input &rarr; AI &rarr; output</div>
+  <div class="eyebrow">AI approach &middot; input &rarr; AI &rarr; output &middot; all live</div>
   <h1 style="font-size:60px">Models read. Rules decide. <span class="soft">People approve.</span></h1>
   <div class="flow">
     <div class="stage"><h3>Input</h3>
-      <div class="item">Certificates, scans, logs<small>PDF and photo, English or <span class="bn">বাংলা</span></small></div>
+      <div class="item">PDFs, scans, photos<small>upload, e-mail, MCP &middot; English or <span class="bn">বাংলা</span></small></div>
       <div class="item">Buyer code of conduct<small>clauses and evidence rules</small></div>
     </div>
     <div class="arrow">&rarr;</div>
     <div class="stage"><h3>AI layer</h3>
-      <div class="item">OCR + LLM structured extraction<small>fields with file and page citation</small><span class="plan">planned &middot; sample in demo</span></div>
-      <div class="item">RAG clause-to-evidence matching<small>hybrid retrieval + reranking</small><span class="plan">planned</span></div>
-      <div class="item">Evidence knowledge graph<small>one document, many requirements</small><span class="live">live</span></div>
+      <div class="item">OCR + Gemini extraction<small>Tesseract eng+ben &middot; JSON schema &middot; quote + page per field</small><span class="live">live</span></div>
+      <div class="item">Guardrails<small>PII redaction &middot; injection fencing &middot; quote check</small><span class="live">live</span></div>
+      <div class="item">Hybrid RAG<small>pgvector + full text &middot; query rewriting</small><span class="live">live</span></div>
     </div>
     <div class="arrow">&rarr;</div>
     <div class="stage"><h3>Decide</h3>
       <div class="item">Deterministic rules<small>expiry, coverage, contradictions</small><span class="live">live</span></div>
-      <div class="item">Risk index + what-if<small>decision support, not a score</small><span class="live">live</span></div>
+      <div class="item">LangGraph pipeline<small>2 human-approval interrupts</small><span class="live">live</span></div>
     </div>
     <div class="arrow">&rarr;</div>
     <div class="stage"><h3>Output</h3>
       <div class="item">Cited findings, alerts, plan<span class="live">live</span></div>
-      <div class="item">Bilingual report<small>LLM drafting planned; templates live</small><span class="live">live</span></div>
+      <div class="item">Bilingual draft (Gemini)<small>uncited sentences removed</small><span class="live">live</span></div>
+      <div class="item">REST API + MCP server<span class="live">live</span></div>
     </div>
   </div>
-  <div class="human">&#10003; A named person approves every closure. AI can never close a finding. <span class="live" style="margin:0">live</span></div>
+  <div class="human">&#10003; A named Compliance Officer approves every document and every closure. AI can never close a finding.</div>
 </section>
 
-<!-- 2:30 Impact & next step -->
+<!-- Impact & next step -->
 <section class="slide" id="impact">
   <div class="eyebrow">Impact &middot; next step</div>
   <h1 style="font-size:62px">Fewer audit surprises.<br><span class="soft">Faster, provable fixes.</span></h1>
   <div class="cols">
     <div class="col"><h2>KPIs we will measure in a pilot</h2>
       <ul><li>Evidence-preparation hours per audit</li><li>Share of requirements with cited, in-date evidence</li><li>Issues found before vs during the audit</li><li>Days from finding to approved closure</li></ul>
-      <p>Targets set with pilot factories. No results claimed yet.</p></div>
+      <p>Synthetic test set today; no real-world results claimed yet.</p></div>
     <div class="col"><h2>Next</h2>
-      <ul><li>Pilot with export factories</li><li>Real OCR + LLM extraction, RAG</li><li>Bangla document reading</li><li>Buyer view of the Evidence Passport</li></ul></div>
+      <ul><li>Pilot with export factories, real documents</li><li>HTTPS domain, monitoring dashboards</li><li>Local models for private mode</li><li>Buyer view of the Evidence Passport</li></ul></div>
   </div>
-  <div class="links"><div><span>Live demo</span>mohammadyaksafu.github.io/threadlight</div><div><span>Code</span>github.com/mohammadyaksafu/threadlight</div></div>
+  <div class="links"><div><span>Live system</span>165.99.219.251:8095</div><div><span>Code</span>github.com/mohammadyaksafu/threadlight</div></div>
 </section>
 
 <script>
