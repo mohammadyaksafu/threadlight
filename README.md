@@ -49,8 +49,9 @@ copy deploy\.env.example .env      # then set GEMINI_API_KEY and the local datab
 cd web && set VITE_API_BASE=http://localhost:8000/api && npm run dev
 ```
 
-Status: built and tested on a laptop (backend tests, a live Gemini run on the v1 documents that reproduces
-coverage 29 / risk 63, evaluation reports). Not yet deployed to a VPS. Plan and status: [update/plan.md](update/plan.md).
+Status: live (lite profile, plain HTTP for now) at **http://165.99.219.251:8095/**; sign in with "Live API" and a demo
+account below. Tested on the laptop and on the VPS (backend tests, live Gemini runs that reproduce coverage 29 / risk 63,
+evaluation reports, live browser check 11/11). See [docs/DEPLOY.md](docs/DEPLOY.md). Plan and status: [update/plan.md](update/plan.md).
 
 ## The scenario
 

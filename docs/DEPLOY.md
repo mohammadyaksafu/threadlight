@@ -1,8 +1,28 @@
 # Deploying ThreadLight v2 to a VPS
 
-Status: the Compose stack, Dockerfiles, Caddy config, CI/CD and backup script are written and the Compose file
-validates (`docker compose config`). **It has not been deployed yet** because no VPS has been provided; the steps
-below are the runbook for that day.
+## Live now (2026-10-27): lite profile on the shared VPS
+
+**http://165.99.219.251:8095/** (plain HTTP; MCP at `http://165.99.219.251:8095/mcp`). The box (2 vCPU, 4 GB RAM,
+Ubuntu 24.04) already runs other sites that own ports 80 and 443, so ThreadLight runs the **lite profile**
+(`deploy/docker-compose.lite.yml`, code in `/opt/threadlight`, secrets in `/opt/threadlight/deploy/.env`):
+Postgres + pgvector, Redis, API, arq worker, MCP server and the web container, about 360 MB of RAM in total. Gemini is
+the only model provider there (no Ollama, Docling, reranker, Presidio, n8n or Langfuse on this box). Checked after
+deploy: `TL_PAGE=http://165.99.219.251:8095/ node tests/live_check.js` 11/11, MCP over HTTP (9 tools, passport 29 / 63,
+search returns D1:p1 first).
+
+**HTTPS is not set up yet.** The plan is a site block for `165-99-219-251.sslip.io` (or a sub-domain of
+`mdyaksafu.shop`) in the existing Caddy on port 443 (`/var/www/DIU_Hackathon/deploy/Caddyfile`), forwarding to
+`threadlight-web:80`; the web container is already on that Caddy's network. That edits another project's proxy, so it
+needs the owner's go-ahead.
+
+Update the deployment: copy the code (`git archive HEAD | ssh root@<ip> 'tar -x -C /opt/threadlight'`), then
+`docker compose -f deploy/docker-compose.lite.yml --env-file deploy/.env up -d --build`. Seeded v1 documents are
+indexed with `python -m backend.workers.reindex 1 1 D1 synth/out/v1/fire_certificate.pdf` (and so on for D2-D6).
+
+## Full stack
+
+The Compose stack, Dockerfiles, Caddy config, CI/CD and backup script below are for a dedicated VPS of the
+recommended size; that full stack has not been deployed.
 
 ## Size
 

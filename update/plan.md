@@ -20,7 +20,7 @@ on GitHub Pages stays as the zero-backend fallback.
 
 The provider decision changed today: **Gemini replaces Claude** as the cloud model (key received, stored in the
 git-ignored `.env`). Most of the T1 build, and a good part of T2, is now in the repository and tested on the laptop.
-**Nothing is deployed yet: there is still no VPS.**
+**Deployed the same evening** to the shared VPS 165.99.219.251 (lite profile, see below).
 
 | Area | Status | Evidence |
 |---|---|---|
@@ -39,7 +39,8 @@ git-ignored `.env`). Most of the T1 build, and a good part of T2, is now in the 
 | Docker Compose (core + `obs` profile), Caddy, CI/CD, backups | written, config validates; backend image builds (`WITH_ML=0`) | `deploy/`, `.github/workflows/ci.yml`; full stack not started |
 | n8n workflows (expiry watch, nightly evals, e-mail intake) | written | `automation/n8n/`; not imported yet (needs the VPS) |
 | CLAUDE.md, AGENTS.md, specs, `.mcp.json` | done | repo root, `specs/` |
-| Deploy to VPS with HTTPS, Langfuse traces live, n8n running, Grafana | **not done** | needs a VPS and domain |
+| Deploy to VPS | **done (lite profile, HTTP)** at http://165.99.219.251:8095 | `tests/live_check.js` 11/11 against the VPS; `docs/DEPLOY.md` |
+| HTTPS, Langfuse traces live, n8n running, Grafana | **not done** | HTTPS needs a block in the existing port-443 Caddy (another project); the 4 GB shared VPS has no room for Ollama/Langfuse/Presidio |
 | Re-tick `docs/AI_USAGE.md`, `DATA_LIFECYCLE.md`, `SUBMISSION_FIELDS.md`; re-record video segment 4 | **not done** | after deployment (section 14) |
 | Fine-tuning, DeepSeek | dropped | |
 
