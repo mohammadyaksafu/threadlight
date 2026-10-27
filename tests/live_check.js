@@ -43,8 +43,9 @@ const check = (name, cond, detail) => {
 };
 
 async function main() {
-  const server = await serve();
-  const PAGE = `http://127.0.0.1:${server.address().port}/`;
+  // TL_PAGE=https://host/ checks a deployed site instead of the local build + proxy
+  const server = process.env.TL_PAGE ? null : await serve();
+  const PAGE = process.env.TL_PAGE || `http://127.0.0.1:${server.address().port}/`;
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), "tl-live-"));
   const port = 9800 + Math.floor(Math.random() * 100);
   const proc = spawn(BROWSER, ["--headless=new", "--disable-gpu", "--no-first-run", "--remote-debugging-port=" + port,
@@ -106,7 +107,7 @@ async function main() {
   check("no JavaScript errors", errors.length === 0, errors);
 
   console.log(`\n${passed} passed, ${failed} failed`);
-  ws.close(); proc.kill(); server.close();
+  ws.close(); proc.kill(); if (server) server.close();
   process.exit(failed ? 1 : 0);
 }
 

@@ -1,0 +1,122 @@
+# ThreadLight "lite" profile for a small, shared VPS (2 vCPU / 4 GB, other sites already on ports 80/443).
+# Cloud models only (Gemini; no Ollama), no Docling/reranker (WITH_ML=0), files on a local volume (no MinIO),
+# regex + signature-label PII redaction (no Presidio), no n8n/Langfuse/Grafana. The full stack is
+# docker-compose.yml; see docs/DEPLOY.md.
+#
+# The `threadlight-web` container serves the app and proxies /api and /mcp on plain HTTP inside Docker. It joins the
+# network of the HTTPS proxy that already owns port 443 on the host (FRONT_NETWORK), which forwards
+# https://<DOMAIN> to it.
+#
+#   docker compose -f deploy/docker-compose.lite.yml --env-file deploy/.env up -d --build
+
+name: threadlight
+
+x-backend: &backend
+  build:
+    context: ..
+    dockerfile: deploy/backend.Dockerfile
+    args:
+      WITH_ML: "0"
+  image: threadlight-backend:lite
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql://tl_app:${APP_DB_PASSWORD}@postgres:5432/threadlight
+    ADMIN_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/threadlight
+    REDIS_URL: redis://redis:6379/0
+    S3_ENDPOINT: ""
+    LOCAL_STORAGE_DIR: /data/files
+    OLLAMA_URL: http://127.0.0.1:9   # no local models on this box: routes fall through to Gemini at once
+    PRESIDIO_URL: ""
+    RERANKER: "off"
+    INLINE_JOBS: "false"
+  volumes:
+    - files:/data/files
+  restart: unless-stopped
+  depends_on:
+    postgres: {condition: service_healthy}
+    redis: {condition: service_healthy}
+
+services:
+  # Not called "web": this service also joins the front proxy's network, where another project already has a
+  # "web" service, and a duplicate name there would split that project's DNS.
+  threadlight-web:
+    build:
+      context: ..
+      dockerfile: deploy/caddy.Dockerfile
+      args:
+        CADDYFILE: deploy/Caddyfile.internal
+    image: threadlight-web:lite
+    restart: unless-stopped
+    depends_on: [api, mcp]
+    networks: [default, front]
+    mem_limit: 128m
+
+  migrate:
+    <<: *backend
+    command: ["sh", "-c", "alembic -c backend/alembic.ini upgrade head && python -m backend.db.seed"]
+    restart: "no"
+
+  api:
+    <<: *backend
+    command: ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips", "*"]
+    networks:
+      default:
+        aliases: [tl-api]   # unique name: the web container also sees the front network, which has its own "api"
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    mem_limit: 512m
+
+  worker:
+    <<: *backend
+    command: ["arq", "backend.workers.worker.WorkerSettings"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    mem_limit: 512m
+
+  mcp:
+    <<: *backend
+    command: ["python", "-m", "mcp_server.server", "--http", "--port", "8001"]
+    networks:
+      default:
+        aliases: [tl-mcp]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    mem_limit: 384m
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: threadlight
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes: [pg_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d threadlight"]
+      interval: 10s
+      retries: 10
+    restart: unless-stopped
+    mem_limit: 384m
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "96mb", "--maxmemory-policy", "allkeys-lru"]
+    volumes: [redis_data:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+    restart: unless-stopped
+    mem_limit: 128m
+
+networks:
+  front:
+    external: true
+    name: ${FRONT_NETWORK:-deploy_default}
+
+volumes:
+  pg_data: {}
+  redis_data: {}
+  files: {}

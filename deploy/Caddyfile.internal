@@ -1,0 +1,29 @@
+# Plain-HTTP site inside Docker for the lite profile. HTTPS is terminated by the proxy that owns port 443
+# on the host, which forwards to this container (threadlight-web:80).
+{
+	auto_https off
+	admin off
+}
+
+:80 {
+	encode zstd gzip
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+	request_body /api/factories/*/documents {
+		max_size 21MB
+	}
+	handle /api/* {
+		reverse_proxy tl-api:8000
+	}
+	handle /mcp* {
+		reverse_proxy tl-mcp:8001
+	}
+	handle {
+		root * /srv/web
+		try_files {path} /index.html
+		file_server
+	}
+}

@@ -10,5 +10,6 @@ ENV VITE_API_BASE=$VITE_API_BASE
 RUN cd web && npm run build
 
 FROM caddy:2.8.4
+ARG CADDYFILE=deploy/Caddyfile
 COPY --from=web /src/web/dist /srv/web
-COPY deploy/Caddyfile /etc/caddy/Caddyfile
+COPY ${CADDYFILE} /etc/caddy/Caddyfile
