@@ -1,0 +1,646 @@
+{
+ "kind": "pii",
+ "date": "2026-10-27",
+ "summary": {
+  "documents": 60,
+  "presidio": true,
+  "name_leak_rate": 0.0,
+  "phone_leak_rate": 0.0,
+  "docs_with_field_removed": 0
+ },
+ "rows": [
+  {
+   "doc_id": "D1",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "D2",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "D3",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "D4",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "D5",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "D6",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "D1-renewal",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E001",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E002",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E003",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E004",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER"
+   ]
+  },
+  {
+   "doc_id": "E005",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E006",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E007",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E008",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER"
+   ]
+  },
+  {
+   "doc_id": "E009",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E010",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E011",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E012",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER"
+   ]
+  },
+  {
+   "doc_id": "E013",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E014",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E015",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E016",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER"
+   ]
+  },
+  {
+   "doc_id": "E017",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E018",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E019",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E020",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER"
+   ]
+  },
+  {
+   "doc_id": "E021",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E022",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E023",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E024",
+   "group": "en/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER"
+   ]
+  },
+  {
+   "doc_id": "E025",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E026",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E027",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E028",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E029",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E030",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E031",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E032",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E033",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E034",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E035",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E036",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER"
+   ]
+  },
+  {
+   "doc_id": "E037",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E038",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E039",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E040",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PHONE_NUMBER"
+   ]
+  },
+  {
+   "doc_id": "E041",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E042",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E043",
+   "group": "en/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E044",
+   "group": "bn/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E045",
+   "group": "bn/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON",
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E046",
+   "group": "bn/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E047",
+   "group": "bn/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E048",
+   "group": "bn/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E049",
+   "group": "bn/digital",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E050",
+   "group": "bn/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E051",
+   "group": "bn/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E052",
+   "group": "bn/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON",
+    "PERSON",
+    "PERSON"
+   ]
+  },
+  {
+   "doc_id": "E053",
+   "group": "bn/scan",
+   "name_leaked": false,
+   "phone_leaked": false,
+   "fields_removed": [],
+   "entities_found": [
+    "PERSON",
+    "PERSON"
+   ]
+  }
+ ],
+ "note": "Names in the synthetic set are English-script; Presidio's English model does not cover Bangla-script names."
+}

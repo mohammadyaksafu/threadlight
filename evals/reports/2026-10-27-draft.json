@@ -1,0 +1,62 @@
+{
+ "kind": "draft",
+ "date": "2026-10-27",
+ "runs": [
+  {
+   "drafter": "gemini-3.5-flash-lite",
+   "sentences": 17,
+   "citation_coverage": 0.706,
+   "numbers_not_in_rule_output": [],
+   "open_requirements_covered": 1.0,
+   "judge": {
+    "faithfulness": 1.0,
+    "completeness": 1.0,
+    "unsupported_claims": [],
+    "model": "gemma-4-31b-it"
+   },
+   "draft_en": "This compliance readiness report for Sample Apparel Ltd. indicates coverage at 29% with a decision-support risk index of 63/100. Requirements R1, R4, R5, R6, R7, and R8 require review based on the engine results. For requirement R1, there is a likely gap because D1 fire safety certificate (FC-2025-0417) expires on 2026-11-10, before the audit on 2026-11-21 [D1:p1]. For requirement R4, there is a likely gap because D4 environmental clearance (EC-2024-5521) expired on 2026-09-30, and evidence-integrity alert A1 (entity_mismatch) applies [D4:p1]. For requirement R5, there is a likely gap because D5 fire drill record (FD-LOG-2026) is on file with no expiry date, and D1 fire safety certificate (FC-2025-0417) expires on 2026-11-10, before the audit on 2026-11-21 [D5:p1] [D1:p1]. For requirement R6, there is insufficient evidence because no payroll and working-hour summary was found in the file set [R6]. For requirement R7, there is conflicting evidence because D6 safety committee minutes (SC-MIN-2026-09) is on file with no expiry date, and evidence-integrity alert A2 (reference_mismatch) applies [D6:p1]. For requirement R8, there is insufficient evidence because no corrective action closure evidence was found in the file set, and evidence-integrity alert A3 (closure_without_proof) applies [R8].",
+   "draft_bn": "স্যাম্পল অ্যাপারেল লিমিটেডের এই কমপ্লায়েন্স রেডিনেস রিপোর্টে ২৯% কভারেজ এবং ৬৩/১০০ ডিসিশন-সাপোর্ট রিস্ক ইনডেক্স দেখানো হয়েছে। ইঞ্জিন ফলাফলের ভিত্তিতে আর১, আর৪, আর৫, আর৬, আর৭ এবং আর৮ প্রয়োজনীয়তাগুলো পর্যালোচনা করা প্রয়োজন। আর১ প্রয়োজনীয়তার জন্য একটি likely gap রয়েছে কারণ ডি১ অগ্নি নিরাপত্তা শংসাপত্র (FC-2025-0417) ২০২৬-১১-২১ তারিখে অডিটের আগে, ২০২৬-১১-১০ তারিখে মেয়াদ শেষ হয় [D1:p1]। আর৪ প্রয়োজনীয়তার জন্য একটি likely gap রয়েছে কারণ ডি৪ পরিবেশগত ছাড়পত্র (EC-2024-5521) ২০২৬-০৯-৩০ তারিখে মেয়াদোত্তীর্ণ হয়েছে এবং প্রমাণ-অখণ্ডতা সতর্কতা A1 (entity_mismatch) প্রযোজ্য [D4:p1]। আর৫ প্রয়োজনীয়তার জন্য একটি likely gap রয়েছে কারণ ডি৫ ফায়ার ড্রিল রেকর্ড (FD-LOG-2026) ফাইলটিতে কোনো মেয়াদ শেষ হওয়ার তারিখ ছাড়াই রয়েছে এবং ডি১ অগ্নি নিরাপত্তা শংসাপত্র (FC-2025-0417) ২০২৬-১১-২১ তারিখে অডিটের আগে, ২০২৬-১১-১০ তারিখে মেয়াদ শেষ হয় [D5:p1] [D1:p1]। আর৬ প্রয়োজনীয়তার জন্য insufficient evidence রয়েছে কারণ ফাইল সেটে কোনো পেওল এবং কাজের সময়ের সারাংশ পাওয়া যায়নি [R6]। আর৭ প্রয়োজনীয়তার জন্য conflicting evidence রয়েছে কারণ ডি৬ নিরাপত্তা কমিটি কার্যবিবরণী (SC-MIN-2026-09) ফাইলটিতে কোনো মেয়াদ শেষ হওয়ার তারিখ ছাড়াই রয়েছে এবং প্রমাণ-অখণ্ডতা সতর্কতা A2 (reference_mismatch) প্রযোজ্য [D6:p1]। আর৮ প্রয়োজনীয়তার জন্য insufficient evidence রয়েছে কারণ ফাইল সেটে কোনো সংশোধনমূলক পদক্ষেপ বন্ধের প্রমাণ পাওয়া যায়নি এবং প্রমাণ-অখণ্ডতা সতর্কতা A3 (closure_without_proof) প্রযোজ্য [R8]।",
+   "spot_check": null
+  },
+  {
+   "drafter": "gemini-3.5-flash-lite",
+   "sentences": 21,
+   "citation_coverage": 0.952,
+   "numbers_not_in_rule_output": [],
+   "open_requirements_covered": 1.0,
+   "judge": {
+    "faithfulness": 1.0,
+    "completeness": 0.75,
+    "unsupported_claims": [],
+    "model": "gemma-4-31b-it"
+   },
+   "draft_en": "The compliance readiness report for Sample Apparel Ltd. indicates coverage at 29% with a decision-support risk index of 63 out of 100 [D1:p1] [R6]. Several requirements contain likely gaps, insufficient evidence, or conflicting evidence requiring attention [D1:p1] [D4:p1] [D5:p1] [R6] [D6:p1] [R8]. D1 fire safety certificate (FC-2025-0417) expires on 2026-11-10, before the audit on 2026-11-21, indicating a likely gap [D1:p1]. D4 environmental clearance (EC-2024-5521) expired on 2026-09-30, showing a likely gap [D4:p1]. Evidence-integrity alert A1 (entity_mismatch) applies to this requirement [D4:p1]. D5 fire drill record (FD-LOG-2026) is on file, but D1 fire safety certificate (FC-2025-0417) expires on 2026-11-10, before the audit on 2026-11-21, which constitutes a likely gap [D5:p1] [D1:p1]. No payroll and working-hour summary found in the file set, representing insufficient evidence [R6]. D6 safety committee minutes (SC-MIN-2026-09) is on file with no expiry date, and conflicting evidence exists because evidence-integrity alert A2 (reference_mismatch) applies [D6:p1]. No corrective action closure evidence found in the file set, resulting in insufficient evidence [R8]. Evidence-integrity alert A3 (closure_without_proof) also applies to this requirement [R8].",
+   "draft_bn": "স্যাম্পল অ্যাপারেল লিমিটেড-এর কমপ্লায়েন্স রেডিনেস রিপোর্টে কভারেজ ২৯% এবং ডিসিশন-সাপোর্ট রিস্ক ইনডেক্স ১০০ এর মধ্যে ৬৩ দেখানো হয়েছে [D1:p1] [R6]। বেশ কিছু প্রয়োজনীয়তার ক্ষেত্রে সম্ভাব্য ফাঁক, অপর্যাপ্ত প্রমাণ বা পরস্পরবিরোধী প্রমাণ রয়েছে যা মনোযোগ দাবি করে [D1:p1] [D4:p1] [D5:p1] [R6] [D6:p1] [R8]। D1 ফায়ার সেফটি সার্টিফিকেট (FC-2025-0417) ২০২৬-১১-২১ তারিখের অডিটের আগে ২০২৬-১১-১০ তারিখে মেয়াদোত্তীর্ণ হয়, যা একটি সম্ভাব্য ফাঁক নির্দেশ করে [D1:p1]. D4 এনভায়রনমেন্টাল ক্লিয়ারেন্স (EC-2024-5521) ২০২৬-০৯-৩০ তারিখে মেয়াদোত্তীর্ণ হয়েছে, যা একটি সম্ভাব্য ফাঁক দেখায় [D4:p1]। এই প্রয়োজনীয়তার ক্ষেত্রে এভিডেন্স-ইন্টিগ্রিটি অ্যালার্ট A1 (entity_mismatch) প্রযোজ্য [D4:p1]. D5 ফায়ার ড্রিল রেকর্ড (FD-LOG-2026) ফাইলেও আছে, তবে D1 ফায়ার সেফটি সার্টিফিকেট (FC-2025-0417) ২০২৬-১১-২১ তারিখের অডিটের আগে ২০২৬-১১-১০ তারিখে মেয়াদোত্তীর্ণ হয়, যা একটি সম্ভাব্য ফাঁক তৈরি করে [D5:p1] [D1:p1]. ফাইল সেটে কোনো পেোল ও কাজের ঘণ্টার সারাংশ পাওয়া যায়নি, যা অপর্যাপ্ত প্রমাণের প্রতিনিধিত্ব করে [R6]. D6 সেফটি কমিটি মিনিটসের (SC-MIN-2026-09) কোনো মেয়াদোত্তীর্ণের তারিখ নেই এবং ফাইলটিতে আছে, তবে এভিডেন্স-ইন্টিগ্রিটি অ্যালার্ট A2 (reference_mismatch) প্রযোজ্য থাকায় এখানে পরস্পরবিরোধী প্রমাণ রয়েছে [D6:p1]. ফাইল সেটে কোনো কারেক্টিভ অ্যাকশন ক্লোজার প্রমাণ পাওয়া যায়নি, যার ফলে অপর্যাপ্ত প্রমাণ রয়েছে [R8]। এই প্রয়োজনীয়তার ক্ষেত্রে এভিডেন্স-ইন্টিগ্রিটি অ্যালার্ট A3 (closure_without_proof) ও প্রযোজ্য [R8].",
+   "spot_check": null
+  },
+  {
+   "drafter": "gemini-3.5-flash-lite",
+   "sentences": 17,
+   "citation_coverage": 0.824,
+   "numbers_not_in_rule_output": [],
+   "open_requirements_covered": 0.0,
+   "judge": {
+    "faithfulness": 1.0,
+    "completeness": 0.75,
+    "unsupported_claims": [],
+    "model": "gemma-4-31b-it"
+   },
+   "draft_en": "The compliance readiness report for Sample Apparel Ltd. indicates coverage is 29% and the risk index is 63/100 [R1]. Several requirements show likely gaps, insufficient evidence, or conflicting evidence requiring attention [R1, R4, R5, R6, R7, R8]. There is a likely gap because D1 fire safety certificate (FC-2025-0417) expires on 2026-11-10, before the audit on 2026-11-21 [D1:p1]. There is a likely gap because D4 environmental clearance (EC-2024-5521) expired on 2026-09-30, and evidence-integrity alert A1 (entity_mismatch) applies [D4:p1] [A1]. There is a likely gap because D5 fire drill record (FD-LOG-2026) is on file with no expiry date, but D1 fire safety certificate (FC-2025-0417) expires on 2026-11-10, before the audit on 2026-11-21 [D5:p1] [D1:p1]. There is insufficient evidence because no payroll and working-hour summary was found in the file set [R6]. There is conflicting evidence because D6 safety committee minutes (SC-MIN-2026-09) is on file with no expiry date, and evidence-integrity alert A2 (reference_mismatch) applies [D6:p1] [A2]. There is insufficient evidence because no corrective action closure evidence was found in the file set, and evidence-integrity alert A3 (closure_without_proof) applies [R8] [A3].",
+   "draft_bn": "স্যাম্পল অ্যাপারেল লিমিটেড-এর কমপ্লায়েন্স প্রস্তুতি প্রতিবেদনে কভারেজ ২৯% এবং ঝুঁকি সূচক ৬৩/১০এ দেখানো হয়েছে [R1]। বেশ কিছু প্রয়োজনীয়তার ক্ষেত্রে সম্ভাব্য ফাঁতি, অপর্যাপ্ত প্রমাণ বা বিরোধপূর্ণ প্রমাণ দেখা গেছে যা মনোযোগ দাবি করে [R1, R4, R5, R6, R7, R8]। এখানে একটি সম্ভাব্য ফাঁক রয়েছে কারণ D1 ফায়ার সেফটি সার্টিফিকেট (FC-2025-0417) ২০২৬-১১-২১ তারিখের অডিটের পূর্বে, ২০২৬-১১-১০ তারিখে মেয়াদোত্তীর্ণ হয় [D1:p1]। এখানে একটি সম্ভাব্য ফাঁক রয়েছে কারণ D4 পরিবেশগত ছাড়পত্র (EC-2024-5521) ২০২৬-০৯-৩০ তারিখে মেয়াদোত্তীর্ণ হয়েছে এবং প্রমাণ-অখণ্ডতা সতর্কতা A1 (entity_mismatch) প্রযোজ্য [D4:p1] [A1]. এখানে একটি সম্ভাব্য ফাঁক রয়েছে কারণ D5 ফায়ার ড্রিল রেকর্ড (FD-LOG-2026) ফাইলভুক্ত আছে যার কোনো মেয়াদ শেষের তারিখ নেই, তবে D1 ফায়ার সেফটি সার্টিফিকেট (FC-2025-0417) ২০২৬-১১-২১ তারিখের অডিটের পূর্বে, ২০২৬-১১-১০ তারিখে মেয়াদোত্তীর্ণ হয় [D5:p1] [D1:p1]. অপর্যাপ্ত প্রমাণ রয়েছে কারণ ফাইল সেটে কোনো পেরোল এবং কর্মঘণ্টার সারসংক্ষেপ পাওয়া যায়নি [R6]। বিরোধপূর্ণ প্রমাণ রয়েছে কারণ D6 সেফটি কমিটি মিনিট (SC-MIN-2026-09) ফাইলভুক্ত আছে যার কোনো মেয়াদ শেষের তারিখ নেই, এবং প্রমাণ-অখণ্ডতা সতর্কতা A2 (reference_mismatch) প্রযোজ্য [D6:p1] [A2]. অপর্যাপ্ত প্রমাণ রয়েছে কারণ ফাইল সেটে কোনো সংশোধনমূলক পদক্ষেপ বন্ধের প্রমাণ পাওয়া যায়নি, এবং প্রমাণ-অখণ্ডতা সতর্কতা A3 (closure_without_proof) প্রযোজ্য [R8] [A3].",
+   "spot_check": null
+  }
+ ],
+ "summary": {
+  "runs": 3,
+  "mean_citation_coverage": 0.827,
+  "runs_with_unsupported_numbers": 0,
+  "mean_judge_faithfulness": 1.0,
+  "judge_model": "gemma-4-31b-it"
+ },
+ "note": "Uncited sentences are removed by the citation checker before a report is stored; coverage is measured before that step."
+}

@@ -1,0 +1,456 @@
+{
+ "kind": "rag",
+ "date": "2026-10-27",
+ "factory": 1,
+ "documents": 6,
+ "chunks": 11,
+ "embed_model": "gemini-embedding-001",
+ "reranker": false,
+ "results": {
+  "vector": {
+   "queries": 6,
+   "recall_at_5": 1.0,
+   "hit_at_1": 1.0,
+   "mrr": 1.0,
+   "per_clause": [
+    {
+     "requirement": "R1",
+     "relevant": [
+      "D1"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D1",
+      "D6",
+      "D4",
+      "D2",
+      "D5"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R2",
+     "relevant": [
+      "D2"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D2",
+      "D1",
+      "D6",
+      "D4",
+      "D3"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R3",
+     "relevant": [
+      "D3"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D3",
+      "D1",
+      "D2",
+      "D4",
+      "D6"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R4",
+     "relevant": [
+      "D4"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D4",
+      "D2",
+      "D1",
+      "D6",
+      "D5"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R5",
+     "relevant": [
+      "D1",
+      "D5"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D5",
+      "D6",
+      "D1",
+      "D4",
+      "D2"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R7",
+     "relevant": [
+      "D6"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D6",
+      "D5",
+      "D2",
+      "D1",
+      "D4"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    }
+   ]
+  },
+  "fts": {
+   "queries": 6,
+   "recall_at_5": 1.0,
+   "hit_at_1": 0.5,
+   "mrr": 0.75,
+   "per_clause": [
+    {
+     "requirement": "R1",
+     "relevant": [
+      "D1"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D1",
+      "D5",
+      "D4",
+      "D3",
+      "D2"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R2",
+     "relevant": [
+      "D2"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D1",
+      "D2",
+      "D3",
+      "D5",
+      "D4"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": false,
+     "rr": 0.5
+    },
+    {
+     "requirement": "R3",
+     "relevant": [
+      "D3"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D1",
+      "D3",
+      "D5",
+      "D4",
+      "D2"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": false,
+     "rr": 0.5
+    },
+    {
+     "requirement": "R4",
+     "relevant": [
+      "D4"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D1",
+      "D4",
+      "D3",
+      "D5",
+      "D2"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": false,
+     "rr": 0.5
+    },
+    {
+     "requirement": "R5",
+     "relevant": [
+      "D1",
+      "D5"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D5",
+      "D1",
+      "D6",
+      "D3",
+      "D4"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R7",
+     "relevant": [
+      "D6"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D6",
+      "D5",
+      "D1",
+      "D2",
+      "D3"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    }
+   ]
+  },
+  "hybrid": {
+   "queries": 6,
+   "recall_at_5": 1.0,
+   "hit_at_1": 1.0,
+   "mrr": 1.0,
+   "per_clause": [
+    {
+     "requirement": "R1",
+     "relevant": [
+      "D1"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D1",
+      "D5",
+      "D4",
+      "D6",
+      "D2"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R2",
+     "relevant": [
+      "D2"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D2",
+      "D1",
+      "D3",
+      "D6",
+      "D5"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R3",
+     "relevant": [
+      "D3"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D3",
+      "D1",
+      "D4",
+      "D2",
+      "D6"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R4",
+     "relevant": [
+      "D4"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D4",
+      "D1",
+      "D2",
+      "D3",
+      "D5"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R5",
+     "relevant": [
+      "D1",
+      "D5"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D5",
+      "D6",
+      "D1",
+      "D4",
+      "D2"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R7",
+     "relevant": [
+      "D6"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D6",
+      "D5",
+      "D1",
+      "D2",
+      "D3"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    }
+   ]
+  },
+  "hybrid+rewrite": {
+   "queries": 6,
+   "recall_at_5": 1.0,
+   "hit_at_1": 1.0,
+   "mrr": 1.0,
+   "per_clause": [
+    {
+     "requirement": "R1",
+     "relevant": [
+      "D1"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D1",
+      "D5",
+      "D6",
+      "D4",
+      "D2"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R2",
+     "relevant": [
+      "D2"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D2",
+      "D1",
+      "D3",
+      "D6",
+      "D5"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R3",
+     "relevant": [
+      "D3"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D3",
+      "D1",
+      "D2",
+      "D5",
+      "D6"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R4",
+     "relevant": [
+      "D4"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D4",
+      "D5",
+      "D6",
+      "D1",
+      "D2"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R5",
+     "relevant": [
+      "D1",
+      "D5"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D5",
+      "D6",
+      "D1",
+      "D4",
+      "D2"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    },
+    {
+     "requirement": "R7",
+     "relevant": [
+      "D6"
+     ],
+     "relevant_not_indexed": [],
+     "top5": [
+      "D6",
+      "D5",
+      "D1",
+      "D2",
+      "D4"
+     ],
+     "recall_at_5": 1.0,
+     "hit_at_1": true,
+     "rr": 1.0
+    }
+   ]
+  }
+ },
+ "note": "Synthetic documents; relevance = document type needed by the clause. Not real-world retrieval quality."
+}
