@@ -16,6 +16,9 @@ import { SimulatePage } from "@/pages/simulate/SimulatePage";
 import { ActionsPage } from "@/pages/actions/ActionsPage";
 import { WorkflowPage } from "@/pages/actions/WorkflowPage";
 import { ReportPage } from "@/pages/report/ReportPage";
+import { UploadPage } from "@/pages/live/UploadPage";
+import { ReviewPage } from "@/pages/live/ReviewPage";
+import { SystemPage } from "@/pages/live/SystemPage";
 
 export const ROUTES: RouteObject[] = [
   { path: "login", element: <LoginPage /> },
@@ -34,6 +37,9 @@ export const ROUTES: RouteObject[] = [
       { path: "actions", element: <ActionsPage /> },
       { path: "actions/workflow", element: <WorkflowPage /> },
       { path: "report", element: <ReportPage /> },
+      { path: "upload", element: <UploadPage /> },
+      { path: "review", element: <ReviewPage /> },
+      { path: "system", element: <SystemPage /> },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },

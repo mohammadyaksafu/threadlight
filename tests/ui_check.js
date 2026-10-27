@@ -98,7 +98,7 @@ async function main() {
   const typeInto = async (sel, value) => { await evaluate(`document.querySelector(${q(sel)}).focus()`); await send("Input.insertText", { text: value }); };
   await shot("login");
   check("signed-out visitors land on the demo sign-in page", (await evaluate("location.hash")).startsWith("#/login"));
-  check("sign-in page says it is not real authentication", (await text("main")).includes("Demo sign-in, not real authentication"));
+  check("offline sign-in page says it is not real authentication", (await text("main")).includes("Offline demo, not real authentication"));
   await typeInto("#login-email", "officer@threadlight.demo"); await typeInto("#login-password", "wrong-password");
   await click("#login-submit"); await sleep(150);
   check("wrong password is rejected", (await text("#login-error")).includes("does not match"));

@@ -26,6 +26,7 @@ export type Action =
   | { type: "approve"; role: Role }
   | { type: "close"; role: Role }
   | { type: "reset" }
+  | { type: "load"; data: Data }
   | { type: "select"; selection: Selection }
   | { type: "simDate"; date: string }
   | { type: "lang"; lang: Lang };
@@ -126,6 +127,10 @@ export function reducer(state: AppState, action: Action): AppState {
 
     case "reset":
       return { ...initialState(), lang: state.lang };
+
+    case "load":
+      // Live mode: the API's file set (same shape as data/sample.json) replaces the bundled sample.
+      return { ...state, data: clone(action.data), message: null };
 
     case "select": {
       const same = state.selection?.kind === action.selection.kind && state.selection.id === action.selection.id;
