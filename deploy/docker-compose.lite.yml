@@ -46,6 +46,8 @@ services:
       args:
         CADDYFILE: deploy/Caddyfile.internal
     image: threadlight-web:lite
+    # Plain-HTTP fallback address (http://<server-ip>:8095) for when the front HTTPS proxy is not set up yet.
+    ports: ["${PUBLIC_HTTP_PORT:-8095}:80"]
     restart: unless-stopped
     depends_on: [api, mcp]
     networks: [default, front]

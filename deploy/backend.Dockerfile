@@ -15,7 +15,9 @@ COPY mcp_server/ mcp_server/
 COPY evals/ evals/
 COPY synth/ synth/
 COPY data/ data/
-RUN useradd -m -u 10001 app && mkdir -p /models /app/var && chown -R app /models /app/var
+# alembic and `python -m` both import the `backend` package from the repository root
+ENV PYTHONPATH=/app
+RUN useradd -m -u 10001 app && mkdir -p /models /app/var /data/files && chown -R app /models /app/var /data/files
 USER app
 EXPOSE 8000 8001
 CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips", "*"]

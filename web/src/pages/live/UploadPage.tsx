@@ -11,7 +11,7 @@ import { LiveOnly } from "./LiveOnly";
 const STEPS: [string, string][] = [
   ["ingest", "Stored"], ["parse", "Parse / OCR"], ["redact", "PII redaction"], ["classify", "Classify"], ["extract", "Extract"],
   ["validate", "Validate"], ["human_review", "Human review"], ["index", "Index (RAG)"], ["map_clauses", "Map clauses"],
-  ["analyze", "Rules engine"], ["draft", "Bilingual draft"], ["request_approval", "Awaiting approval"], ["approval", "Approved"], ["finalize", "Done"],
+  ["analyze", "Rules engine"], ["request_approval", "Awaiting approval"], ["approval", "Approved"], ["finalize", "Passport updated"], ["draft", "Bilingual draft"],
 ];
 
 interface Upload { file: string; document?: string; jobId?: string; job?: Job; error?: string; duplicate?: boolean }

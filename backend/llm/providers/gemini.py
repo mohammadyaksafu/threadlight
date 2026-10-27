@@ -44,7 +44,8 @@ def _with_retry(call, attempts: int = 2):
         except errors.ClientError as e:
             # per-minute quota: wait once for the advertised retry delay (capped); daily quota (long delay) fails over
             delay = re.search(r"retry in ([\d.]+)s", str(e))
-            if e.code != 429 or i == attempts - 1 or not delay or float(delay.group(1)) > 65:
+            # "limit: 0" = this model has no free-tier quota at all (e.g. Pro): waiting cannot help
+            if e.code != 429 or i == attempts - 1 or not delay or float(delay.group(1)) > 65 or "limit: 0" in str(e):
                 raise
             time.sleep(float(delay.group(1)) + 1)
 

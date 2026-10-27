@@ -1,7 +1,7 @@
 """LangGraph document pipeline with two human-in-the-loop interrupts.
 
 ingest -> parse -> redact -> classify -> extract -> validate -> [human_review] -> index -> map_clauses
-       -> analyze -> draft -> request_approval -> approval (interrupt) -> finalize
+       -> analyze -> request_approval -> approval (interrupt) -> finalize -> draft
 
 - `human_review` pauses the graph when any field is below the confidence threshold or failed a check; a
   person resumes it with accepted/corrected values (stored as labels for the eval set).
@@ -243,11 +243,11 @@ def draft_node(s: State) -> State:
     try:
         with _tx(s) as c:
             report = drafting.generate(c, s["tenant_id"], s["factory_id"])
-            _event(c, s["job_id"], "draft", detail={"report_id": report["id"], "flagged": report["flagged"], "model": report["model"]})
+            _event(c, s["job_id"], "draft", state="done", detail={"report_id": report["id"], "flagged": report["flagged"], "model": report["model"]})
         return {"report_id": report["id"]}
-    except Exception as e:  # a failed draft must not block approval of the evidence itself
+    except Exception as e:  # a failed draft must not fail the job: the evidence is already approved
         with _tx(s) as c:
-            _event(c, s["job_id"], "draft", detail={"error": str(e)[:300]})
+            _event(c, s["job_id"], "draft", state="done", detail={"error": str(e)[:300]})
         return {}
 
 
@@ -300,7 +300,8 @@ def build(checkpointer):
         g.add_edge(a, b)
     g.add_conditional_edges("validate", lambda s: "human_review" if s["validated"]["needs_review"] else "index",
                             {"human_review": "human_review", "index": "index"})
-    for a, b in [("human_review", "index"), ("index", "map_clauses"), ("map_clauses", "analyze"), ("analyze", "draft"),
-                 ("draft", "request_approval"), ("request_approval", "approval"), ("approval", "finalize"), ("finalize", END)]:
+    # The draft runs after finalize so a slow or rate-limited model never delays the officer's approval step.
+    for a, b in [("human_review", "index"), ("index", "map_clauses"), ("map_clauses", "analyze"), ("analyze", "request_approval"),
+                 ("request_approval", "approval"), ("approval", "finalize"), ("finalize", "draft"), ("draft", END)]:
         g.add_edge(a, b)
     return g.compile(checkpointer=checkpointer)
