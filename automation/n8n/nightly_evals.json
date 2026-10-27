@@ -1,0 +1,208 @@
+{
+  "name": "ThreadLight - nightly evals (02:00)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 2 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Every night 02:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.github.com/repos/{{ $env.GITHUB_REPO }}/actions/workflows/evals.yml/dispatches",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.GITHUB_TOKEN }}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{ \"ref\": \"main\", \"inputs\": { \"trigger\": \"n8n-nightly\" } }",
+        "options": {}
+      },
+      "name": "Start evals workflow on GitHub",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 40,
+        "unit": "minutes"
+      },
+      "name": "Wait 40 min",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.THREADLIGHT_API }}/auth/login",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"email\": \"automation@threadlight.demo\", \"password\": \"{{ $env.AUTOMATION_PASSWORD }}\" }",
+        "options": {}
+      },
+      "name": "Sign in (automation account)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.THREADLIGHT_API }}/system/evals",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Sign in (automation account)').item.json.access_token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Latest eval report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $input.first().json.report;\nif (!r) return [{ json: { text: 'ThreadLight nightly evals: no report found.' } }];\nconst lines = Object.entries((r.extraction || {})).map(([m, v]) => `- ${m}: field accuracy ${v.field_accuracy}, silent errors ${v.silent_error_rate}`);\nreturn [{ json: { text: `ThreadLight nightly evals ${r.date}: gates ${r.gates_passed ? 'PASSED' : 'FAILED'}\\n` + lines.join('\\n') } }];"
+      },
+      "name": "Summarise",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"chat_id\": \"{{ $env.TELEGRAM_CHAT_ID }}\", \"text\": {{ JSON.stringify($json.text) }} }",
+        "options": {}
+      },
+      "name": "Post summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Every night 02:00": {
+      "main": [
+        [
+          {
+            "node": "Start evals workflow on GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start evals workflow on GitHub": {
+      "main": [
+        [
+          {
+            "node": "Wait 40 min",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 40 min": {
+      "main": [
+        [
+          {
+            "node": "Sign in (automation account)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign in (automation account)": {
+      "main": [
+        [
+          {
+            "node": "Latest eval report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Latest eval report": {
+      "main": [
+        [
+          {
+            "node": "Summarise",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarise": {
+      "main": [
+        [
+          {
+            "node": "Post summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Dhaka"
+  },
+  "active": false
+}

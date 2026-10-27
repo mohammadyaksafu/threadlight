@@ -1,0 +1,86 @@
+# Tests on every push and PR; on main, build the images, push them to GHCR and deploy to the VPS over SSH.
+name: CI / deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5434:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 20
+      redis:
+        image: redis:7.4-alpine
+        ports: ["6381:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Rules engine unit tests + Python/TypeScript parity
+        run: |
+          python -m unittest discover -s tests
+          python tests/parity.py
+      - name: Backend tests (fake LLM, real Postgres + pgvector, row-level security)
+        run: |
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-ben
+          pip install -r backend/requirements.txt
+          python -m pytest backend/tests -q
+      - name: Web build + headless UI check
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+          node ../tests/ui_check.js /usr/bin/google-chrome
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.DEPLOY_ENABLED == 'true'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push images
+        run: |
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          docker build -f deploy/backend.Dockerfile -t ghcr.io/$OWNER/threadlight-backend:${{ github.sha }} -t ghcr.io/$OWNER/threadlight-backend:latest .
+          docker build -f deploy/caddy.Dockerfile -t ghcr.io/$OWNER/threadlight-caddy:${{ github.sha }} -t ghcr.io/$OWNER/threadlight-caddy:latest .
+          docker push --all-tags ghcr.io/$OWNER/threadlight-backend
+          docker push --all-tags ghcr.io/$OWNER/threadlight-caddy
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /opt/threadlight && git pull --ff-only
+            export BACKEND_IMAGE=ghcr.io/${{ github.repository_owner }}/threadlight-backend:${{ github.sha }}
+            export CADDY_IMAGE=ghcr.io/${{ github.repository_owner }}/threadlight-caddy:${{ github.sha }}
+            docker compose -f deploy/docker-compose.yml --env-file deploy/.env pull api caddy
+            docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --no-build
+            sleep 20 && curl -fsS https://$(grep ^DOMAIN= deploy/.env | cut -d= -f2)/api/health

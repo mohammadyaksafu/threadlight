@@ -1,0 +1,241 @@
+# ThreadLight v2 on one VPS. Run from the repository root:
+#   docker compose -f deploy/docker-compose.yml --env-file deploy/.env up -d --build
+# Profiles: the core stack starts by default; `--profile obs` adds Langfuse, Prometheus and Grafana.
+
+x-backend: &backend
+  build:
+    context: ..
+    dockerfile: deploy/backend.Dockerfile
+    args:
+      WITH_ML: ${WITH_ML:-1}
+  image: ${BACKEND_IMAGE:-threadlight-backend:local}
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql://tl_app:${APP_DB_PASSWORD}@postgres:5432/threadlight
+    ADMIN_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/threadlight
+    REDIS_URL: redis://redis:6379/0
+    S3_ENDPOINT: minio:9000
+    S3_ACCESS_KEY: ${MINIO_ROOT_USER}
+    S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+    OLLAMA_URL: http://ollama:11434
+    PRESIDIO_URL: http://presidio-analyzer:3000
+    LANGFUSE_HOST: ${LANGFUSE_HOST:-http://langfuse-web:3000}
+    INLINE_JOBS: "false"
+  volumes:
+    - hf_models:/models
+  restart: unless-stopped
+  depends_on:
+    postgres: {condition: service_healthy}
+    redis: {condition: service_healthy}
+    minio: {condition: service_healthy}
+
+services:
+  caddy:
+    build:
+      context: ..
+      dockerfile: deploy/caddy.Dockerfile
+    image: ${CADDY_IMAGE:-threadlight-caddy:local}
+    env_file: .env
+    ports: ["80:80", "443:443"]
+    volumes: [caddy_data:/data, caddy_config:/config]
+    restart: unless-stopped
+    depends_on: [api, mcp]
+    mem_limit: 256m
+
+  migrate:
+    <<: *backend
+    command: ["sh", "-c", "alembic -c backend/alembic.ini upgrade head && python -m backend.db.seed"]
+    restart: "no"
+
+  api:
+    <<: *backend
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    mem_limit: 3g
+
+  worker:
+    <<: *backend
+    command: ["arq", "backend.workers.worker.WorkerSettings"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    mem_limit: 6g
+
+  mcp:
+    <<: *backend
+    command: ["python", "-m", "mcp_server.server", "--http", "--port", "8001"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    mem_limit: 3g
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: threadlight
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes: [pg_data:/var/lib/postgresql/data, ./postgres-init:/docker-entrypoint-initdb.d:ro]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d threadlight"]
+      interval: 10s
+      retries: 10
+    restart: unless-stopped
+    mem_limit: 2g
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redis_data:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+    restart: unless-stopped
+    mem_limit: 512m
+
+  minio:
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes: [minio_data:/data]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 15s
+    restart: unless-stopped
+    mem_limit: 1g
+
+  minio-init:
+    image: minio/mc:RELEASE.2025-04-16T18-13-26Z
+    entrypoint: ["sh", "-c", "mc alias set local http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD} && mc mb -p local/threadlight local/langfuse local/backups"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    depends_on:
+      minio: {condition: service_healthy}
+    restart: "no"
+
+  ollama:
+    image: ollama/ollama:0.6.8
+    volumes: [ollama_data:/root/.ollama]
+    restart: unless-stopped
+    mem_limit: ${OLLAMA_MEM:-10g}
+
+  ollama-pull:
+    image: ollama/ollama:0.6.8
+    environment: {OLLAMA_HOST: "ollama:11434"}
+    entrypoint: ["sh", "-c", "sleep 5 && for m in ${OLLAMA_MODELS:-llama3.2:3b bge-m3}; do ollama pull $$m; done"]
+    depends_on: [ollama]
+    restart: "no"
+
+  presidio-analyzer:
+    image: mcr.microsoft.com/presidio-analyzer:2.2.358
+    restart: unless-stopped
+    mem_limit: 1500m
+
+  n8n:
+    image: n8nio/n8n:1.95.3
+    environment:
+      N8N_HOST: n8n.${DOMAIN}
+      N8N_PROTOCOL: https
+      WEBHOOK_URL: https://n8n.${DOMAIN}/
+      GENERIC_TIMEZONE: Asia/Dhaka
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+      THREADLIGHT_API: http://api:8000/api
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+      AUTOMATION_PASSWORD: ${AUTOMATION_PASSWORD}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+      GITHUB_REPO: ${GITHUB_REPO:-mohammadyaksafu/threadlight}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+    volumes: [n8n_data:/home/node/.n8n, ../automation/n8n:/import:ro]
+    restart: unless-stopped
+    mem_limit: 1g
+
+  # ---------------- observability (docker compose --profile obs ...) ----------------
+  langfuse-web:
+    profiles: [obs]
+    image: langfuse/langfuse:3
+    environment: &langfuse_env
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/langfuse
+      CLICKHOUSE_URL: http://clickhouse:8123
+      CLICKHOUSE_MIGRATION_URL: clickhouse://clickhouse:9000
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_CLUSTER_ENABLED: "false"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+      LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://minio:9000
+      LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
+      LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+      NEXTAUTH_URL: https://langfuse.${DOMAIN}
+      NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET}
+      SALT: ${LANGFUSE_SALT}
+      ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY}
+      LANGFUSE_INIT_ORG_ID: threadlight
+      LANGFUSE_INIT_ORG_NAME: ThreadLight
+      LANGFUSE_INIT_PROJECT_ID: threadlight
+      LANGFUSE_INIT_PROJECT_NAME: ThreadLight
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY}
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: ${LANGFUSE_SECRET_KEY}
+      LANGFUSE_INIT_USER_EMAIL: ${LANGFUSE_ADMIN_EMAIL}
+      LANGFUSE_INIT_USER_NAME: admin
+      LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_ADMIN_PASSWORD}
+    depends_on: [clickhouse, postgres, redis, minio]
+    restart: unless-stopped
+    mem_limit: 1500m
+
+  langfuse-worker:
+    profiles: [obs]
+    image: langfuse/langfuse-worker:3
+    environment: *langfuse_env
+    depends_on: [clickhouse, postgres, redis, minio]
+    restart: unless-stopped
+    mem_limit: 1g
+
+  clickhouse:
+    profiles: [obs]
+    image: clickhouse/clickhouse-server:24.8
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+    volumes: [clickhouse_data:/var/lib/clickhouse]
+    restart: unless-stopped
+    mem_limit: 2g
+
+  prometheus:
+    profiles: [obs]
+    image: prom/prometheus:v3.1.0
+    volumes: [./prometheus.yml:/etc/prometheus/prometheus.yml:ro, prom_data:/prometheus]
+    restart: unless-stopped
+    mem_limit: 512m
+
+  grafana:
+    profiles: [obs]
+    image: grafana/grafana:11.4.0
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      GF_SERVER_ROOT_URL: https://grafana.${DOMAIN}
+    volumes: [./grafana/provisioning:/etc/grafana/provisioning:ro, grafana_data:/var/lib/grafana]
+    restart: unless-stopped
+    mem_limit: 512m
+
+volumes:
+  pg_data: {}
+  redis_data: {}
+  minio_data: {}
+  ollama_data: {}
+  hf_models: {}
+  n8n_data: {}
+  caddy_data: {}
+  caddy_config: {}
+  clickhouse_data: {}
+  prom_data: {}
+  grafana_data: {}

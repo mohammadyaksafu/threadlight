@@ -1,0 +1,123 @@
+{
+  "name": "ThreadLight - email intake (IMAP)",
+  "nodes": [
+    {
+      "parameters": {
+        "mailbox": "INBOX",
+        "postProcessAction": "read",
+        "downloadAttachments": true,
+        "options": {}
+      },
+      "name": "New email with attachment",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Sender address -> factory id (synthetic mapping; edit for real use). One item per PDF/JPEG/PNG attachment.\nconst map = { 'safety@sample-apparel.example': 1 };\nconst out = [];\nfor (const item of $input.all()) {\n  const from = (item.json.from || '').match(/<?([^<>\\s]+@[^<>\\s]+)>?/);\n  const factory = map[((from && from[1]) || '').toLowerCase()];\n  if (!factory) continue;\n  for (const bin of Object.values(item.binary || {})) {\n    if (!/pdf|jpeg|png/.test(bin.mimeType || '')) continue;\n    out.push({ json: { factory, file: bin.fileName }, binary: { data: bin } });\n  }\n}\nreturn out;"
+      },
+      "name": "Match sender to factory",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.THREADLIGHT_API }}/auth/login",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"email\": \"{{ $env.INTAKE_EMAIL }}\", \"password\": \"{{ $env.INTAKE_PASSWORD }}\" }",
+        "options": {}
+      },
+      "name": "Sign in (staff intake account)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.THREADLIGHT_API }}/factories/{{ $('Match sender to factory').item.json.factory }}/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Sign in (staff intake account)').first().json.access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Upload to ThreadLight",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "New email with attachment": {
+      "main": [
+        [
+          {
+            "node": "Match sender to factory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Match sender to factory": {
+      "main": [
+        [
+          {
+            "node": "Sign in (staff intake account)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign in (staff intake account)": {
+      "main": [
+        [
+          {
+            "node": "Upload to ThreadLight",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

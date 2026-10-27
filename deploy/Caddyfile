@@ -1,0 +1,52 @@
+# DOMAIN comes from deploy/.env (e.g. threadlight.example.com). Caddy obtains HTTPS certificates itself.
+# Admin tools live on sub-domains, behind basic auth and an IP allow-list (ADMIN_ALLOW, CIDR list).
+{
+	email {$ACME_EMAIL}
+}
+
+(admin_guard) {
+	@blocked not remote_ip {$ADMIN_ALLOW}
+	respond @blocked "Forbidden" 403
+	basic_auth {
+		{$ADMIN_USER} {$ADMIN_PASSWORD_HASH}
+	}
+}
+
+{$DOMAIN} {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+	request_body /api/factories/*/documents {
+		max_size 21MB
+	}
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+	handle /mcp* {
+		reverse_proxy mcp:8001
+	}
+	handle {
+		root * /srv/web
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+n8n.{$DOMAIN} {
+	import admin_guard
+	reverse_proxy n8n:5678
+}
+
+langfuse.{$DOMAIN} {
+	import admin_guard
+	reverse_proxy langfuse-web:3000
+}
+
+grafana.{$DOMAIN} {
+	import admin_guard
+	reverse_proxy grafana:3000
+}

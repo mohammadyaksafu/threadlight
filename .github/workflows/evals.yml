@@ -1,0 +1,49 @@
+# Evaluations with the real models. Started by the n8n nightly workflow (workflow_dispatch) or by hand.
+# Runs on the digital documents (no OCR on the runner is needed for them), the promptfoo regression
+# suite, writes the report, and opens an issue if a gate fails.
+name: Evals
+
+on:
+  workflow_dispatch:
+    inputs:
+      trigger:
+        description: who started the run
+        default: manual
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      PYTHONPATH: .
+      REDIS_URL: redis://localhost:6399/0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - run: pip install -r backend/requirements.txt
+      - name: Extraction eval (regex baseline + Gemini models)
+        run: python -m evals.extraction_eval --models baseline-regex gemini-flash-lite-3.5 gemini-flash --only en/digital,bn/digital --sleep 4
+      - name: Prompt regression (promptfoo)
+        run: npx --yes promptfoo@0.103.5 eval -c evals/promptfooconfig.yaml --no-cache -o evals/reports/promptfoo-latest.json
+      - name: Report and gates
+        id: gates
+        run: python -m evals.run_all --strict
+      - name: Commit the report
+        if: always()
+        run: |
+          git config user.name "threadlight-evals"
+          git config user.email "evals@users.noreply.github.com"
+          git add evals/reports && git commit -m "Eval report $(date +%F) (${{ inputs.trigger }})" && git push || true
+      - name: Open an issue on regression
+        if: failure() && steps.gates.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh issue create --title "Eval gates failed $(date +%F)" --body-file evals/reports/$(date +%F).md

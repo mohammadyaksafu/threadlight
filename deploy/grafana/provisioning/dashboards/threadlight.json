@@ -1,0 +1,16 @@
+{
+  "title": "ThreadLight API",
+  "uid": "threadlight-api",
+  "schemaVersion": 39,
+  "time": {"from": "now-24h", "to": "now"},
+  "panels": [
+    {"type": "timeseries", "title": "Requests per minute by status", "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+     "targets": [{"expr": "sum by (status) (rate(tl_http_requests_total[5m])) * 60"}]},
+    {"type": "timeseries", "title": "p95 latency (s) by route", "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+     "targets": [{"expr": "histogram_quantile(0.95, sum by (le, route) (rate(tl_http_request_seconds_bucket[5m])))"}]},
+    {"type": "stat", "title": "5xx in the last hour", "gridPos": {"x": 0, "y": 8, "w": 6, "h": 6},
+     "targets": [{"expr": "sum(increase(tl_http_requests_total{status=~\"5..\"}[1h]))"}]},
+    {"type": "timeseries", "title": "Uploads by result", "gridPos": {"x": 6, "y": 8, "w": 18, "h": 6},
+     "targets": [{"expr": "sum by (result) (increase(tl_uploads_total[1h]))"}]}
+  ]
+}

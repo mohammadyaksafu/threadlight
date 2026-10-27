@@ -1,0 +1,143 @@
+{
+  "name": "ThreadLight - expiry watch (daily 07:00)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Every day 07:00 (Asia/Dhaka)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.THREADLIGHT_API }}/auth/login",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"email\": \"automation@threadlight.demo\", \"password\": \"{{ $env.AUTOMATION_PASSWORD }}\" }",
+        "options": {}
+      },
+      "name": "Sign in (automation account)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.THREADLIGHT_API }}/expiring",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Sign in (automation account)').item.json.access_token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Evidence expiring before audit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One message per factory with evidence that expires before its next audit.\nconst out = [];\nfor (const f of $input.all().map(i => i.json)) {\n  if (!f.items) continue;\n  const lines = f.items.map(x => `- ${x.requirement} ${x.title} (owner: ${x.owner}): ${x.reason}`);\n  out.push({ json: { text: `ThreadLight: ${f.factory}, audit ${f.audit_date} (${f.days_to_audit} days)\\n` + lines.join('\\n') + '\\nDecision support only; a person must act.' } });\n}\nreturn out;"
+      },
+      "name": "Build alert text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"chat_id\": \"{{ $env.TELEGRAM_CHAT_ID }}\", \"text\": {{ JSON.stringify($json.text) }} }",
+        "options": {}
+      },
+      "name": "Send Telegram alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Every day 07:00 (Asia/Dhaka)": {
+      "main": [
+        [
+          {
+            "node": "Sign in (automation account)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign in (automation account)": {
+      "main": [
+        [
+          {
+            "node": "Evidence expiring before audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evidence expiring before audit": {
+      "main": [
+        [
+          {
+            "node": "Build alert text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build alert text": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Dhaka"
+  },
+  "active": false
+}
