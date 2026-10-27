@@ -9,8 +9,48 @@ Prototype for the International AI Builders Congress, track JusticeSphere AI > C
 
 > **Synthetic data notice.** Every factory, buyer, framework, document and reference number in
 > this repository is invented ("Sample Apparel Ltd.", "Buyer A (synthetic)", "Buyer A Code of
-> Conduct v3.2 (synthetic)"). No real company, buyer or standard is represented. The demo makes
-> **no language-model, OCR or network API calls**; the only external request is for Google Fonts.
+> Conduct v3.2 (synthetic)"). No real company, buyer or standard is represented. The **offline demo**
+> (GitHub Pages) makes no language-model, OCR or network API calls; the only external request is for
+> Google Fonts. The **v2 backend** below does call models (Gemini, local Ollama models), on synthetic files only.
+
+## v2: live backend (in this repository)
+
+The prototype now has a real pipeline behind it. **Models read, rules decide, people approve.**
+
+```
+upload (API / n8n e-mail / MCP) -> parse (Docling, PDF text, Tesseract eng+ben) -> PII redaction (Presidio)
+  -> classify (Llama 3.2 3B local, Gemini Flash-Lite fallback) -> extract cited fields (Gemini, JSON schema)
+  -> validate (quote on page, value in quote) -> [human review if unsure] -> index (contextual chunks,
+  pgvector + full text) -> propose clause mappings (hybrid search, rewrite/HyDE, reranker)
+  -> the same rules engine -> bilingual draft with source tags -> [officer approval] -> passport
+```
+
+| Part | Where | Docs |
+|---|---|---|
+| FastAPI API (JWT, roles, Postgres row-level security, OpenAPI at `/api/docs`) | `backend/app/` | [docs/SECURITY.md](docs/SECURITY.md) |
+| LangGraph pipeline with two human interrupts, arq workers | `backend/pipeline/` | [specs/001-document-pipeline](specs/001-document-pipeline/spec.md) |
+| LLM router, versioned prompts, Gemini / Ollama / optional Anthropic providers | `backend/llm/`, `backend/prompts/` | [docs/MODEL_ROUTING.md](docs/MODEL_ROUTING.md) |
+| Retrieval | `backend/rag/` | [docs/RAG.md](docs/RAG.md) |
+| threadlight-mcp (9 tools, 3 resources, 2 prompts; stdio + HTTP) | `mcp_server/` | [docs/MCP.md](docs/MCP.md) |
+| Synthetic PDFs and scans with ground truth (60 docs, EN + BN) | `synth/` | |
+| Evaluations (extraction, retrieval, drafts, promptfoo) | `evals/` | `evals/reports/` |
+| Docker Compose for one VPS, Caddy, CI/CD, backups; n8n workflows | `deploy/`, `automation/n8n/` | [docs/DEPLOY.md](docs/DEPLOY.md) |
+| Live mode in the web app (Upload, Review queue, System pages) | `web/src/api/`, `web/src/pages/live/` | [specs/003-live-web](specs/003-live-web/spec.md) |
+
+Run it locally (Windows; see [CLAUDE.md](CLAUDE.md) for all commands):
+
+```
+docker run -d --name tl-test-pg -e POSTGRES_PASSWORD=postgres -p 5434:5432 pgvector/pgvector:pg16
+docker run -d --name tl-test-redis -p 6381:6379 redis:7-alpine
+python -m venv .venv && .venv/Scripts/pip install -r backend/requirements.txt
+copy deploy\.env.example .env      # then set GEMINI_API_KEY and the local database URLs (see .env in the repo docs)
+.venv/Scripts/alembic -c backend/alembic.ini upgrade head && .venv/Scripts/python -m backend.db.seed
+.venv/Scripts/uvicorn backend.app.main:app --port 8000
+cd web && set VITE_API_BASE=http://localhost:8000/api && npm run dev
+```
+
+Status: built and tested on a laptop (backend tests, a live Gemini run on the v1 documents that reproduces
+coverage 29 / risk 63, evaluation reports). Not yet deployed to a VPS. Plan and status: [update/plan.md](update/plan.md).
 
 ## The scenario
 
@@ -24,7 +64,7 @@ Baseline: coverage 29%, decision-support risk index 63/100, 6 open findings. Upl
 renewed certificate moves R1 and R5 to *pending human review* (coverage stays 29%); only after
 a person approves it as Compliance Officer do they become *supported* (coverage 55%).
 
-## Implemented vs planned
+## Implemented vs planned (v1 offline prototype; see the v2 section above for what is now built)
 
 | Implemented in this prototype | Planned (not in this repo) |
 |---|---|
@@ -114,6 +154,7 @@ Requires Python 3.8+, Node.js 22.6+ and, for the UI check, Chrome or Edge.
 python3 -m unittest discover -s tests      # 37 unit tests
 python3 tests/parity.py                    # 7 scenarios, Python vs TypeScript, must be identical
 cd web && npm run build && npm run test:ui # drives the built app in headless Chrome/Edge
+python -m pytest backend/tests -q          # v2 backend: 23 tests (needs the test Postgres on :5434)
 ```
 
 On Windows use `python` instead of `python3` if needed.
