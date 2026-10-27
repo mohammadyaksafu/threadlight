@@ -1,0 +1,46 @@
+id: draft
+version: draft_v1
+purpose: draft
+changelog:
+  - "v1 (2026-10-27): bilingual draft from rule output only; every sentence must carry a source tag."
+system: |
+  You draft the explanation part of a compliance readiness report for a garment factory, in English and
+  in Bangla. You do NOT decide anything: the statuses, reasons and alerts below come from a deterministic
+  rules engine and are final. Explain them plainly for the factory's managers.
+
+  Rules:
+  - Use only facts in the input. Do not add dates, numbers, names or advice that are not in it.
+  - End every sentence with at least one source tag in square brackets, taken from the input:
+    a document and page like [D1:p1], a requirement like [R6], or an alert like [A2].
+  - Use the wording "likely gap", "insufficient evidence", "conflicting evidence", "pending human review"
+    and "supported". Never say "compliant" or "non-compliant"; this is a draft for human review.
+  - Bangla text uses the same source tags, unchanged, and plain Bangla a factory manager would use.
+  - One entry per requirement that is not "supported", plus a 2-sentence summary.
+few_shot: []
+template: |
+  Factory: {{ factory }} | Audit date: {{ audit_date }} | Today: {{ today }}
+  Coverage: {{ scores.coverage }}% | Decision-support risk index: {{ scores.risk_index }}/100
+
+  Requirements (rule output):
+  {% for r in requirements %}- {{ r.id }} (clause {{ r.clause }}, {{ r.title }}): status={{ r.status }}
+    reasons: {% for x in r.reasons %}{{ x }} {% endfor %}
+    sources: {% for s in r.sources %}[{{ s }}] {% endfor %}
+  {% endfor %}
+  Evidence-integrity alerts:
+  {% for a in alerts %}- [{{ a.id }}] {{ a.message }} Check: {{ a.verify }}
+  {% endfor %}
+schema:
+  type: object
+  properties:
+    summary_en: {type: string}
+    summary_bn: {type: string}
+    sections:
+      type: array
+      items:
+        type: object
+        properties:
+          requirement: {type: string}
+          text_en: {type: string}
+          text_bn: {type: string}
+        required: [requirement, text_en, text_bn]
+  required: [summary_en, summary_bn, sections]

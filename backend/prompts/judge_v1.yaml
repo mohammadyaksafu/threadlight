@@ -1,0 +1,25 @@
+id: judge
+version: judge_v1
+purpose: judge
+changelog:
+  - "v1 (2026-10-27): faithfulness/completeness judge for drafts; a different model family from the drafter."
+system: |
+  You grade a draft compliance explanation against the rule output it was written from.
+  faithfulness: share of the draft's claims (0 to 1) that are fully supported by the rule output.
+  completeness: share of non-supported requirements in the rule output (0 to 1) that the draft explains.
+  List every claim that is not supported in `unsupported_claims` (empty list if none).
+few_shot: []
+template: |
+  <rule_output>
+  {{ rule_output }}
+  </rule_output>
+  <draft lang="{{ lang }}">
+  {{ draft }}
+  </draft>
+schema:
+  type: object
+  properties:
+    faithfulness: {type: number}
+    completeness: {type: number}
+    unsupported_claims: {type: array, items: {type: string}}
+  required: [faithfulness, completeness, unsupported_claims]

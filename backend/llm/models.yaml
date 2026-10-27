@@ -1,0 +1,72 @@
+# Model catalogue and task routing. The router tries each model in a route in order and falls back on
+# error, quota exhaustion (429) or when a provider is not configured. Prices are USD per million tokens,
+# used for the cost estimate in llm_calls. Gemini model ids were checked against models.list() for this
+# key on 2026-10-27 (gemini-2.5-* is closed to new keys). Prices for the 3.x models are left at 0 until
+# they are copied from the current Gemini price list, so cost_usd under-reports until then.
+# Routing rationale and measured numbers: docs/MODEL_ROUTING.md (filled from evals/reports/).
+
+models:
+  gemini-flash:
+    provider: gemini
+    name: gemini-3.8-flash
+    options: {thinking_level: LOW}   # default (high) thinking took minutes per document
+    price: {input: 0, output: 0, cached_input: 0}
+  gemini-flash-lite:
+    provider: gemini
+    name: gemini-3.1-flash-lite
+    price: {input: 0, output: 0, cached_input: 0}
+  gemini-flash-lite-3.5:
+    provider: gemini
+    name: gemini-3.5-flash-lite
+    price: {input: 0, output: 0, cached_input: 0}
+  gemini-pro:            # needs a paid Gemini plan; on the free tier it returns 429 and the route falls back
+    provider: gemini
+    name: gemini-pro-latest
+    price: {input: 0, output: 0, cached_input: 0}
+  llama3.2-3b:
+    provider: ollama
+    name: llama3.2:3b
+    price: {input: 0, output: 0, cached_input: 0}
+  qwen2.5-7b:
+    provider: ollama
+    name: qwen2.5:7b
+    price: {input: 0, output: 0, cached_input: 0}
+  gemma-4-31b:          # open-weights Gemma family (served by Google AI Studio): judge for Gemini-written drafts
+    provider: gemini
+    name: gemma-4-31b-it
+    price: {input: 0, output: 0, cached_input: 0}
+  claude-haiku:          # optional second cloud family; used only when ANTHROPIC_API_KEY is set
+    provider: anthropic
+    name: claude-haiku-5-5
+    price: {input: 1.00, output: 5.00, cached_input: 0.10}
+  bge-m3:
+    provider: ollama
+    name: bge-m3
+    kind: embedding
+    dims: 1024
+  gemini-embedding:
+    provider: gemini
+    name: gemini-embedding-001
+    kind: embedding
+    dims: 1024
+    price: {input: 0, output: 0, cached_input: 0}
+
+# task -> ordered list of models (first = primary)
+routes:
+  classify: [llama3.2-3b, gemini-flash-lite]        # short input; local is enough and private
+  extract: [gemini-flash-lite-3.5, gemini-flash, qwen2.5-7b]  # 3.5 Flash-Lite: ~2 s per document; 3.8 Flash was overloaded (503) on 2026-10-27
+  contextualize: [gemini-flash-lite, llama3.2-3b]   # many short calls on a cached document prefix
+  rewrite: [gemini-flash-lite, llama3.2-3b]         # query rewriting / HyDE
+  draft: [gemini-pro, gemini-flash, gemini-flash-lite-3.5]  # bilingual explanation; Pro needs a paid plan
+  judge: [qwen2.5-7b, gemma-4-31b, claude-haiku, llama3.2-3b]  # never the Gemini model that wrote the draft
+  embed: [bge-m3, gemini-embedding]
+
+# private mode (PRIVATE_MODE=true): no document text leaves the VPS
+private_routes:
+  classify: [llama3.2-3b]
+  extract: [qwen2.5-7b, llama3.2-3b]
+  contextualize: [llama3.2-3b]
+  rewrite: [llama3.2-3b]
+  draft: [qwen2.5-7b]
+  judge: [llama3.2-3b]
+  embed: [bge-m3]

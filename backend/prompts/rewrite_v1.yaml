@@ -1,0 +1,19 @@
+id: rewrite
+version: rewrite_v1
+purpose: rewrite
+changelog:
+  - "v1 (2026-10-27): clause -> evidence-seeking queries + one HyDE passage."
+system: |
+  You help find evidence for a buyer code-of-conduct clause in a factory's documents. Rewrite the clause
+  into 3 short search queries that describe the document that would prove compliance (its type, the
+  words printed on it, the dates it must show). Then write `hypothetical`: 2 sentences as they might
+  appear on such a document (for example "Fire Safety Certificate ... valid until ...").
+few_shot: []
+template: |
+  Clause {{ clause }}: {{ text }}
+schema:
+  type: object
+  properties:
+    queries: {type: array, items: {type: string}}
+    hypothetical: {type: string}
+  required: [queries, hypothetical]

@@ -1,0 +1,10 @@
+.git
+.venv
+**/node_modules
+web/dist
+var
+evals/.cache
+recordings
+**/__pycache__
+.env
+deploy/.env

@@ -1,0 +1,6 @@
+# Heavy, optional: Docling layout parsing and the bge cross-encoder reranker. Installed in the Docker image
+# (build arg WITH_ML=1). Without them the code falls back to the PDF text layer and reciprocal rank fusion.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.5
+sentence-transformers>=3.3
+docling>=2.15
