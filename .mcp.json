@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "threadlight": {
+      "command": ".venv/Scripts/python",
+      "args": ["-m", "mcp_server.server"],
+      "env": { "PYTHONPATH": ".", "THREADLIGHT_MCP_TOKEN": "${THREADLIGHT_MCP_TOKEN}" }
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres@0.6.2", "postgresql://postgres:postgres@localhost:5434/threadlight"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem@2025.3.28", "./synth/out", "./evals/reports"]
+    }
+  }
+}
