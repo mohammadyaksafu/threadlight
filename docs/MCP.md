@@ -101,6 +101,8 @@ Resources: `sample://dataset`, `sample://result`. Prompt: `gap_walkthrough`.
 - Transport smoke test, 2026-10-31 (`tools/mcp_smoke.py`): threadlight-rules-mcp over stdio (`get_scenario` 29/63),
   SSE (`what_if_renewal approved` -> risk 37, 4 open) and streamable HTTP (`list_alerts`); threadlight-mcp over SSE:
   no token -> 401, officer token -> 9 tools, 3 resource templates, 2 prompts, `get_passport` ok.
+- VPS, 2026-10-31: `http://165.99.219.251:8095/rules-mcp` -> 7 tools, 2 resources, 1 prompt, `get_scenario` ok;
+  `http://165.99.219.251:8095/mcp` without token -> 401, officer token -> 9 tools, `get_passport` ok.
 
 ## Used during development
 
