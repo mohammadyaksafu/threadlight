@@ -49,7 +49,7 @@ services:
     # Plain-HTTP fallback address (http://<server-ip>:8095) for when the front HTTPS proxy is not set up yet.
     ports: ["${PUBLIC_HTTP_PORT:-8095}:80"]
     restart: unless-stopped
-    depends_on: [api, mcp]
+    depends_on: [api, mcp, rules-mcp]
     networks: [default, front]
     mem_limit: 128m
 
@@ -89,6 +89,16 @@ services:
     depends_on:
       migrate: {condition: service_completed_successfully}
     mem_limit: 384m
+
+  # Rules engine over the synthetic sample only: no database, no login, read-only (public at /rules-mcp).
+  rules-mcp:
+    <<: *backend
+    command: ["python", "-m", "mcp_server.rules_server", "--http", "--host", "0.0.0.0", "--port", "8002", "--path", "/rules-mcp"]
+    networks:
+      default:
+        aliases: [tl-rules-mcp]
+    depends_on: []
+    mem_limit: 128m
 
   postgres:
     image: pgvector/pgvector:pg16

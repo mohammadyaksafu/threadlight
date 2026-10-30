@@ -21,6 +21,9 @@
 	handle /mcp* {
 		reverse_proxy tl-mcp:8001
 	}
+	handle /rules-mcp* {
+		reverse_proxy tl-rules-mcp:8002
+	}
 	handle {
 		root * /srv/web
 		try_files {path} /index.html

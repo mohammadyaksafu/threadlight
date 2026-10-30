@@ -2,6 +2,7 @@
 
     python -m mcp_server.server                 # stdio, for Claude Desktop / Claude Code on the same machine
     python -m mcp_server.server --http          # streamable HTTP on :8001/mcp (behind Caddy at /mcp)
+    python -m mcp_server.server --sse           # SSE on :8001/sse (older clients), same bearer-token auth
 
 Auth: stdio runs as the token in THREADLIGHT_MCP_TOKEN; over HTTP every request needs
 `Authorization: Bearer <token>`. Tokens are API-issued JWTs (tenant + role). Scopes follow the role:
@@ -216,12 +217,12 @@ def explain_finding(req_id: str, lang: str = "en") -> str:
             "and cite each fact with its document and page." % (req_id, "Bangla" if lang == "bn" else "English"))
 
 
-def http_app():
-    """Streamable-HTTP app with bearer-token auth on every request."""
+def http_app(sse: bool = False):
+    """Streamable-HTTP (or SSE) app with bearer-token auth on every request."""
     from starlette.middleware.base import BaseHTTPMiddleware
     from starlette.responses import JSONResponse
 
-    app = mcp.streamable_http_app()
+    app = mcp.sse_app() if sse else mcp.streamable_http_app()
 
     class BearerAuth(BaseHTTPMiddleware):
         async def dispatch(self, request, call_next):
@@ -245,11 +246,12 @@ def http_app():
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--http", action="store_true")
+    ap.add_argument("--sse", action="store_true")
     ap.add_argument("--port", type=int, default=8001)
     args = ap.parse_args()
-    if args.http:
+    if args.http or args.sse:
         import uvicorn
 
-        uvicorn.run(http_app(), host="0.0.0.0", port=args.port)
+        uvicorn.run(http_app(sse=args.sse), host="0.0.0.0", port=args.port)
     else:
         mcp.run("stdio")

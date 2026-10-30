@@ -107,20 +107,46 @@ docs/PROMPT_LIBRARY.md.
 
 ### mcp servers
 
-> None. No Model Context Protocol server was built or used in this project. An MCP server is planned so
-> buyer and auditor tools can query a factory's Evidence Passport with the factory's consent (see
-> docs/ARCHITECTURE.md, "Planned").
+> **Built (2), both with the official MCP Python SDK (FastMCP):**
+> 1. **threadlight-mcp** (`mcp_server/server.py`): a factory's live Verified Evidence Passport from Postgres.
+>    Transports: stdio, SSE (`--sse`, `/sse`) and streamable HTTP (`--http`, `/mcp` behind Caddy). JWT bearer
+>    token on every HTTP/SSE request (401 without one); tenant and role come from the token.
+> 2. **threadlight-rules-mcp** (`mcp_server/rules_server.py`): the deterministic rules engine over the bundled
+>    synthetic scenario, no database and no login, so anyone can try the passport logic. stdio, SSE and
+>    streamable HTTP; public at http://165.99.219.251:8095/rules-mcp.
+>
+> **Used during development (external):** CloudCamp BD knowledge-base MCP (streamable HTTP, read-only resource,
+> 2026-10-31) to audit the submission; Postgres MCP (`@modelcontextprotocol/server-postgres`) and Filesystem MCP
+> (`@modelcontextprotocol/server-filesystem`) configured in `.mcp.json` [FILL: keep only if the dated row in
+> docs/MCP.md exists].
+>
+> **Hosts/clients:** Claude Code via the project `.mcp.json`; Claude Desktop config in docs/MCP.md; MCP Python SDK
+> `ClientSession` for tests and the stdio/SSE/HTTP smoke test (`tools/mcp_smoke.py`). Both servers are thin
+> adapters that reuse the same engine, RAG search and passport services as the web app and API (no duplicated
+> logic). Tests: `backend/tests/test_mcp.py`, `backend/tests/test_rules_mcp.py` (10 passed). Details: docs/MCP.md.
 
 ### tools exposed
 
-> None yet. Planned tools (read-only, per factory): `get_passport_summary`, `list_requirements`,
-> `get_requirement` (status, reasons, cited evidence), `list_integrity_alerts`.
+> **threadlight-mcp (9 tools, 3 resources, 2 prompts):** `get_passport`, `list_requirements`, `get_requirement`
+> (reasons, cited evidence with file and page, clause text), `list_alerts`, `search_evidence` (hybrid RAG with
+> citations like D1:p1), `get_document` (extracted fields with page, confidence, source text), `what_if`
+> (hypothetical expiry, nothing saved), `get_report` (bilingual draft), `propose_mapping` (proposal only).
+> Resources `passport://{factory_id}`, `framework://{framework_id}/clauses`, `audit-log://{factory_id}`; prompts
+> `audit_prep_brief`, `explain_finding`.
+>
+> **threadlight-rules-mcp (7 tools, 2 resources, 1 prompt):** `get_scenario`, `list_requirements`,
+> `get_requirement`, `list_alerts`, `get_task_plan`, `what_if_expiry`, `what_if_renewal`; resources
+> `sample://dataset`, `sample://result`; prompt `gap_walkthrough`.
 
 ### permissions
 
-> None granted, since no MCP tools exist. The planned design is read-only access, scoped to one factory
-> (tenant), granted by the factory, with every request logged. No write or close permissions: closing a
-> finding stays a human action inside the app.
+> Read is the default scope for every role; `propose_mapping` needs staff or officer and only creates a proposal
+> that a Compliance Officer confirms in the app. No MCP tool can approve evidence, close a finding or change a
+> rule. Every threadlight-mcp query runs in a tenant transaction with Postgres row-level security (a token for
+> another tenant gets an error, tested) and proposals are written to the audit log as `<user>/mcp`. The rules
+> server has no write path and reads only synthetic sample data. External servers were scoped: Filesystem MCP to
+> `synth/out` and `evals/reports` only, Postgres MCP to the local test database, CloudCamp read-only. Output from
+> external servers is treated as data, not instructions.
 
 ---
 

@@ -33,7 +33,9 @@ git-ignored `.env`). Most of the T1 build, and a good part of T2, is now in the 
 | LangGraph pipeline, 2 human interrupts, arq worker | done | live Gemini run reproduced v1 exactly (29 / 63, alerts A1-A3) |
 | RAG: contextual chunks, pgvector + FTS hybrid, rewrite/HyDE, reranker hook, clause proposals | done | `docs/RAG.md` (recall@5 1.0 on 6 clauses) |
 | Bilingual drafts with source tags | done | `evals/reports/2026-10-27-draft.json` |
-| MCP server (9 tools, 3 resources, 2 prompts, stdio + HTTP, bearer auth) | done | `docs/MCP.md`, `test_mcp.py`, HTTP smoke test |
+| MCP server (9 tools, 3 resources, 2 prompts, stdio + SSE + HTTP, bearer auth) | done | `docs/MCP.md`, `test_mcp.py`, HTTP + SSE smoke tests |
+| Second MCP server: threadlight-rules-mcp (7 tools, 2 resources, 1 prompt, stdio + SSE + HTTP, sample data, no login) | done 2026-10-31 | `mcp_server/rules_server.py`, `test_rules_mcp.py`, `tools/mcp_smoke.py` |
+| External MCP used: CloudCamp KB (done 2026-10-31); Postgres + Filesystem MCP | Postgres/Filesystem **not run yet** | run `tools/mcp_used_check.py`, then add dated rows to `docs/MCP.md` |
 | Evals: extraction, retrieval, drafts (Gemma judge), PII, promptfoo config, gates | done (promptfoo not yet run) | `evals/`, `evals/reports/2026-10-27.md` (all 4 gates pass) |
 | Web live mode: API sign-in, live data, Upload, Review queue, System page | done | `node tests/live_check.js` 11/11; offline `ui_check.js` 80/80 |
 | Docker Compose (core + `obs` profile), Caddy, CI/CD, backups | written, config validates; backend image builds (`WITH_ML=0`) | `deploy/`, `.github/workflows/ci.yml`; full stack not started |
