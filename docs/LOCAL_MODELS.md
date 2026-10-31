@@ -11,7 +11,7 @@ stays on the machine.
 | `qwen2.5:7b` (Alibaba Qwen 2.5) | 7.6B, Q4_K_M, 4.7 GB | extract fallback, judge (primary), private-mode extract/draft | extraction eval on 8 English documents |
 | `bge-m3` (BAAI) | 568M, 1.2 GB | embed (primary) | re-indexed the demo factory (12 chunks) and every retrieval eval query |
 | `deepseek-r1:1.5b` (DeepSeek-R1 distill) | 1.8B, Q4_K_M, 1.1 GB | candidate only, not routed | extraction eval on the same 8 documents |
-| `gemma2:2b` (Google Gemma 2) | 2.6B, Q4_K_M, 1.6 GB | candidate only, not routed | extraction eval on the same 8 documents |
+| `gemma2:2b` (Google Gemma 2) | 2.6B, Q4_0, 1.6 GB | candidate only, not routed | extraction eval on the same 8 documents |
 
 **Hardware:** Lenovo ThinkPad T14s, Intel Core i5-10310U (4 cores), Intel UHD Graphics (no CUDA GPU), 16 GB RAM, CPU
 inference only. The VPS (4 GB shared) has no room for these models, so it stays on Gemini.
