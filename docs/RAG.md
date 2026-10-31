@@ -54,5 +54,10 @@ Use it with `POST /api/search {"graph": true}` or the MCP tool `search_evidence(
 about relations between records, ground truth from the synthetic scenario. recall@3 **0.722 -> 0.944** (hybrid ->
 hybrid + graph), hit@1 1.0 for both. recall@5 is 1.0 for both because the factory has only 7 documents, so recall@3
 is the meaningful cut. A small synthetic set: it shows the mechanism, not real-world quality.
+Those numbers use Gemini embeddings (`gemini-embedding-001`). Re-run after re-indexing with the local **bge-m3**
+(Ollama, same day; `evals/reports/2026-10-31-graph-rag-bge-m3.json`): recall@3 **0.611 -> 0.722**, hit@1 0.667 for
+both. The graph helps with either embedding model; bge-m3 alone ranks the related records lower on these questions.
+Clause-to-evidence retrieval with bge-m3 (`evals/reports/2026-10-31-rag.json`, 6 clauses): recall@5 1.0 for every
+configuration, hit@1 1.0 for vector and hybrid, 0.5 for full text alone.
 Tests: `backend/tests/test_graph_rag.py` (typo link FC-2025-0417 ~ FC-2025-0471, D6 reached in two hops, tenant scoping)
 and the graph assertion in `test_api.py`.
