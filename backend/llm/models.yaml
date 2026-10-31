@@ -31,6 +31,14 @@ models:
     provider: ollama
     name: qwen2.5:7b
     price: {input: 0, output: 0, cached_input: 0}
+  deepseek-r1-1.5b:      # candidate only, measured in evals/reports/2026-10-31-extraction-small.json; not routed
+    provider: ollama
+    name: deepseek-r1:1.5b
+    price: {input: 0, output: 0, cached_input: 0}
+  gemma2-2b:             # candidate only, measured alongside; not routed
+    provider: ollama
+    name: gemma2:2b
+    price: {input: 0, output: 0, cached_input: 0}
   gemma-4-31b:          # open-weights Gemma family (served by Google AI Studio): judge for Gemini-written drafts
     provider: gemini
     name: gemma-4-31b-it
