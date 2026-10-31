@@ -1,0 +1,106 @@
+{
+  "name": "ThreadLight - expiry watch (local check, no Telegram)",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Run now (manual)",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.THREADLIGHT_API }}/auth/login",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"email\": \"{{ $env.AUTOMATION_EMAIL || 'automation@threadlight.demo' }}\", \"password\": \"{{ $env.AUTOMATION_PASSWORD }}\" }",
+        "options": {}
+      },
+      "name": "Sign in (automation account)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.THREADLIGHT_API }}/expiring",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Sign in (automation account)').item.json.access_token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Evidence expiring before audit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One message per factory with evidence that expires before its next audit.\nconst out = [];\nfor (const f of $input.all().map(i => i.json)) {\n  if (!f.items) continue;\n  const lines = f.items.map(x => `- ${x.requirement} ${x.title} (owner: ${x.owner}): ${x.reason}`);\n  out.push({ json: { text: `ThreadLight: ${f.factory}, audit ${f.audit_date} (${f.days_to_audit} days)\\n` + lines.join('\\n') + '\\nDecision support only; a person must act.' } });\n}\nreturn out;"
+      },
+      "name": "Build alert text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Sign in (automation account)": {
+      "main": [
+        [
+          {
+            "node": "Evidence expiring before audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evidence expiring before audit": {
+      "main": [
+        [
+          {
+            "node": "Build alert text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run now (manual)": {
+      "main": [
+        [
+          {
+            "node": "Sign in (automation account)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "tlExpiryLocal01",
+  "active": false
+}

@@ -14,3 +14,14 @@ Environment used by the workflows (set on the `n8n` service in `deploy/docker-co
 `AUTOMATION_PASSWORD`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `GITHUB_REPO`, `GITHUB_TOKEN` (fine-grained,
 Actions: write), and `INTAKE_EMAIL`/`INTAKE_PASSWORD` (a staff account) for intake. The IMAP credential is created
 in the n8n editor. `N8N_BLOCK_ENV_ACCESS_IN_NODE=false` lets the expressions read `$env`.
+
+## Local run (2026-10-31)
+
+`expiry_watch_local.json` is the expiry watch with a manual trigger and without the Telegram step, for checking the
+workflow on a laptop. It was imported into n8n 1.72.1 (`docker run -d --name tl-n8n -p 5679:5678 -e
+THREADLIGHT_API=http://host.docker.internal:8000/api -e N8N_BLOCK_ENV_ACCESS_IN_NODE=false n8nio/n8n:1.72.1`) and run with
+`n8n execute --id tlExpiryLocal01` against the local API, signed in as the read-only demo viewer
+(`AUTOMATION_EMAIL`/`AUTOMATION_PASSWORD`; the development database predates the automation account). Result: finished,
+one alert, "ThreadLight: Sample Apparel Ltd., audit 2026-11-21 (30 days) - R4 Environmental clearance (owner:
+Compliance): D4 environmental clearance (EC-2024-5521) expired on 2026-09-30." The production workflows are not running
+on the VPS yet (no room on the shared 4 GB box, and no Telegram bot configured).
