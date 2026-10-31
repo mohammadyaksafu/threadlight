@@ -109,6 +109,8 @@ def test_pipeline_end_to_end_reaches_v1_scores(client, seeded_empty):
 
     hits = client.post("/api/search", headers=h, json={"factory_id": 1, "query": "fire safety certificate valid until"}).json()["hits"]
     assert hits and hits[0]["citation"].startswith("D")
+    g = client.post("/api/search", headers=h, json={"factory_id": 1, "query": "Which records refer to FC-2025-0417?", "graph": True}).json()
+    assert g["method"].endswith("+graph") and g["graph"]["seeds"] and any("graph" in x for x in g["hits"])
     report = client.post("/api/factories/1/report", headers=h).json()
     assert report["label"] == "Draft for human review"
     assert client.get("/api/factories/1/export?format=csv", headers=h).text.startswith("requirement,")

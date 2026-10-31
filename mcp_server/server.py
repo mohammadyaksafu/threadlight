@@ -19,6 +19,7 @@ from mcp.server.fastmcp import Context, FastMCP
 
 from backend.app.auth import RANK, User, decode
 from backend.db.session import one, rows, tenant_tx
+from backend.rag.graph import graph_search
 from backend.rag.search import search
 from backend.services.passport import build_dataset, passport
 from threadlight.engine import analyze, set_document_field
@@ -109,12 +110,13 @@ def list_alerts(factory_id: int, ctx: Context = None) -> list[dict]:
 
 
 @mcp.tool()
-def search_evidence(factory_id: int, query: str, k: int = 5, ctx: Context = None) -> dict:
-    """Hybrid search (vector + full text, reranked) over the factory's documents. Each hit has a citation like D1:p1."""
+def search_evidence(factory_id: int, query: str, k: int = 5, graph: bool = False, ctx: Context = None) -> dict:
+    """Hybrid search (vector + full text, reranked) over the factory's documents. Each hit has a citation like D1:p1.
+    graph=True adds Graph RAG: documents linked through references, citations, clauses and alerts, with the path."""
     u = _user(ctx)
     with tenant_tx(u.tenant_id) as c:
         _factory(c, factory_id)
-        return search(c, factory_id, query, k=min(k, 10), tenant_id=u.tenant_id)
+        return (graph_search if graph else search)(c, factory_id, query, k=min(k, 10), tenant_id=u.tenant_id)
 
 
 @mcp.tool()

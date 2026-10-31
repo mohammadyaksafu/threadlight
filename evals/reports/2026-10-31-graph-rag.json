@@ -1,0 +1,276 @@
+{
+ "kind": "graph_rag",
+ "date": "2026-10-31",
+ "factory": 1,
+ "results": {
+  "hybrid": {
+   "queries": 6,
+   "recall_at_3": 0.722,
+   "hit_at_1": 1.0,
+   "per_question": [
+    {
+     "question": "Which records refer to fire certificate FC-2025-0417?",
+     "relevant": [
+      "D1",
+      "D1-renewal",
+      "D6"
+     ],
+     "top3": [
+      "D1",
+      "D1-renewal",
+      "D6"
+     ],
+     "recall_at_3": 1.0,
+     "hit_at_1": true,
+     "paths": {}
+    },
+    {
+     "question": "If fire certificate D1 expires, which other evidence is affected?",
+     "relevant": [
+      "D1",
+      "D1-renewal",
+      "D6"
+     ],
+     "top3": [
+      "D1-renewal",
+      "D1",
+      "D4"
+     ],
+     "recall_at_3": 0.6666666666666666,
+     "hit_at_1": true,
+     "paths": {}
+    },
+    {
+     "question": "What evidence does requirement R5 need?",
+     "relevant": [
+      "D1",
+      "D1-renewal",
+      "D5"
+     ],
+     "top3": [
+      "D1-renewal",
+      "D2",
+      "D1"
+     ],
+     "recall_at_3": 0.6666666666666666,
+     "hit_at_1": true,
+     "paths": {}
+    },
+    {
+     "question": "Which certificate do the safety committee minutes quote?",
+     "relevant": [
+      "D1",
+      "D6"
+     ],
+     "top3": [
+      "D6",
+      "D1-renewal",
+      "D5"
+     ],
+     "recall_at_3": 0.5,
+     "hit_at_1": true,
+     "paths": {}
+    },
+    {
+     "question": "Which documents does alert A2 concern?",
+     "relevant": [
+      "D1-renewal",
+      "D6"
+     ],
+     "top3": [
+      "D6",
+      "D4",
+      "D2"
+     ],
+     "recall_at_3": 0.5,
+     "hit_at_1": true,
+     "paths": {}
+    },
+    {
+     "question": "Which document shows the entity name variant on environmental clearance EC-2024-5521?",
+     "relevant": [
+      "D4"
+     ],
+     "top3": [
+      "D4",
+      "D1-renewal",
+      "D1"
+     ],
+     "recall_at_3": 1.0,
+     "hit_at_1": true,
+     "paths": {}
+    }
+   ]
+  },
+  "hybrid+graph": {
+   "queries": 6,
+   "recall_at_3": 0.944,
+   "hit_at_1": 1.0,
+   "per_question": [
+    {
+     "question": "Which records refer to fire certificate FC-2025-0417?",
+     "relevant": [
+      "D1",
+      "D1-renewal",
+      "D6"
+     ],
+     "top3": [
+      "D1",
+      "D1-renewal",
+      "D6"
+     ],
+     "recall_at_3": 1.0,
+     "hit_at_1": true,
+     "paths": {
+      "D1": [
+       "FC-2025-0417 (named in query)",
+       "~HAS_REF D1"
+      ],
+      "D1-renewal": [
+       "D1-renewal (search hit #2)"
+      ],
+      "D6": [
+       "FC-2025-0417 (named in query)",
+       "SIMILAR_TO FC-2025-0471",
+       "~CITES D6"
+      ]
+     }
+    },
+    {
+     "question": "If fire certificate D1 expires, which other evidence is affected?",
+     "relevant": [
+      "D1",
+      "D1-renewal",
+      "D6"
+     ],
+     "top3": [
+      "D1",
+      "D1-renewal",
+      "D6"
+     ],
+     "recall_at_3": 1.0,
+     "hit_at_1": true,
+     "paths": {
+      "D1": [
+       "D1 (named in query)"
+      ],
+      "D1-renewal": [
+       "D1 (named in query)",
+       "~SUPERSEDES D1-renewal"
+      ],
+      "D6": [
+       "D1 (named in query)",
+       "~SUPERSEDES D1-renewal",
+       "~FLAGS A2 reference_mismatch",
+       "FLAGS D6"
+      ]
+     }
+    },
+    {
+     "question": "What evidence does requirement R5 need?",
+     "relevant": [
+      "D1",
+      "D1-renewal",
+      "D5"
+     ],
+     "top3": [
+      "D1-renewal",
+      "D2",
+      "D1"
+     ],
+     "recall_at_3": 0.6666666666666666,
+     "hit_at_1": true,
+     "paths": {
+      "D1-renewal": [
+       "D1-renewal (search hit #1)"
+      ],
+      "D2": [
+       "D2 (search hit #2)"
+      ],
+      "D1": [
+       "D1-renewal (search hit #1)",
+       "SUPERSEDES D1"
+      ]
+     }
+    },
+    {
+     "question": "Which certificate do the safety committee minutes quote?",
+     "relevant": [
+      "D1",
+      "D6"
+     ],
+     "top3": [
+      "D6",
+      "D1-renewal",
+      "D1"
+     ],
+     "recall_at_3": 1.0,
+     "hit_at_1": true,
+     "paths": {
+      "D6": [
+       "D6 (search hit #2)"
+      ],
+      "D1-renewal": [
+       "D6 (search hit #2)",
+       "~FLAGS A2 reference_mismatch",
+       "FLAGS D1-renewal"
+      ],
+      "D1": [
+       "D6 (search hit #2)",
+       "~FLAGS A2 reference_mismatch",
+       "FLAGS D1-renewal",
+       "SUPERSEDES D1"
+      ]
+     }
+    },
+    {
+     "question": "Which documents does alert A2 concern?",
+     "relevant": [
+      "D1-renewal",
+      "D6"
+     ],
+     "top3": [
+      "D6",
+      "D4",
+      "D1-renewal"
+     ],
+     "recall_at_3": 1.0,
+     "hit_at_1": true,
+     "paths": {
+      "D6": [
+       "A2 reference_mismatch (named in query)",
+       "FLAGS D6"
+      ],
+      "D4": [
+       "D4 (search hit #2)"
+      ],
+      "D1-renewal": [
+       "A2 reference_mismatch (named in query)",
+       "FLAGS D1-renewal"
+      ]
+     }
+    },
+    {
+     "question": "Which document shows the entity name variant on environmental clearance EC-2024-5521?",
+     "relevant": [
+      "D4"
+     ],
+     "top3": [
+      "D4",
+      "D1-renewal",
+      "D1"
+     ],
+     "recall_at_3": 1.0,
+     "hit_at_1": true,
+     "paths": {
+      "D4": [
+       "EC-2024-5521 (named in query)",
+       "~HAS_REF D4"
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "note": "6 synthetic multi-hop questions; ground truth from data/sample.json relations. Not real-world retrieval quality."
+}

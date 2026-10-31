@@ -32,3 +32,27 @@ Before D4 was OCR'd (laptop without Tesseract) every configuration missed R4 (re
 the right document first only half the time; hybrid fixes that. Six documents are far too few to tell rewriting or
 reranking apart, so this is a smoke test, not a benchmark. Re-run `python -m evals.rag_eval` on the VPS with the
 reranker installed and more documents before quoting retrieval quality.
+
+## Graph RAG (2026-10-31)
+
+`backend/rag/graph.py` builds an entity-relation knowledge graph per factory from what the pipeline extracted and
+people confirmed: documents, organisations (normalised names), reference numbers, document types, buyer-code
+requirements, corrective actions and integrity alerts. Edges: `ISSUED_TO`, `HAS_REF`, `CITES`, `SIMILAR_TO` (reference
+numbers one edit or one transposition apart, i.e. a likely typo), `IS_A`, `NEEDS`, `SUPERSEDES`, `MAPPED_TO`
+(confirmed mappings), `ADDRESSES`, `FLAGS`. It is rebuilt per call from tenant-scoped rows (RLS applies) and adds no
+model calls.
+
+`graph_search()` seeds the graph with nodes named in the query (reference numbers, `D1`, `R5`, `CAP-14`, `A2`)
+and, at half weight, the top two hybrid hits; walks up to three hops (broad hubs such as a document type or the
+factory's own name count for less); and fuses per document: hybrid rank score + graph weight. Documents reached only
+through the graph get their best chunk added, and every graph hit carries its path, e.g.
+`FC-2025-0417 (named in query) -> SIMILAR_TO FC-2025-0471 -> ~CITES D6`.
+
+Use it with `POST /api/search {"graph": true}` or the MCP tool `search_evidence(..., graph=true)`.
+
+**Measured** (`python -m evals.graph_rag_eval`, `evals/reports/2026-10-31-graph-rag.json`): 6 multi-hop questions
+about relations between records, ground truth from the synthetic scenario. recall@3 **0.722 -> 0.944** (hybrid ->
+hybrid + graph), hit@1 1.0 for both. recall@5 is 1.0 for both because the factory has only 7 documents, so recall@3
+is the meaningful cut. A small synthetic set: it shows the mechanism, not real-world quality.
+Tests: `backend/tests/test_graph_rag.py` (typo link FC-2025-0417 ~ FC-2025-0471, D6 reached in two hops, tenant scoping)
+and the graph assertion in `test_api.py`.

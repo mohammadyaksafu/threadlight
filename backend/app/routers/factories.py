@@ -17,6 +17,7 @@ from pydantic import BaseModel
 from backend.app.auth import User, staff, viewer
 from backend.app.deps import UPLOADS, factory_or_404, limiter
 from backend.db.session import audit, one, rows, scalar, tenant_tx
+from backend.rag.graph import graph_search
 from backend.rag.search import search as rag_search
 from backend.services import drafting, jobs, storage
 from backend.services.passport import build_dataset, passport
@@ -206,13 +207,15 @@ class SearchBody(BaseModel):
     factory_id: int
     query: str
     k: int = 5
+    graph: bool = False  # Graph RAG: expand the hits over the evidence knowledge graph (backend/rag/graph.py)
 
 
 @router.post("/search")
 def search(body: SearchBody, user: User = Depends(viewer)):
     with tenant_tx(user.tenant_id) as c:
         factory_or_404(c, body.factory_id)
-        return rag_search(c, body.factory_id, body.query, k=min(body.k, 20), tenant_id=user.tenant_id)
+        fn = graph_search if body.graph else rag_search
+        return fn(c, body.factory_id, body.query, k=min(body.k, 20), tenant_id=user.tenant_id)
 
 
 class WhatIf(BaseModel):
