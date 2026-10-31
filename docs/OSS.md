@@ -28,5 +28,6 @@ in `deploy/docker-compose.yml`.
 | Caddy | Apache-2.0 | HTTPS, reverse proxy |
 | promptfoo | MIT | prompt regression tests |
 | React, React Router, Vite, Tailwind CSS, lucide-react | MIT / ISC | web app |
+| Recharts 2.15, Apache ECharts 5.5 | MIT / Apache-2.0 | Overview charts: risk-index composition, document validity timeline |
 
 Gemini models are a hosted, closed service (Google AI Studio); they are listed in `docs/MODEL_ROUTING.md`, not here.

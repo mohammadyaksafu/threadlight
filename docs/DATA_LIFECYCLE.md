@@ -108,11 +108,18 @@ empty rather than tick something that was not built.
 
 ## 5. Visualization
 
-**Tick:** none of the listed libraries. **Add:** "Custom SVG + React (no chart library)".
+**Tick:** Recharts, Apache ECharts, and "Custom SVG + React (no chart library)".
 
 **Visualization details, paste:**
 
-> All charts are hand-built SVG and HTML in React with Tailwind:
+> Two chart libraries on the Overview page (lazy-loaded chunk, `web/src/components/charts/InsightCharts.tsx`):
+> - **Recharts** bar chart "Where the risk index comes from": each requirement's points (criticality ×
+>   status penalty over total criticality), coloured by status; the bars add up to the risk index.
+> - **Apache ECharts** (tree-shaken core, SVG renderer) timeline "Document validity vs audit day": each
+>   active document's issue-to-expiry window, coloured by expiry state, with today and the audit day marked.
+>
+> Both read the same engine result as the rest of the app, so they move with the what-if simulation and
+> with live data. The other views are hand-built SVG and HTML in React with Tailwind:
 > - an **evidence graph**, with documents and requirements in two columns joined by curves drawn from the
 >   real element positions and redrawn on resize. Each line takes the status colour *and* a dash pattern,
 >   so it is not colour-only, and clicking a node highlights its links ("1 document affects 2

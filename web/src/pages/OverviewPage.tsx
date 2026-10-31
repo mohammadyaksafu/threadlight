@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { ArrowRight, CalendarClock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SAMPLE } from "@/data/sample";
@@ -6,6 +7,11 @@ import { useThreadLight } from "@/store/ThreadLightProvider";
 import { ALERT_LABEL, STATUS, STATUS_ORDER } from "@/lib/vocab";
 import { Meter, Mono, StatusIcon, StatusPill, cx } from "@/components/ui";
 import { PageHeader, Panel } from "@/components/ui/page";
+
+// Chart libraries (Recharts, Apache ECharts) load with this chunk, not with the first page.
+const RiskContributionChart = lazy(() => import("@/components/charts/InsightCharts").then((m) => ({ default: m.RiskContributionChart })));
+const ValidityTimelineChart = lazy(() => import("@/components/charts/InsightCharts").then((m) => ({ default: m.ValidityTimelineChart })));
+const chartFallback = <div className="h-64 animate-pulse rounded-xl bg-surface-2" aria-hidden="true" />;
 
 function Ring({ value, size = 148 }: { value: number; size?: number }) {
   const stroke = 13, r = (size - stroke) / 2, c = 2 * Math.PI * r;
@@ -143,6 +149,15 @@ export function OverviewPage() {
             <span className="text-sm text-ink-2">Current step: <strong className="capitalize text-ink">{state.finding.state}</strong></span>
           </div>
           <p className="mt-3 text-sm text-ink-2">{reqTitle("R1")} expires before the audit and also affects R5. Only a named person can approve and close it.</p>
+        </Panel>
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <Panel title="Where the risk index comes from" description={`Points per requirement: criticality × status penalty. They add up to ${s.risk_index}.`}>
+          <Suspense fallback={chartFallback}><RiskContributionChart result={result} /></Suspense>
+        </Panel>
+        <Panel title="Document validity vs audit day" description={<>Issue-to-expiry window of each active document. Solid line: today (<Mono>{result.today}</Mono>); dashed red: audit (<Mono>{result.audit_date}</Mono>).</>}>
+          <Suspense fallback={chartFallback}><ValidityTimelineChart data={state.data} result={result} /></Suspense>
         </Panel>
       </div>
 
