@@ -49,7 +49,7 @@ services:
     # Plain-HTTP fallback address (http://<server-ip>:8095) for when the front HTTPS proxy is not set up yet.
     ports: ["${PUBLIC_HTTP_PORT:-8095}:80"]
     restart: unless-stopped
-    depends_on: [api, mcp, rules-mcp]
+    depends_on: [api, mcp, rules-mcp, grafana]
     networks: [default, front]
     mem_limit: 128m
 
@@ -100,6 +100,30 @@ services:
     depends_on: []
     mem_limit: 128m
 
+  # Ops dashboards at /grafana/: model calls, tokens, latency, pipeline jobs, review queue, audit trail.
+  # Anonymous visitors get the Viewer role; the datasource is a read-only role pinned to the demo tenant.
+  grafana:
+    image: grafana/grafana:11.4.0
+    environment:
+      GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL:-http://localhost:8095/grafana/}
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/provisioning/dashboards/threadlight-ops.json
+      GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD}
+    volumes: [./grafana/lite:/etc/grafana/provisioning:ro, grafana_data:/var/lib/grafana]
+    networks:
+      default:
+        aliases: [tl-grafana]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    restart: unless-stopped
+    mem_limit: 256m
+
   postgres:
     image: pgvector/pgvector:pg16
     environment:
@@ -132,3 +156,4 @@ volumes:
   pg_data: {}
   redis_data: {}
   files: {}
+  grafana_data: {}

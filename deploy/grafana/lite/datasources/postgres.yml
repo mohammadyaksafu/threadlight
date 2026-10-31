@@ -1,0 +1,17 @@
+# Lite profile: Grafana reads Postgres directly as tl_grafana (SELECT only, read-only transactions,
+# pinned to the demo tenant by row-level security; see migration 0002_grafana_reader).
+apiVersion: 1
+datasources:
+  - name: ThreadLight Postgres
+    uid: tl-pg
+    type: grafana-postgresql-datasource
+    url: postgres:5432
+    user: tl_grafana
+    isDefault: true
+    jsonData:
+      database: threadlight
+      sslmode: disable
+      postgresVersion: 1600
+      timescaledb: false
+    secureJsonData:
+      password: ${GRAFANA_DB_PASSWORD}
