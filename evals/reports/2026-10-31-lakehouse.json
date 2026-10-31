@@ -1,0 +1,232 @@
+{
+ "kind": "lakehouse",
+ "date": "2026-10-31",
+ "format": "Delta Lake (delta-rs) + DuckDB",
+ "root": "C:/tl-lakehouse",
+ "exported": {
+  "llm_calls": {
+   "rows": 429,
+   "delta_version": 8
+  },
+  "jobs": {
+   "rows": 8,
+   "delta_version": 7
+  },
+  "documents": {
+   "rows": 7,
+   "delta_version": 6
+  },
+  "review_items": {
+   "rows": 8,
+   "delta_version": 6
+  },
+  "audit_events": {
+   "rows": 39,
+   "delta_version": 6
+  }
+ },
+ "queries": {
+  "tokens_by_model": [
+   {
+    "provider": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "calls": 17,
+    "tokens": 32570,
+    "avg_latency_ms": 2622.0,
+    "cache_hit_rate": 0.118
+   },
+   {
+    "provider": "gemini",
+    "model": "gemini-embedding-001",
+    "calls": 203,
+    "tokens": 10720,
+    "avg_latency_ms": 1163.0,
+    "cache_hit_rate": 0.517
+   },
+   {
+    "provider": "gemini",
+    "model": "gemini-3.1-flash-lite",
+    "calls": 124,
+    "tokens": 10129,
+    "avg_latency_ms": 1854.0,
+    "cache_hit_rate": 0.782
+   },
+   {
+    "provider": "gemini",
+    "model": "gemma-4-31b-it",
+    "calls": 5,
+    "tokens": 7051,
+    "avg_latency_ms": 26420.0,
+    "cache_hit_rate": 0.0
+   },
+   {
+    "provider": "ollama",
+    "model": "bge-m3",
+    "calls": 43,
+    "tokens": 2725,
+    "avg_latency_ms": 1614.0,
+    "cache_hit_rate": 0.419
+   },
+   {
+    "provider": "ollama",
+    "model": "qwen2.5:7b",
+    "calls": 3,
+    "tokens": 0,
+    "avg_latency_ms": 4106.0,
+    "cache_hit_rate": 0.0
+   },
+   {
+    "provider": "gemini",
+    "model": "gemini-pro-latest",
+    "calls": 15,
+    "tokens": 0,
+    "avg_latency_ms": 577.0,
+    "cache_hit_rate": 0.0
+   },
+   {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash",
+    "calls": 15,
+    "tokens": 0,
+    "avg_latency_ms": 1993.0,
+    "cache_hit_rate": 0.0
+   },
+   {
+    "provider": "ollama",
+    "model": "llama3.2:3b",
+    "calls": 3,
+    "tokens": 0,
+    "avg_latency_ms": 4138.0,
+    "cache_hit_rate": 0.0
+   },
+   {
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5",
+    "calls": 1,
+    "tokens": 0,
+    "avg_latency_ms": 6457.0,
+    "cache_hit_rate": 0.0
+   }
+  ],
+  "calls_per_day": [
+   {
+    "day": "2026-10-27",
+    "provider": "anthropic",
+    "calls": 1
+   },
+   {
+    "day": "2026-10-27",
+    "provider": "gemini",
+    "calls": 325
+   },
+   {
+    "day": "2026-10-27",
+    "provider": "ollama",
+    "calls": 6
+   },
+   {
+    "day": "2026-10-31",
+    "provider": "gemini",
+    "calls": 54
+   },
+   {
+    "day": "2026-10-31",
+    "provider": "ollama",
+    "calls": 43
+   }
+  ],
+  "pipeline_seconds": [
+   {
+    "state": "done",
+    "jobs": 8,
+    "avg_seconds": 99.4
+   }
+  ],
+  "documents_by_status": [
+   {
+    "type": "committee_minutes",
+    "status": "extracted",
+    "verified": true,
+    "n": 1
+   },
+   {
+    "type": "env_clearance",
+    "status": "extracted",
+    "verified": true,
+    "n": 1
+   },
+   {
+    "type": "fire_certificate",
+    "status": "extracted",
+    "verified": true,
+    "n": 2
+   },
+   {
+    "type": "fire_drill_record",
+    "status": "extracted",
+    "verified": true,
+    "n": 1
+   },
+   {
+    "type": "structural_report",
+    "status": "extracted",
+    "verified": true,
+    "n": 1
+   },
+   {
+    "type": "trade_license",
+    "status": "extracted",
+    "verified": true,
+    "n": 1
+   }
+  ],
+  "review_backlog": [
+   {
+    "kind": "approval",
+    "status": "resolved",
+    "n": 7
+   },
+   {
+    "kind": "fields",
+    "status": "resolved",
+    "n": 1
+   }
+  ],
+  "audit_actions": [
+   {
+    "action": "review_resolved",
+    "n": 9
+   },
+   {
+    "action": "document_reindexed",
+    "n": 9
+   },
+   {
+    "action": "evidence_approved",
+    "n": 8
+   },
+   {
+    "action": "document_uploaded",
+    "n": 8
+   },
+   {
+    "action": "login",
+    "n": 3
+   },
+   {
+    "action": "fields_reviewed",
+    "n": 1
+   },
+   {
+    "action": "mapping_proposed_mcp",
+    "n": 1
+   }
+  ],
+  "snapshots": [
+   {
+    "snapshot": "2026-10-31",
+    "rows": 429
+   }
+  ]
+ }
+}

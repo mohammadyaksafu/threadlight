@@ -265,3 +265,28 @@ empty rather than tick something that was not built.
 > Not used. Nothing local was exposed. The demo is a static build published by GitHub Actions to GitHub
 > Pages (https://mohammadyaksafu.github.io/threadlight/), which is public, read-only and always on, and
 > has no backend to secure. There are no webhooks or OAuth callbacks.
+
+## Graph database and lakehouse (added 2026-10-31)
+
+**Graph DB: Neo4j 5.26 (community).** `backend/rag/neo4j_sync.py` mirrors the evidence knowledge graph that Graph RAG
+builds (docs/RAG.md) into Neo4j: labelled nodes (`Document`, `Reference`, `Requirement`, `Entity`, `DocType`,
+`CorrectiveAction`, `Alert`) and typed relationships (`HAS_REF`, `CITES`, `SIMILAR_TO`, `SUPERSEDES`, `NEEDS`, `IS_A`,
+`ISSUED_TO`, `MAPPED_TO`, `ADDRESSES`, `FLAGS`), every node scoped by `tenant_id` and `factory_id`. Postgres stays the
+system of record; Neo4j is a read model rebuilt per sync, for Cypher exploration and multi-hop queries. Run locally:
+`docker run -d --name tl-neo4j -p 7475:7474 -p 7688:7687 -e NEO4J_AUTH=neo4j/<password> neo4j:5.26.0-community`, then
+`NEO4J_PASSWORD=<password> python -m backend.rag.neo4j_sync 1 1`. 2026-10-31: 37 nodes and 40 relationships (matching the
+in-memory graph); the Cypher variable-length query from reference FC-2025-0417 returns D1 (1 hop, `HAS_REF`), D1-renewal
+(2 hops, `HAS_REF`, `SUPERSEDES`) and D6 (2 hops, `SIMILAR_TO`, `CITES`: the minutes that misquote the number). Not on the
+4 GB VPS.
+
+**Lakehouse: Delta Lake (delta-rs) + DuckDB.** `backend/services/lakehouse.py` appends a daily snapshot of the tenant's
+model-call log, pipeline jobs, document metadata, review queue and audit-log events to Delta tables partitioned by
+snapshot date (Parquet + transaction log: versioned, time travel), then runs DuckDB SQL over them (tokens and latency per
+model, calls per day and provider, pipeline durations, documents by status, review backlog, audit actions) and writes
+`evals/reports/<date>-lakehouse.json`. Ids, types, statuses, counts and timings only: no document text or personal data.
+Re-running on the same day replaces that snapshot. 2026-10-31: 429 model calls, 8 jobs (avg 99 s), 7 documents, 8 review
+items and 39 audit events exported. delta-rs 0.22 cannot write under a path with spaces, so this laptop uses
+`LAKEHOUSE_ROOT=C:/tl-lakehouse`.
+
+Tests: `backend/tests/test_lakehouse_neo4j.py` (idempotent snapshot + DuckDB queries; Neo4j node/edge counts and the
+Cypher path, skipped when no Neo4j server is configured).

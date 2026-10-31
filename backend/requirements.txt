@@ -31,3 +31,7 @@ SQLAlchemy==2.0.55
 structlog==26.1.0
 uvicorn[standard]==0.54.0
 pytest==9.1.1
+neo4j==5.26.0          # optional Neo4j mirror of the evidence graph (backend/rag/neo4j_sync.py)
+deltalake==0.22.3      # analytics lakehouse (backend/services/lakehouse.py)
+pyarrow==18.1.0
+duckdb==1.1.3
