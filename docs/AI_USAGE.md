@@ -178,12 +178,19 @@ brainstorming. Leave it out if none.]
 
 ## Frontend AI / Visual App Builders (+1 each, max 5)
 
-**Tick:** none of the listed builders (Lovable, v0, Bolt, Claude Artifacts and the rest were not used).
-**Add:** Claude Code (Anthropic's agentic CLI).
+**Tick:** Claude Artifacts (used 2026-10-31). The others (Lovable, v0, Bolt, Cursor, Gemini Canvas, ChatGPT Canvas)
+were not used; do not tick them. **Add:** Claude Code (Anthropic's agentic CLI).
 
 **How did you use these tools? Paste:**
 
-> The front end was written as code by Claude Code. We did not use a visual builder. It went through
+> **Claude Artifacts (Design canvas):** on 2026-10-31 we used Claude Artifacts to prototype a phone version of
+> the passport for factory managers: an interactive 390x844 artboard with the coverage and risk header, tabs for
+> open gaps, integrity alerts and supported clauses (real values from the synthetic scenario), and the upload
+> action with the human-approval note. It is the design reference for a mobile layout; the shipped web app is
+> still code. Link: https://claude.ai/artifact/GkrFUDBXudP3MKuorsHsCn [FILL: share it from the page's Share menu
+> before pasting, or judges cannot open it].
+>
+> The shipped front end was written as code by Claude Code. It went through
 > several iterations driven by our prompts: a single page, then TypeScript + Tailwind, then React, then a
 > multi-page app with sidebar navigation, then the indigo theme, command palette (Ctrl+K) and demo
 > sign-in. Practically all of the UI code was AI-generated; the team set the requirements, judged the
