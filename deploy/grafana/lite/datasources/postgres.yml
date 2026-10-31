@@ -5,7 +5,7 @@ datasources:
   - name: ThreadLight Postgres
     uid: tl-pg
     type: grafana-postgresql-datasource
-    url: postgres:5432
+    url: ${TL_PG_URL}
     user: tl_grafana
     isDefault: true
     jsonData:

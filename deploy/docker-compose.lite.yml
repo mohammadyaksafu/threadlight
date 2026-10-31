@@ -115,6 +115,7 @@ services:
       GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
       GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/provisioning/dashboards/threadlight-ops.json
       GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD}
+      TL_PG_URL: postgres:5432
     volumes: [./grafana/lite:/etc/grafana/provisioning:ro, grafana_data:/var/lib/grafana]
     networks:
       default:

@@ -290,3 +290,13 @@ items and 39 audit events exported. delta-rs 0.22 cannot write under a path with
 
 Tests: `backend/tests/test_lakehouse_neo4j.py` (idempotent snapshot + DuckDB queries; Neo4j node/edge counts and the
 Cypher path, skipped when no Neo4j server is configured).
+
+**Grafana 11.4 dashboards (2026-10-31).** `deploy/grafana/lite/` provisions a Postgres datasource (read-only role
+`tl_grafana`, pinned to the demo tenant by row-level security; migration `0002_grafana_reader`) and the dashboard
+"ThreadLight: models, pipeline and audit trail": model calls, tokens, cache-hit rate, median latency, cost and failed
+calls; tokens over time per model; calls by purpose; latency and tokens per model; pipeline jobs; documents by status;
+human review queue; clause mappings; audit-log events. Running locally against the development database (screenshot
+`docs/img/grafana-ops-dashboard.jpg`: 429 model calls, 63,195 tokens, 51.7% cache hits, 723 ms median latency):
+`docker run -d --name tl-grafana -p 3300:3000 -e TL_PG_URL=host.docker.internal:5434 -e GRAFANA_DB_PASSWORD=tl_grafana
+-e GF_AUTH_ANONYMOUS_ENABLED=true -v <repo>/deploy/grafana/lite:/etc/grafana/provisioning:ro grafana/grafana:11.4.0`.
+The lite VPS Compose file has the same service behind `/grafana/`; it is not deployed there yet.
