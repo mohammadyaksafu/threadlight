@@ -11,6 +11,8 @@ in `deploy/docker-compose.yml`.
 | PostgreSQL 16 + pgvector | PostgreSQL / PostgreSQL | relational store, vector index (HNSW), full-text search, row-level security |
 | Redis, arq | BSD / MIT | job queue, response and embedding cache |
 | LangGraph (+ checkpoint-postgres) | MIT | pipeline state machine with human-in-the-loop interrupts |
+| three.js | MIT | WebGL thread scene behind the sign-in, overview and agent-framework panels (loaded on demand) |
+| Pydantic AI, OpenAI Agents SDK, smolagents, AutoGen, Agno, DSPy | MIT / Apache-2.0 (see each package) | agent-framework bench only (`agent_bench/`), not deployed |
 | MCP Python SDK (FastMCP) | MIT | threadlight-mcp server |
 | Docling | MIT | layout-aware PDF parsing |
 | Tesseract OCR (eng + ben), pytesseract, pypdfium2, pypdf, Pillow | Apache-2.0 / BSD / HPND | OCR, PDF rendering and text |

@@ -6,6 +6,7 @@ import { useSession, type Mode } from "@/auth/SessionProvider";
 import { LIVE_AVAILABLE } from "@/api/client";
 import { Logo } from "@/components/layout/Sidebar";
 import { Button, Mono, cx } from "@/components/ui";
+import { ThreadCanvas } from "@/components/fx/ThreadCanvas";
 
 const ROLE_ICON = { officer: ShieldCheck, staff: UserCog, guest: UserRound };
 
@@ -42,18 +43,19 @@ export function LoginPage() {
   return (
     <div className="grid min-h-screen lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       {/* Brand panel */}
-      <section className="relative hidden overflow-hidden bg-side p-12 text-side-ink lg:flex lg:flex-col">
+      <section className="aurora relative hidden overflow-hidden bg-side p-12 text-side-ink lg:flex lg:flex-col">
         <svg className="pointer-events-none absolute -bottom-10 -left-20 h-[420px] w-[760px] text-side-ink/[0.06]" viewBox="0 0 760 420" fill="none" aria-hidden="true">
-          <path d="M0 330 C 170 60, 330 470, 510 190 S 720 70, 760 120" stroke="currentColor" strokeWidth="30" strokeLinecap="round" />
+          <path pathLength={1} className="thread-draw" d="M0 330 C 170 60, 330 470, 510 190 S 720 70, 760 120" stroke="currentColor" strokeWidth="30" strokeLinecap="round" />
         </svg>
-        <div className="relative flex items-center gap-3">
+        <ThreadCanvas variant="weave" />
+        <div className="relative flex items-center gap-3 motion-safe:animate-rise-in">
           <Logo size={40} />
           <div>
             <div className="text-2xl font-extrabold tracking-tight">ThreadLight</div>
             <div className="text-sm text-side-ink-2">Verified Evidence Passport</div>
           </div>
         </div>
-        <div className="relative mt-auto max-w-md">
+        <div className="relative mt-auto max-w-md motion-safe:animate-rise-in motion-safe:[animation-delay:.25s]">
           <h1 className="text-[40px] font-extrabold leading-[1.08] tracking-tight">Evidence you can verify, before the auditor asks.</h1>
           <p className="mt-4 text-[15px] leading-relaxed text-side-ink-2">
             A garment factory 30 days before a buyer audit. Rules check every certificate against the audit date, flag records that
@@ -65,7 +67,7 @@ export function LoginPage() {
 
       {/* Form */}
       <main className="flex items-center justify-center px-4 py-10 sm:px-8">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md motion-safe:animate-rise-in">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <span className="grid h-11 w-11 place-items-center rounded-xl bg-side"><Logo size={30} /></span>
             <div className="text-xl font-extrabold tracking-tight">ThreadLight</div>
@@ -133,14 +135,14 @@ export function LoginPage() {
                   <li key={a.role}>
                     <button type="button" id={`login-as-${a.role}`} onClick={() => use(a)}
                       className={cx("group flex w-full items-center gap-3 rounded-2xl border border-line bg-surface p-3.5 text-left shadow-sm",
-                        "motion-safe:transition hover:border-thread/50 hover:shadow-card")}>
-                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-thread-soft text-thread-strong"><Icon size={19} aria-hidden="true" /></span>
+                        "lift hover:border-thread/50")}>
+                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-thread-soft text-thread-strong motion-safe:transition-transform motion-safe:group-hover:scale-110"><Icon size={19} aria-hidden="true" /></span>
                       <span className="min-w-0 flex-1">
                         <span className="block font-semibold">{a.title}</span>
                         <span className="block text-xs text-ink-2">{a.summary}</span>
                         <span className="mt-1 block truncate text-[11.5px] text-ink-3"><Mono>{a.email}</Mono> &middot; <Mono>{a.password}</Mono></span>
                       </span>
-                      <ArrowRight size={17} className="shrink-0 text-ink-3 group-hover:text-thread" aria-hidden="true" />
+                      <ArrowRight size={17} className="shrink-0 text-ink-3 motion-safe:transition-transform group-hover:translate-x-1 group-hover:text-thread" aria-hidden="true" />
                     </button>
                   </li>
                 );

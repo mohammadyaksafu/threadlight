@@ -47,7 +47,7 @@ export function Sidebar({ open, onClose, theme, onTheme }: {
         )}>
         {/* quiet thread motif */}
         <svg className="pointer-events-none absolute inset-x-0 bottom-36 h-48 w-full text-side-ink/[0.06]" viewBox="0 0 280 190" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M-10 150 C 60 20, 120 200, 190 80 S 260 30, 300 60" stroke="currentColor" strokeWidth="14" strokeLinecap="round" />
+          <path pathLength={1} className="thread-draw" d="M-10 150 C 60 20, 120 200, 190 80 S 260 30, 300 60" stroke="currentColor" strokeWidth="14" strokeLinecap="round" />
         </svg>
 
         <div className="relative flex items-center gap-3 px-5 pb-5 pt-6">
@@ -71,13 +71,13 @@ export function Sidebar({ open, onClose, theme, onTheme }: {
                     <li key={it.id}>
                       <NavLink id={`nav-${it.id}`} to={it.to} end={it.to === "/"}
                         className={({ isActive }) => cx(
-                          "relative flex min-h-[42px] items-center gap-3 rounded-xl px-3 text-sm font-medium motion-safe:transition-colors",
+                          "group relative flex min-h-[42px] items-center gap-3 rounded-xl px-3 text-sm font-medium motion-safe:transition-colors",
                           isActive ? "bg-side-active text-side-ink shadow-sm" : "text-side-ink-2 hover:bg-side-hover hover:text-side-ink",
                         )}>
                         {({ isActive }) => (
                           <>
-                            {isActive && <span className="absolute -left-3 bottom-2 top-2 w-1 rounded-r-full bg-side-ink" aria-hidden="true" />}
-                            <Icon size={18} aria-hidden="true" className="shrink-0" />
+                            {isActive && <span className="absolute -left-3 bottom-2 top-2 w-1 origin-center rounded-r-full bg-side-ink motion-safe:animate-grow-y" aria-hidden="true" />}
+                            <Icon size={18} aria-hidden="true" className="shrink-0 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:scale-110" />
                             <span className="flex-1">{it.label}</span>
                             {badge[it.id] !== undefined && (
                               <span className={cx("min-w-[22px] rounded-full px-1.5 text-center font-mono text-[11px] tabular-nums",

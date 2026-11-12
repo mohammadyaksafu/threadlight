@@ -32,7 +32,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       ref={ref}
       type={type}
       className={cx(
-        "inline-flex items-center gap-2 rounded-xl border font-semibold motion-safe:transition-colors",
+        "inline-flex items-center gap-2 rounded-xl border font-semibold motion-safe:transition motion-safe:active:scale-[.97]",
         "disabled:cursor-not-allowed disabled:opacity-45 aria-disabled:cursor-not-allowed aria-disabled:opacity-55",
         size === "sm" ? "min-h-[36px] px-3 text-[13px]" : "min-h-[42px] px-4 text-sm",
         VARIANT[variant],
@@ -120,7 +120,7 @@ export function Delta({ now, base, lowerIsBetter = false, unit = "" }: { now: nu
 export function Meter({ value, className, label }: { value: number; className: string; label: string }) {
   return (
     <div className="h-1.5 overflow-hidden rounded-full bg-surface-3" role="img" aria-label={label}>
-      <div className={cx("h-full rounded-full motion-safe:transition-[width] motion-safe:duration-700", className)} style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
+      <div className={cx("h-full origin-left rounded-full motion-safe:animate-grow-x motion-safe:transition-[width] motion-safe:duration-700", className)} style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
     </div>
   );
 }

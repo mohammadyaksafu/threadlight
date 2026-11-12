@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { NAV_ITEMS } from "@/nav";
+import { useReveal } from "@/lib/scroll";
 import { cx } from "./index";
 
 /** Page title block. The icon tile is taken from the sidebar entry for the current section. */
@@ -23,7 +24,7 @@ export function PageHeader({ eyebrow, title, description, actions, back }: {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex min-w-0 max-w-3xl gap-4">
           {Icon && (
-            <span className="mt-1 grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-thread text-thread-on shadow-card max-sm:hidden" aria-hidden="true">
+            <span className="mt-1 grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-thread text-thread-on shadow-card motion-safe:animate-tile-in max-sm:hidden" aria-hidden="true">
               <Icon size={22} />
             </span>
           )}
@@ -59,8 +60,9 @@ export function SubNav({ items, label }: { items: { to: string; label: string; c
 export function Panel({ title, description, actions, children, className, id }: {
   title?: ReactNode; description?: ReactNode; actions?: ReactNode; children: ReactNode; className?: string; id?: string;
 }) {
+  const ref = useReveal<HTMLElement>();
   return (
-    <section id={id} className={cx("card", className)}>
+    <section ref={ref} data-reveal="" id={id} className={cx("card", className)}>
       {(title || actions) && (
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
@@ -90,8 +92,9 @@ export function LinkRow({ to, children, className, id, testId }: { to: string; c
 }
 
 export function List({ children, label }: { children: ReactNode; label?: string }) {
+  const ref = useReveal<HTMLUListElement>();
   return (
-    <ul aria-label={label} className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+    <ul ref={ref} data-reveal="" data-stagger="" aria-label={label} className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
       {children}
     </ul>
   );

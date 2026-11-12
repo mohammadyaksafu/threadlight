@@ -5,6 +5,8 @@ import { NAV_ITEMS } from "@/nav";
 import { useTheme } from "@/lib/hooks";
 import { useSession } from "@/auth/SessionProvider";
 import { CommandPalette } from "./CommandPalette";
+import { ScrollProgressBar, useScrolled } from "@/lib/scroll";
+import { cx } from "@/components/ui";
 import { Sidebar } from "./Sidebar";
 import { StatusBar } from "./StatusBar";
 
@@ -18,6 +20,7 @@ export function AppShell() {
   const location = useLocation();
   const navigate = useNavigate();
   const mainRef = useRef<HTMLElement>(null);
+  const scrolled = useScrolled();
 
   // New page: close the drawer, scroll to top, move focus to the page so screen readers announce it.
   useEffect(() => {
@@ -52,7 +55,7 @@ export function AppShell() {
       <Sidebar open={open} onClose={() => setOpen(false)} theme={theme} onTheme={setTheme} />
 
       <div className="flex min-w-0 flex-col">
-        <header className="sticky top-0 z-30 border-b border-line/80 bg-bg/80 backdrop-blur-md print:hidden supports-[backdrop-filter]:bg-bg/70">
+        <header className={cx("sticky top-0 z-30 border-b border-line/80 bg-bg/80 backdrop-blur-md motion-safe:transition-shadow motion-safe:duration-300 print:hidden supports-[backdrop-filter]:bg-bg/70", scrolled && "shadow-lift")}>
           <div className="flex min-h-[64px] flex-wrap items-center gap-2 px-4 sm:flex-nowrap sm:gap-3 sm:px-8">
             <button type="button" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-ink-2 hover:bg-surface hover:text-ink lg:hidden"
               aria-label="Open navigation" aria-expanded={open} aria-controls="sidebar" onClick={() => setOpen(true)}>
@@ -74,6 +77,7 @@ export function AppShell() {
               ? <span><strong className="text-ink">Synthetic data, live system.</strong> Uploads are read on the server by OCR and Gemini; the rules decide; a named person approves.</span>
               : <span><strong className="text-ink">Synthetic data.</strong> Rules run live in your browser. Extraction results are pre-computed samples, not live AI.</span>}
           </p>
+          <ScrollProgressBar />
         </header>
 
         <main id="main" ref={mainRef} tabIndex={-1} className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 outline-none sm:px-8 lg:py-10">

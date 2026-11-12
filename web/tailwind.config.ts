@@ -34,8 +34,17 @@ export default {
       keyframes: {
         "fade-up": { from: { opacity: "0", transform: "translateY(4px)" }, to: { opacity: "1", transform: "none" } },
         "pop-in": { from: { opacity: "0", transform: "scale(.98) translateY(-4px)" }, to: { opacity: "1", transform: "none" } },
+        "tile-in": { from: { opacity: "0", transform: "scale(.6) rotate(-12deg)" }, to: { opacity: "1", transform: "none" } },
+        "grow-x": { from: { transform: "scaleX(0)" }, to: { transform: "scaleX(1)" } },
+        "grow-y": { from: { transform: "scaleY(0)" }, to: { transform: "scaleY(1)" } },
+        float: { "0%, 100%": { transform: "translateY(0)" }, "50%": { transform: "translateY(-6px)" } },
+        "rise-in": { from: { opacity: "0", transform: "translateY(14px)" }, to: { opacity: "1", transform: "none" } },
       },
-      animation: { "fade-up": "fade-up .25s ease-out both", "pop-in": "pop-in .16s ease-out both" },
+      animation: {
+        "fade-up": "fade-up .35s ease-out both", "pop-in": "pop-in .16s ease-out both",
+        "tile-in": "tile-in .5s cubic-bezier(.2,1.4,.4,1) both", "grow-x": "grow-x .9s cubic-bezier(.2,.7,.2,1) both",
+        "grow-y": "grow-y .3s ease-out both", float: "float 6s ease-in-out infinite", "rise-in": "rise-in .6s cubic-bezier(.2,.7,.2,1) both",
+      },
     },
   },
   plugins: [],
