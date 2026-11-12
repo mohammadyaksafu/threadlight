@@ -1,7 +1,7 @@
 // Sidebar navigation: groups, order and 1-7 keyboard shortcuts. Pair each entry with a route in routes.tsx.
 
 import {
-  ClipboardCheck, Cpu, FileBarChart2, FileText, FileUp, Inbox, LayoutDashboard, ListChecks, Network, ShieldAlert, SlidersHorizontal, type LucideIcon,
+  Bot, ClipboardCheck, Cpu, FileBarChart2, FileText, FileUp, Inbox, LayoutDashboard, ListChecks, Network, ShieldAlert, SlidersHorizontal, type LucideIcon,
 } from "lucide-react";
 
 export interface NavItem { id: string; to: string; label: string; icon: LucideIcon; shortcut?: string }
@@ -37,6 +37,7 @@ export const NAV: NavGroup[] = [
       { id: "upload", to: "/upload", label: "Upload", icon: FileUp },
       { id: "review", to: "/review", label: "Review queue", icon: Inbox },
       { id: "system", to: "/system", label: "System", icon: Cpu },
+      { id: "agents", to: "/agents", label: "Agent frameworks", icon: Bot },
     ],
   },
 ];

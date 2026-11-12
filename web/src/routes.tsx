@@ -19,6 +19,7 @@ import { ReportPage } from "@/pages/report/ReportPage";
 import { UploadPage } from "@/pages/live/UploadPage";
 import { ReviewPage } from "@/pages/live/ReviewPage";
 import { SystemPage } from "@/pages/live/SystemPage";
+import { AgentsPage } from "@/pages/agents/AgentsPage";
 
 export const ROUTES: RouteObject[] = [
   { path: "login", element: <LoginPage /> },
@@ -40,6 +41,7 @@ export const ROUTES: RouteObject[] = [
       { path: "upload", element: <UploadPage /> },
       { path: "review", element: <ReviewPage /> },
       { path: "system", element: <SystemPage /> },
+      { path: "agents", element: <AgentsPage /> },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },

@@ -1,0 +1,301 @@
+{
+  "date": "2026-11-12",
+  "model": "llama3.2:3b",
+  "host": "local Ollama on a laptop CPU (AMD64), temperature 0, one run per framework",
+  "system": "You are the audit-prep assistant for a garment factory. You can only read and propose. You cannot approve evidence or close findings. Use the tools for every fact and never guess a number.",
+  "task": "Write the audit-prep brief. First call get_scores. Then call list_open_findings. Then give the final answer: the coverage, the risk index, and the three requirement ids to fix first, in the order the tool returned them, each with a one-sentence reason.",
+  "tools": [
+    "get_scores",
+    "list_open_findings",
+    "get_requirement",
+    "what_if_valid_until"
+  ],
+  "expected": {
+    "coverage": 29,
+    "risk_index": 63,
+    "priorities": [
+      "R1",
+      "R8",
+      "R6"
+    ]
+  },
+  "checks": {
+    "called_tools": "called get_scores and list_open_findings",
+    "ids_are_open_findings": "every requirement id it cites is an open finding",
+    "ranking_matches_rules": "its top three match the rules engine's ranking",
+    "numbers_match_engine": "coverage and risk index equal the engine's figures"
+  },
+  "frameworks": [
+    {
+      "id": "langgraph",
+      "name": "LangGraph",
+      "package": "langgraph",
+      "version": "1.2.20",
+      "pattern": "Graph-based tool loop",
+      "status": "ran",
+      "latency_s": 44.6,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": 29,
+        "risk_index": 63,
+        "priorities": [
+          "R1",
+          "R8",
+          "R6",
+          "R4",
+          "R5",
+          "R7"
+        ]
+      },
+      "raw": "{\"coverage\": 29, \"risk_index\": 63, \"priorities\": [{\"requirement\": \"R1\", \"reason\": \"The fire safety certificate is likely to be expired or not up-to-date.\"}, {\"requirement\": \"R8\", \"reason\": \"Insufficient evidence of corrective action closure for requirement R8.\"}, {\"requirement\": \"R6\", \"reason\": \"Insufficient payroll and working-hour summary evidence for requirement R6.\"}, {\"requirement\": \"R4\", \"reason\": \"The environmental clearance is likely to be expired or not up-to-date.\"}, {\"requirement\": \"R5\", \"reason\": \"The fire safety certificate is likely to be expired or not up-to-date.\"}, {\"requirement\": \"R7\", \"reason\": \"Evidence-integrity alert A2 needs to be resolved for requirement R7.\"}]}",
+      "notes": {},
+      "checks": {
+        "called_tools": true,
+        "ids_are_open_findings": true,
+        "ranking_matches_rules": true,
+        "numbers_match_engine": true
+      },
+      "passed": 4
+    },
+    {
+      "id": "pydantic-ai",
+      "name": "Pydantic AI",
+      "package": "pydantic-ai-slim",
+      "version": "2.54.0",
+      "pattern": "Typed, validated output",
+      "status": "error",
+      "error": "UnexpectedModelBehavior: Exceeded maximum output retries (2)",
+      "latency_s": 61.7,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": null,
+        "risk_index": null,
+        "priorities": []
+      },
+      "raw": "",
+      "notes": {},
+      "checks": {
+        "called_tools": false,
+        "ids_are_open_findings": false,
+        "ranking_matches_rules": false,
+        "numbers_match_engine": false
+      },
+      "passed": 0
+    },
+    {
+      "id": "openai-agents",
+      "name": "OpenAI Agents SDK",
+      "package": "openai-agents",
+      "version": "0.24.0",
+      "pattern": "Triage to specialist handoff",
+      "status": "ran",
+      "latency_s": 15.2,
+      "tool_calls": [],
+      "brief": {
+        "coverage": 85,
+        "risk_index": 6,
+        "priorities": []
+      },
+      "raw": "{\"name\": \"get_scores\", \"parameters\": {}}; {\"name\": \"list_open_findings\", \"parameters\": {}}; {\"name\": \"transfer_to_gap_analyst\", \"parameters\": {\"auditPrepBrief\": \"{\\\"coverage\\\": \\\"85%\\\", \\\"riskIndex\\\": 6, \\\"requirementIdsToFixFirst\\\": [1, 2, 3], \\\"reasons\\\": [\\\"Insufficient coverage\\\", \\\"Moderate risk\\\", \\\"Missing requirement 1\\\", \\\"Missing requirement 2\\\", \\\"Missing requirement 3\\\"]}\"}}",
+      "notes": {
+        "last_agent": "Triage"
+      },
+      "checks": {
+        "called_tools": false,
+        "ids_are_open_findings": false,
+        "ranking_matches_rules": false,
+        "numbers_match_engine": false
+      },
+      "passed": 0
+    },
+    {
+      "id": "smolagents",
+      "name": "smolagents",
+      "package": "smolagents",
+      "version": "1.26.0",
+      "pattern": "Multi-step tool-calling agent",
+      "status": "ran",
+      "latency_s": 257.2,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": 0,
+        "risk_index": 0,
+        "priorities": [
+          "R0",
+          "R1",
+          "R2"
+        ]
+      },
+      "raw": "{\"coverage\": 0, \"risk_index\": 0, \"priorities\": [{\"requirement\": \"R0\", \"reason\": \"...\"}, {\"requirement\": \"R1\", \"reason\": \"...\"}, {\"requirement\": \"R2\", \"reason\": \"...\"}]}",
+      "notes": {},
+      "checks": {
+        "called_tools": true,
+        "ids_are_open_findings": false,
+        "ranking_matches_rules": false,
+        "numbers_match_engine": false
+      },
+      "passed": 1
+    },
+    {
+      "id": "autogen",
+      "name": "AutoGen",
+      "package": "autogen-agentchat",
+      "version": "0.7.5",
+      "pattern": "Analyst and reviewer conversation",
+      "status": "ran",
+      "latency_s": 83.8,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": 29,
+        "risk_index": 63,
+        "priorities": [
+          "R1",
+          "R8",
+          "R6"
+        ]
+      },
+      "raw": "{\"coverage\": 29, \"risk_index\": 63, \"priorities\": [{\"requirement\": \"R1\", \"reason\": \"Renew or replace the fire safety certificate to ensure compliance with safety regulations\"}, {\"requirement\": \"R8\", \"reason\": \"Locate or produce the corrective action closure evidence to demonstrate corrective actions taken\"}, {\"requirement\": \"R6\", \"reason\": \"Locate or produce the payroll and working-hour summary to ensure accurate labor records\"}]}",
+      "notes": {
+        "reviewer": "Here is the audit-prep brief:\n\nGet the scores for the audit tool.\n\nList the open findings from the audit tool.\n\nProvide the final answer, including the coverage, risk index, and the three requirement IDs to fix first, along with a one-sentence reason for each.\n\nAnswer:\nCoverage: 29\nRisk Index: 63\nRequirement IDs to fix first:\nR1: Renew or replace the fire safety certificate to ensure compliance wi"
+      },
+      "checks": {
+        "called_tools": true,
+        "ids_are_open_findings": true,
+        "ranking_matches_rules": true,
+        "numbers_match_engine": true
+      },
+      "passed": 4
+    },
+    {
+      "id": "agno",
+      "name": "Agno",
+      "package": "agno",
+      "version": "3.1.12",
+      "pattern": "Single agent, native Ollama client",
+      "status": "ran",
+      "latency_s": 51.4,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": null,
+        "risk_index": null,
+        "priorities": []
+      },
+      "raw": "Since the tool call to list_open_findings was not executed, I will not be able to provide the list of open findings. However, I can provide the initial results from get_scores:\n\n{\"name\": \"get_scores\", \"parameters\": {}}",
+      "notes": {},
+      "checks": {
+        "called_tools": false,
+        "ids_are_open_findings": false,
+        "ranking_matches_rules": false,
+        "numbers_match_engine": false
+      },
+      "passed": 0
+    },
+    {
+      "id": "dspy",
+      "name": "DSPy",
+      "package": "dspy",
+      "version": "3.5.0",
+      "pattern": "ReAct over a typed signature",
+      "status": "error",
+      "error": "ValueError: ReAct failed to produce final outputs after parse_error: submit failed.\nExecution error in submit: \nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo T14s\\Desktop\\Glimpses of Light\\threadlight\\.venv-agents\\lib\\site-packages\\dspy\\adapters\\types\\tool.py\", line 204, in _validate_and_parse_args\n    validate(instance=instance, schema=self.args[k])\n  File \"C:\\Users\\Lenovo T14s\\Deskt",
+      "latency_s": 361.4,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": null,
+        "risk_index": null,
+        "priorities": []
+      },
+      "raw": "",
+      "notes": {},
+      "checks": {
+        "called_tools": false,
+        "ids_are_open_findings": false,
+        "ranking_matches_rules": false,
+        "numbers_match_engine": false
+      },
+      "passed": 0
+    }
+  ]
+}

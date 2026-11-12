@@ -1,0 +1,12 @@
+# Agent-framework bench (agent_bench/). Kept apart from backend/requirements.txt: these packages are not
+# deployed. Install into their own environment:
+#   uv venv .venv-agents --python 3.10 && uv pip install --python .venv-agents/Scripts/python.exe -r agent_bench/requirements.txt
+agno==3.1.12
+autogen-agentchat==0.7.5
+autogen-ext[openai]==0.7.5
+dspy==3.5.0
+langgraph==1.2.20
+ollama==0.6.3
+openai-agents==0.24.0
+pydantic-ai-slim[openai]==2.54.0
+smolagents[openai]==1.26.0

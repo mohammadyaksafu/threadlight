@@ -8,6 +8,7 @@ Two kinds of agents touch this repository: the agents **inside** the product, an
 |---|---|---|---|
 | Document pipeline (LangGraph) | `backend/pipeline/graph.py` | parse, redact, classify, extract cited fields, index, propose clause mappings, run the rules, draft text | approve evidence, close findings, skip the human-review interrupt |
 | MCP clients (Claude Desktop, IDE agents) | `mcp_server/server.py` | read the passport, search evidence, run what-if, propose a mapping (staff/officer token) | write anything except a mapping *proposal*; there is no approve/close tool |
+| Bench agents (Pydantic AI, OpenAI Agents SDK, smolagents, AutoGen, Agno, DSPy, LangGraph) | `agent_bench/` | call four read-only tools over the rules engine and write an audit-prep brief; scored by code (`docs/AGENT_BENCH.md`) | write anything: there is no approve, close or propose tool, and the bench is not deployed |
 | n8n workflows | `automation/n8n/` | read-only automation account: expiry alerts, eval summaries; staff account for e-mail intake | approve or close anything |
 
 The lifecycle (`threadlight/lifecycle.py`) raises `LifecycleError` if an AI actor tries to close a finding; the API only

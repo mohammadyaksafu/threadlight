@@ -8,6 +8,8 @@ All data is synthetic. Never add real company names, people or certificates.
   `web/src/engine/` and running `python tests/parity.py`.
 - `backend/` FastAPI API, LangGraph pipeline, LLM router, RAG, OCR, guardrails. Postgres with row-level security.
 - `mcp_server/` threadlight-mcp (FastMCP). Read and propose only; no tool may approve evidence or close findings.
+- `agent_bench/` the same read-only task run through seven agent frameworks on a local model. Own environment
+  (`.venv-agents`, `agent_bench/requirements.txt`); not imported by `backend/` and not deployed. See `docs/AGENT_BENCH.md`.
 - `evals/` evaluation scripts and committed reports. `synth/` synthetic PDF generator with ground truth.
 - `deploy/` Docker Compose, Caddy, backups. `automation/n8n/` workflow exports. `web/` React app.
 - `specs/` feature specs (spec, plan, tasks). `update/plan.md` is the delivery plan and status.
@@ -19,6 +21,8 @@ All data is synthetic. Never add real company names, people or certificates.
 - API: `uvicorn backend.app.main:app --port 8000` (settings from `.env`; INLINE_JOBS=true runs the pipeline in-process)
 - Tests: `python -m pytest backend/tests -q` (fake LLM, own `threadlight_test` DB), `python -m unittest discover -s tests`,
   `python tests/parity.py`, `cd web && npm run build && node ../tests/ui_check.js`
+- Agent bench: `.venv-agents/Scripts/python -m agent_bench.run` (needs Ollama with `qwen2.5:7b`; `--model llama3.2:3b --tag llama3.2-3b` for the second run; writes
+  `evals/reports/<date>-agents.json`, which the web app's Agent frameworks page reads at build time)
 - Evals: `python -m evals.extraction_eval`, `python -m evals.rag_eval`, `python -m evals.draft_eval`, `python -m evals.run_all`
 
 ## Rules for changes

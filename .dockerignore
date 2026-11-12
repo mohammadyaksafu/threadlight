@@ -8,3 +8,5 @@ recordings
 **/__pycache__
 .env
 deploy/.env
+.venv-agents
+agent_bench

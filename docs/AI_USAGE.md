@@ -128,13 +128,22 @@ brainstorming. Leave it out if none.]
 
 **Paste:**
 
-> No agent framework is used. The product's "seven agents" (Requirement Intelligence, Evidence
-> Intelligence, Gap Auditor, Contradiction Engine, Risk and Audit Twin, Remediation Planner, Report Agent)
-> are pipeline stages in custom deterministic code. Two of them are shown with pre-computed sample
-> extraction, and the UI labels each one "rules" or "sample extraction". The planned version keeps a fixed,
-> auditable pipeline instead of free-running agents: models extract and draft, rules decide, people
-> approve. The build itself was orchestrated by Claude Code's agent loop, which edits files, runs commands
-> and tests, and reads screenshots.
+> **In the product: LangGraph.** The document pipeline (`backend/pipeline/graph.py`) is a LangGraph state
+> machine with 14 nodes, Postgres checkpoints and two human interrupts: a reviewer corrects low-confidence
+> fields, and a named Compliance Officer approves the evidence. The graph cannot pass either step on a
+> model's output. arq workers on Redis run it; MCP clients and n8n workflows can read and propose only.
+>
+> **Benchmarked, not deployed: six more frameworks.** `agent_bench/` gives LangGraph, Pydantic AI, the
+> OpenAI Agents SDK, smolagents, AutoGen, Agno and DSPy the same audit-prep task, the same four read-only
+> tools over the rules engine and the same local model through Ollama. Plain code scores each run on four
+> checks. On Qwen 2.5 7B, four of seven passed all four checks (LangGraph, Pydantic AI, Agno, DSPy); on
+> Llama 3.2 3B, two did (LangGraph, AutoGen). One run per framework per model, so these are smoke-test
+> results, not a ranking. The reports are `evals/reports/2026-11-12-agents*.json`, the method
+> and limits are in `docs/AGENT_BENCH.md`, and the app shows the runs on its Agent frameworks page.
+>
+> **Orchestration rule.** Agents read and propose, the rules engine decides every status, and a person
+> approves. No agent in the product or the bench has an approve or close tool. The build itself was
+> orchestrated by Claude Code's agent loop.
 
 ## Fine-tuning / Adaptation (/5)
 
@@ -216,8 +225,20 @@ text-to-speech voice, which is not an LLM.)
 
 ## Agentic Frameworks Used
 
-**Leave blank** (none of the listed frameworks). The build agent was Claude Code; see "Agent Frameworks &
-Orchestration".
+**Tick:** LangGraph (runs the product pipeline). **Tick only if the form allows "evaluated" use, and say so
+in the notes:** Pydantic-AI, OpenAI Agents SDK, smolagents, AutoGen, DSPy, Agno. These six ran in the local
+bench only (`agent_bench/`, one run each on Qwen 2.5 7B and Llama 3.2 3B); they are not in the deployed product.
+
+**Do not tick:** Hermes, OpenClaw, CrewAI, OpenAI Swarm, Letta / MemGPT, Mastra, Google ADK. None of them
+was installed or run.
+
+**Notes, paste:**
+
+> LangGraph orchestrates the production document pipeline (14 nodes, 2 human interrupts, Postgres
+> checkpoints). Pydantic AI, OpenAI Agents SDK, smolagents, AutoGen, Agno and DSPy were each run once on
+> the same read-only audit-brief task against local Qwen 2.5 7B and Llama 3.2 3B models and scored by code; results and limits
+> are in docs/AGENT_BENCH.md and on the app's Agent frameworks page. They are benchmark use, not
+> production use.
 
 ## AI Development Lifecycle (AI-DLC)
 

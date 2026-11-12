@@ -1,0 +1,379 @@
+{
+  "date": "2026-11-12",
+  "model": "qwen2.5:7b",
+  "host": "local Ollama on a laptop CPU (AMD64), temperature 0, one run per framework",
+  "system": "You are the audit-prep assistant for a garment factory. You can only read and propose. You cannot approve evidence or close findings. Use the tools for every fact and never guess a number.",
+  "task": "Write the audit-prep brief. First call get_scores. Then call list_open_findings. Then give the final answer: the coverage, the risk index, and the three requirement ids to fix first, in the order the tool returned them, each with a one-sentence reason.",
+  "tools": [
+    "get_scores",
+    "list_open_findings",
+    "get_requirement",
+    "what_if_valid_until"
+  ],
+  "expected": {
+    "coverage": 29,
+    "risk_index": 63,
+    "priorities": [
+      "R1",
+      "R8",
+      "R6"
+    ]
+  },
+  "checks": {
+    "called_tools": "called get_scores and list_open_findings",
+    "ids_are_open_findings": "every requirement id it cites is an open finding",
+    "ranking_matches_rules": "its top three match the rules engine's ranking",
+    "numbers_match_engine": "coverage and risk index equal the engine's figures"
+  },
+  "frameworks": [
+    {
+      "id": "langgraph",
+      "name": "LangGraph",
+      "package": "langgraph",
+      "version": "1.2.20",
+      "pattern": "Graph-based tool loop",
+      "status": "ran",
+      "latency_s": 241.9,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": 29,
+        "risk_index": 63,
+        "priorities": [
+          "R1",
+          "R8",
+          "R6"
+        ]
+      },
+      "raw": "Based on the provided information:\n\n- Coverage: 29%\n- Risk Index: 63\n- Priorities: \n  - R1: Likely gap, renew or replace the fire safety certificate.\n  - R8: Insufficient, locate or produce the corrective action closure evidence.\n  - R6: Insufficient, locate or produce the payroll and working-hour summary.\n\n{\"coverage\": 29, \"risk_index\": 63, \"priorities\": [{\"requirement\": \"R1\", \"reason\": \"Likely gap, renew or replace the fire safety certificate.\"}, {\"requirement\": \"R8\", \"reason\": \"Insufficient, locate or produce the corrective action closure evidence.\"}, {\"requirement\": \"R6\", \"reason\": \"Insufficient, locate or produce the payroll and working-hour summary.\"}]}",
+      "notes": {},
+      "checks": {
+        "called_tools": true,
+        "ids_are_open_findings": true,
+        "ranking_matches_rules": true,
+        "numbers_match_engine": true
+      },
+      "passed": 4
+    },
+    {
+      "id": "pydantic-ai",
+      "name": "Pydantic AI",
+      "package": "pydantic-ai-slim",
+      "version": "2.54.0",
+      "pattern": "Typed, validated output",
+      "status": "ran",
+      "latency_s": 78.2,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": 29,
+        "risk_index": 63,
+        "priorities": [
+          "R1",
+          "R8",
+          "R6"
+        ]
+      },
+      "raw": "{\"coverage\": 29, \"risk_index\": 63, \"priorities\": [\"R1\", \"R8\", \"R6\"]}",
+      "notes": {},
+      "checks": {
+        "called_tools": true,
+        "ids_are_open_findings": true,
+        "ranking_matches_rules": true,
+        "numbers_match_engine": true
+      },
+      "passed": 4
+    },
+    {
+      "id": "openai-agents",
+      "name": "OpenAI Agents SDK",
+      "package": "openai-agents",
+      "version": "0.24.0",
+      "pattern": "Triage to specialist handoff",
+      "status": "ran",
+      "latency_s": 142.5,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": 29,
+        "risk_index": 63,
+        "priorities": [
+          "R1",
+          "R4",
+          "R5"
+        ]
+      },
+      "raw": "Based on the provided information, the audit-prep brief would be as follows:\n\n- Coverage: 29%\n- Risk Index: 63\n- Priorities: \n  - R1: Renew or replace the fire safety certificate.\n  - R4: Renew or replace the environmental clearance.\n  - R5: Renew or replace the fire safety certificate.\n\nThe coverage is 29% and the risk index is 63, indicating areas of significant concern. The three requirements to fix first are R1, R4, and R5, as they are all marked as likely gaps and require urgent attention to ensure compliance and reduce risk. {\"coverage\": 29, \"risk_index\": 63, \"priorities\": [{\"requirement\": \"R1\", \"reason\": \"Renew or replace the fire safety certificate.\"}, {\"requirement\": \"R4\", \"reason\":",
+      "notes": {
+        "last_agent": "Gap analyst"
+      },
+      "checks": {
+        "called_tools": true,
+        "ids_are_open_findings": true,
+        "ranking_matches_rules": false,
+        "numbers_match_engine": true
+      },
+      "passed": 3
+    },
+    {
+      "id": "smolagents",
+      "name": "smolagents",
+      "package": "smolagents",
+      "version": "1.26.0",
+      "pattern": "Multi-step tool-calling agent",
+      "status": "ran",
+      "latency_s": 262.6,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": 29,
+        "risk_index": 63,
+        "priorities": [
+          "R001",
+          "R002",
+          "R003"
+        ]
+      },
+      "raw": "{\"coverage\": 29, \"risk_index\": 63, \"priorities\": [{\"requirement\": \"R001\", \"reason\": \"Highest risk index\"}, {\"requirement\": \"R002\", \"reason\": \"Second highest risk index\"}, {\"requirement\": \"R003\", \"reason\": \"Third highest risk index\"}]}",
+      "notes": {},
+      "checks": {
+        "called_tools": false,
+        "ids_are_open_findings": false,
+        "ranking_matches_rules": false,
+        "numbers_match_engine": true
+      },
+      "passed": 1
+    },
+    {
+      "id": "autogen",
+      "name": "AutoGen",
+      "package": "autogen-agentchat",
+      "version": "0.7.5",
+      "pattern": "Analyst and reviewer conversation",
+      "status": "ran",
+      "latency_s": 921.2,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": 29,
+        "risk_index": 63,
+        "priorities": [
+          "R1",
+          "R4",
+          "R8"
+        ]
+      },
+      "raw": "{\"coverage\": 29, \"risk_index\": 63, \"priorities\": [{\"requirement\": \"R1\", \"reason\": \"The fire safety certificate is likely to have a gap, posing a significant safety risk.\"}, {\"requirement\": \"R4\", \"reason\": \"The environmental clearance is likely to have a gap, which could lead to legal issues.\"}, {\"requirement\": \"R8\", \"reason\": \"The corrective action closure evidence is missing, indicating potential non-compliance issues.\"}]}",
+      "notes": {
+        "reviewer": "The coverage is 29, the risk index is 63, and the three requirement IDs to fix first are R1, R4, and R8, in that order, as they pose significant safety, legal, and compliance risks respectively."
+      },
+      "checks": {
+        "called_tools": true,
+        "ids_are_open_findings": true,
+        "ranking_matches_rules": false,
+        "numbers_match_engine": true
+      },
+      "passed": 3
+    },
+    {
+      "id": "agno",
+      "name": "Agno",
+      "package": "agno",
+      "version": "3.1.12",
+      "pattern": "Single agent, native Ollama client",
+      "status": "ran",
+      "latency_s": 633.2,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        }
+      ],
+      "brief": {
+        "coverage": 29,
+        "risk_index": 63,
+        "priorities": [
+          "R1",
+          "R8",
+          "R6"
+        ]
+      },
+      "raw": "{\"coverage\": 29, \"risk_index\": 63, \"priorities\": [{\"requirement\": \"R1\", \"reason\": \"The fire safety certificate is likely missing or expired, posing a significant safety risk.\"}, {\"requirement\": \"R8\", \"reason\": \"The corrective action closure evidence is missing, indicating incomplete resolution of issues.\"}, {\"requirement\": \"R6\", \"reason\": \"The payroll and working-hour summary is missing, which is crucial for labor compliance.\"}]}",
+      "notes": {},
+      "checks": {
+        "called_tools": true,
+        "ids_are_open_findings": true,
+        "ranking_matches_rules": true,
+        "numbers_match_engine": true
+      },
+      "passed": 4
+    },
+    {
+      "id": "dspy",
+      "name": "DSPy",
+      "package": "dspy",
+      "version": "3.5.0",
+      "pattern": "ReAct over a typed signature",
+      "status": "ran",
+      "latency_s": 561.8,
+      "tool_calls": [
+        {
+          "tool": "get_scores",
+          "args": {}
+        },
+        {
+          "tool": "list_open_findings",
+          "args": {}
+        },
+        {
+          "tool": "get_requirement",
+          "args": {
+            "requirement_id": "R1"
+          }
+        },
+        {
+          "tool": "get_requirement",
+          "args": {
+            "requirement_id": "R8"
+          }
+        },
+        {
+          "tool": "get_requirement",
+          "args": {
+            "requirement_id": "R6"
+          }
+        }
+      ],
+      "brief": {
+        "coverage": 29,
+        "risk_index": 63,
+        "priorities": [
+          "R1",
+          "R8",
+          "R6"
+        ]
+      },
+      "raw": "{\"coverage\": 29, \"risk_index\": 63, \"priorities\": [\"R1\", \"R8\", \"R6\"]}",
+      "notes": {},
+      "checks": {
+        "called_tools": true,
+        "ids_are_open_findings": true,
+        "ranking_matches_rules": true,
+        "numbers_match_engine": true
+      },
+      "passed": 4
+    }
+  ]
+}

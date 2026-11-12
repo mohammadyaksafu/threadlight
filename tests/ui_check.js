@@ -243,6 +243,31 @@ async function main() {
   await click('[data-lang="en"]');
   await go("/actions/workflow"); await click("#lc-reset");
 
+  // Agent frameworks page: figures come from the committed bench report, one chapter per framework
+  await go("/agents"); await sleep(600);
+  const bench = (() => {
+    const dir = path.join(ROOT, "evals", "reports");
+    const f = fs.readdirSync(dir).filter((n) => /-agents\.json$/.test(n)).sort().pop();
+    return f ? JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")) : null;
+  })();
+  if (bench) {
+    check("agents page: one chapter per benchmarked framework", await count('[data-testid="framework"]') === bench.frameworks.length, await count('[data-testid="framework"]'));
+    check("agents page: scores match the bench report", await evaluate(`[...document.querySelectorAll('[data-testid="fw-score"]')].map(n=>parseInt(n.textContent)).join()`) === bench.frameworks.map((f) => f.passed).join());
+    check("agents page: says only LangGraph is in the product", (await text("#main")).includes("Only LangGraph is in the product") && await evaluate(`[...document.querySelectorAll('[data-testid="framework"]')].filter(n=>n.textContent.includes("in the product")).map(n=>n.id).join()`) === "fw-langgraph");
+    await evaluate(`document.getElementById("fw-${bench.frameworks[2].id}").scrollIntoView({block:"center"})`); await sleep(700);
+    check("agents page: scrolling to a chapter moves the thread to it", (await text('[aria-live="polite"].absolute')).includes(bench.frameworks[2].name), await text('[aria-live="polite"].absolute'));
+    await shot("agents-desktop");
+  } else {
+    check("agents page: explains that no bench report exists", (await text("#main")).includes("No bench report is committed yet"));
+  }
+
+  // Scroll effects: progress bar follows the page, panels below the fold reveal when reached
+  await go("/"); await sleep(500);
+  await evaluate(`window.scrollTo(0, document.documentElement.scrollHeight)`); await sleep(900);
+  check("scroll progress bar fills at the bottom of the page", await evaluate(`new DOMMatrix(getComputedStyle(document.querySelector(".scroll-bar")).transform).a > 0.95`));
+  check("panels revealed after scrolling to them", await evaluate(`[...document.querySelectorAll("#main [data-reveal]")].every(n => n.hasAttribute("data-in") && getComputedStyle(n).opacity === "1")`));
+  await evaluate(`window.scrollTo(0, 0)`); await sleep(200);
+
   // Keyboard: number keys open sections
   await evaluate(`document.activeElement && document.activeElement.blur()`);
   await send("Input.dispatchKeyEvent", { type: "keyDown", key: "3", text: "3" });
@@ -265,7 +290,7 @@ async function main() {
   // Narrow viewport: no horizontal page scroll on any page; drawer navigation works
   await send("Emulation.setDeviceMetricsOverride", { width: 400, height: 860, deviceScaleFactor: 1, mobile: true });
   await sleep(300);
-  for (const route of ["/", "/documents", "/documents/D1", "/requirements", "/requirements/R1", "/graph", "/findings", "/findings/alerts", "/simulate", "/actions", "/actions/workflow", "/report"]) {
+  for (const route of ["/", "/documents", "/documents/D1", "/requirements", "/requirements/R1", "/graph", "/findings", "/findings/alerts", "/simulate", "/actions", "/actions/workflow", "/report", "/agents"]) {
     await go(route);
     const w = await evaluate(`document.documentElement.scrollWidth`);
     check(`400px: no horizontal scroll on ${route}`, w <= 400, w);
